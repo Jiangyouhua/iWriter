@@ -10,7 +10,7 @@ import Foundation
 
 /**
  ## Works Role
-    作品符号，作品中的常用对象，如：降龙十八掌
+    作品符号，作品中的常用对象，如：降龙十八掌、天机处等
  1. 支持subscript，方便与Dictionary转换
  2. 提供forDictionary方法，支持转换为Dictionary
  */

@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- ## 作品数据协议
+ ## 作品数据协议，用多态进行同一处理
  */
 protocol WorksDelegate {
     func forDictionary() -> Dictionary<String, Any>

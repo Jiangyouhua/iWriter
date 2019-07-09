@@ -10,7 +10,7 @@ import Foundation
 
 /**
  ## Works Role
-    作品角色
+    作品角色，通过标签注释角色信息
  1. 支持subscript，方便与Dictionary转换
  2. 提供forDictionary方法，支持转换为Dictionary
  */

@@ -36,7 +36,7 @@ enum WorksError: Error {
 
 /**
  ## Works类
-    配置文件操作：New File、Open File、Save File、Save As File
+    配置文件操作：New File、Open File、Save File、Save As File。
     各业务流程如下：
  1. New File
  1.1 清空或新建缓存文件夹iWriter；
