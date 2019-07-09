@@ -11,7 +11,7 @@ import CommonCrypto
 
 /**
  ## Works Data Status
- 作品数据状态
+    作品数据状态
  1. 为Info、Catalog、Role、Symbol保存最近的MD5值；
  2. 判断新的MD5值与原值是否相同，不同表示数据有更新，需要保存；
  3. 提供Data的MD5方法。

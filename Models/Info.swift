@@ -10,7 +10,7 @@ import Foundation
 
 /**
  ## Works Info
- 作品信息
+    作品信息
  1. 支持subscript，方便与Dictionary转换
  2. 提供forDictionary方法，支持转换为Dictionary
  */

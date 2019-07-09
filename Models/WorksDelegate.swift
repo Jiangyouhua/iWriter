@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ ## 作品数据协议
+ */
 protocol WorksDelegate {
     func forDictionary() -> Dictionary<String, Any>
 }
