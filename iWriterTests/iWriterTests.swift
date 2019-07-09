@@ -212,6 +212,7 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(symbol.creation, 0)
     }
     
+    /// 测试Satus数据模型
     func testStatus(){
         var status = Status()
         let md5 = status.md5(data: "Jiang Youhua".data(using: .utf8)!)
@@ -222,6 +223,7 @@ class iWriterTests: XCTestCase {
         XCTAssertTrue(status.isSave(symbol: "symbol".data(using: .utf8)!))
     }
     
+    /// 测试Works数据模型
     func testWorks(){
         // New File
         var file = folder + "/new_file.iw"

@@ -89,7 +89,7 @@ class Works: NSObject {
         }
     }
     
-    // 当前章节ID
+    // 当前章节索引，即在catalogData的索引
     var currentChapterIndex: Int {
         set{
             infoData.currentChapter = newValue
