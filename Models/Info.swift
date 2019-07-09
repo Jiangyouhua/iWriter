@@ -19,8 +19,8 @@ struct Info: WorksDelegate {
     var file: String                    // 作品名称，含路径
     var author: String                  // 作者，前期使用iwriter，后期从设置中读取
     var creation: Int                   // 创建时间，时间戮
-    var chaptersOnBar: [Int]            // 在文件栏上的章节
-    var currentChapter: Int             // 当前编辑的章节
+    var chaptersOnBar: [Int]            // 在章节标题栏上的章节，章节索引
+    var currentChapter: Int             // 当前编辑的章节，章节索引
     var other:Dictionary<String, Any>
     
     init() {

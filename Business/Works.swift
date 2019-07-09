@@ -90,7 +90,7 @@ class Works: NSObject {
     }
     
     // 当前章节ID
-    private var currentChapterId: Int {
+    var currentChapterIndex: Int {
         set{
             infoData.currentChapter = newValue
             addChapterOnBar(id: newValue)
@@ -99,7 +99,6 @@ class Works: NSObject {
             return infoData.currentChapter
         }
     }
-    
     // 当前章节内容
     var currentChapterData: String
 
@@ -197,11 +196,11 @@ extension Works {
     /// - throws: 读写错误、JSON解析错误
     func saveWorksToCacheFolder()throws{
         do{
+            try writeCurrentChapterFile()     // 写作品当前章节
             try writeInfoFile()               // 写作品信息
             try writeCatalogFile()            // 写作品目录
             try writeRoleFile()               // 写作品角色
             try writeSymbolFile()             // 写作品符号
-            try writeCurrentChapterFile()     // 写作品当前章节
         } catch {
             throw error
         }
@@ -232,9 +231,9 @@ extension Works {
     /// 设置初始文件：info.txt、catalog.txt、role.txt、symbol.txt
     private func defaultFilesInCacheFolder() throws {
         guard fileManager.createFile(atPath: infoFile, contents: nil, attributes: nil)
-            || fileManager.createFile(atPath: catalogFile, contents: nil, attributes: nil)
-            || fileManager.createFile(atPath: roleFile, contents: nil, attributes: nil)
-            || fileManager.createFile(atPath: symbolFile, contents: nil, attributes: nil) else {
+            && fileManager.createFile(atPath: catalogFile, contents: nil, attributes: nil)
+            && fileManager.createFile(atPath: roleFile, contents: nil, attributes: nil)
+            && fileManager.createFile(atPath: symbolFile, contents: nil, attributes: nil) else {
             throw WorksError.operateError(OperateCode.fileCreat, #function, fileError)
         }
     }
@@ -293,34 +292,24 @@ extension Works {
         }
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-            catalogData = forCatalog(array: array as! [Any])
+            for item in array as! [Any]{
+                var catalog = Catalog()
+                for (key, value) in item as! [String: Any]{
+                    catalog[key] = value
+                }
+                catalogData.append(catalog)
+            }
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, jsonError)
         }
     }
     
-    /// 转为多级目录
-    private func forCatalog(array:[Any]) -> [Catalog]{
-        var catalogs = [Catalog]()
-        for item in array {
-            var catalog = Catalog()
-            for (key, value) in item as! [String: Any]{
-                if key == "subset" {
-                    catalog[key] = forCatalog(array: value as! [Any])
-                }else{
-                    catalog[key] = value
-                }
-            }
-            catalogs.append(catalog)
-        }
-        return catalogs
-    }
-    
     /// 写Catalog File
     private func writeCatalogFile() throws {
+        let array = forWorksDelegateArray(array: catalogData)
         let data:Data
         do {
-            data = try JSONSerialization.data(withJSONObject: catalogData, options: .prettyPrinted)
+            data = try JSONSerialization.data(withJSONObject: array, options: .prettyPrinted)
         } catch {
             throw WorksError.operateError(OperateCode.jsonData, #function, jsonError)
         }
@@ -356,9 +345,10 @@ extension Works {
     
     /// 写Role File
     private func writeRoleFile() throws {
+        let array = forWorksDelegateArray(array: roleData)
         let data:Data
         do {
-            data = try JSONSerialization.data(withJSONObject: roleData, options: .prettyPrinted)
+            data = try JSONSerialization.data(withJSONObject: array, options: .prettyPrinted)
         } catch {
             throw WorksError.operateError(OperateCode.jsonData, #function, jsonError)
         }
@@ -394,9 +384,10 @@ extension Works {
     
     /// 写Symbol File
     private func writeSymbolFile() throws {
+        let array = forWorksDelegateArray(array: symbolData)
         let data:Data
         do {
-            data = try JSONSerialization.data(withJSONObject: symbolData, options: .prettyPrinted)
+            data = try JSONSerialization.data(withJSONObject: array, options: .prettyPrinted)
         } catch {
             throw WorksError.operateError(OperateCode.jsonData, #function, jsonError)
         }
@@ -413,10 +404,12 @@ extension Works {
     // MARK: - Current Chpater File
     /// 读当前章节
     private func readCurrentChapterFile() throws {
-        guard currentChapterId > 0 else {
+        guard currentChapterIndex < catalogData.count else {
             return
         }
-        let file = cache + "/chapter\(currentChapterId).txt"
+        // 章节以创建时间为标识保存
+        let creation = catalogData[currentChapterIndex].creation
+        let file = cache + "/chapter\(creation).txt"
         do {
             currentChapterData = try String(contentsOfFile: file)
         } catch {
@@ -426,10 +419,13 @@ extension Works {
     
     /// 写当前章节
     private func writeCurrentChapterFile() throws {
-        guard currentChapterId > 0 else {
+        guard currentChapterIndex < catalogData.count else {
             return
         }
-        let file = cache + "/chapter\(currentChapterId).txt"
+        // 章节以创建时间为标识保存
+        let creation = catalogData[currentChapterIndex].creation
+        let file = cache + "/chapter\(creation).txt"
+        catalogData[currentChapterIndex].number = currentChapterData.count
         do{
             try currentChapterData.write(toFile: file, atomically: false, encoding: String.Encoding.utf8)
         } catch {
@@ -479,6 +475,16 @@ extension Works {
         } catch {
             throw WorksError.operateError(OperateCode.fileWrite, #function, fileError)
         }
+    }
+    
+    /// 将作品协议的实例数组转为Dictionary的数组
+    func forWorksDelegateArray(array: [WorksDelegate]) -> Array<Any> {
+        var arr = [Any]()
+        for item in array {
+            let dic = item.forDictionary()
+            arr.append(dic)
+        }
+        return arr
     }
     
     private func addChapterOnBar(id: Int) {

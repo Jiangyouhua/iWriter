@@ -16,23 +16,25 @@ import Foundation
  */
 struct Catalog: WorksDelegate {
     
+    var level: Int                       // 章节的层级
     var title: String                    // 章节标题
     var info: String                     // 章节信息，概述
     var creation: Int                    // 创建时间，时间戮
     var number: Int                      // 章节字数
-    var subset: [Catalog]                // 子章节
     
     init() {
+        self.level = 0
         self.title = ""
         self.info = ""
         self.creation = 0
         self.number = 0
-        self.subset = [Catalog]()
     }
     
     subscript(key:String)->Any?{
         get{
             switch key {
+            case "level":
+                return self.level
             case "title":
                 return self.title
             case "info":
@@ -41,14 +43,14 @@ struct Catalog: WorksDelegate {
                 return self.creation
             case "number":
                 return self.number
-            case "subset":
-                return self.subset
             default:
                 return nil
             }
         }
         set{
             switch key {
+            case "level":
+                self.level = newValue as? Int ?? 0
             case "title":
                 self.title = newValue as? String ?? ""
             case "info":
@@ -57,8 +59,6 @@ struct Catalog: WorksDelegate {
                 self.creation = newValue as? Int  ?? 0
             case "number":
                 self.number = newValue as? Int  ?? 0
-            case "subset":
-                self.subset = newValue as? [Catalog]  ?? [Catalog]()
             default:
                 return
             }
@@ -69,11 +69,11 @@ struct Catalog: WorksDelegate {
     /// - returns: 字典
     func forDictionary()->Dictionary<String, Any>{
         var dic:Dictionary<String, Any> = [:]
+        dic["level"] = self.level
         dic["title"] = self.title
         dic["info"] = self.info
         dic["creation"] = self.creation
         dic["number"] = self.number
-        dic["subset"] = self.subset
         return dic
     }
 }
