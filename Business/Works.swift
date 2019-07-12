@@ -13,10 +13,10 @@ import ZipArchive
  ## 操作码
  */
 enum OperateCode: String{
-    case folderCreat         // 创建文件夹
+    case folderCreate        // 创建文件夹
     case folderRemove        // 删除文件夹
     case folderZip           // 压缩文件夹
-    case fileCreat           // 创建文件
+    case fileCreate          // 创建文件
     case fileRead            // 读文件
     case fileWrite           // 写文件
     case fileUnzip           // 解压文件
@@ -224,7 +224,7 @@ extension Works {
         do {
             try fileManager.createDirectory(atPath: cache, withIntermediateDirectories: false, attributes: nil)
         } catch {
-            throw WorksError.operateError(OperateCode.folderCreat, #function, fileError)
+            throw WorksError.operateError(OperateCode.folderCreate, #function, fileError)
         }
     }
     
@@ -234,7 +234,7 @@ extension Works {
             && fileManager.createFile(atPath: catalogFile, contents: nil, attributes: nil)
             && fileManager.createFile(atPath: roleFile, contents: nil, attributes: nil)
             && fileManager.createFile(atPath: symbolFile, contents: nil, attributes: nil) else {
-            throw WorksError.operateError(OperateCode.fileCreat, #function, fileError)
+            throw WorksError.operateError(OperateCode.fileCreate, #function, fileError)
         }
     }
     

@@ -22,7 +22,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-// MARK: - Menu Action
+// MARK: - File Menu 
+
+// MARK: - File Menu
 extension AppDelegate{
     
     /// 事件：新建文件
