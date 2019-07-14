@@ -1523,6 +1523,7 @@ CA
                     </connections>
                 </viewController>
                 <customObject id="sbn-Z3-XGA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <userDefaultsController representsSharedInstance="YES" id="0bT-u0-7XP"/>
             </objects>
             <point key="canvasLocation" x="160" y="624"/>
         </scene>

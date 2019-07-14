@@ -71,102 +71,169 @@ class ViewController: NSViewController {
     @IBOutlet var ideaTextView: NSTextView!
     @IBOutlet var contentTextView: NSTextView!
     
-    let threshold:CGFloat = 130
-    let thickness:CGFloat = 30
+    let defaults = UserDefaults.standard
+    let threshold:CGFloat = 130          // Left Area View、 Right Area View 宽度最小值
+    let thickness:CGFloat = 30           // 标题栏厚度
+    
+    // Catalog Block View 处于隐藏状态
+    var catalogState:Bool{
+        get{
+            return catalogBlockView.frame.height == thickness
+        }
+    }
+    
+    // Note Block View 处于隐藏状态
+    var noteState:Bool{
+        get{
+            return noteBlockView.frame.height == thickness
+        }
+    }
+    
+    // Search Block View 处于隐藏状态
+    var searchState:Bool{
+        get{
+            return searchBlockView.frame.height == thickness
+        }
+    }
+    
+    // Role Block View 处于隐藏状态
+    var roleState:Bool{
+        get{
+            return roleBlockView.frame.height == thickness
+        }
+    }
+    
+    // Symbol Block View 处于隐藏状态
+    var symbolState:Bool{
+        get{
+            return symbolBlockView.frame.height == thickness
+        }
+    }
+    
+    // Dictionary Block View 处于隐藏状态
+    var dictionaryState:Bool{
+        get{
+            return dictionaryBlockView.frame.height == thickness
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        // Split View的委托
         leftRightSplitView.delegate = self
+        
+        // 加载布局配置
+        loadLayoutConfig()
+    }
+    
+    override func viewDidDisappear() {
+        saveLayoutConfig()
     }
     
     override var representedObject: Any? {
         didSet {
             // Update the view, if already loaded.
+            saveLayoutConfig()
         }
     }
 }
 
 /// MARK: - Block Toggle
-extension ViewController: NSSplitViewDelegate {
+
+/**
+ ## 各BlockView显示与隐藏
+ 显示：原则上向下展开。
+ 隐藏：原则上向上收拢。
+ 1. 所有BlockView隐藏，则隐藏其AreaView；
+ 2. 通IconButton显示其AreaView时，同时显示其BlockView。
+ */
+extension ViewController {
     
-    // 显示隐藏目录内容
+    /* IconButton Action*/
+    
+    /// 显示隐藏目录内容
     @IBAction func catalogIconClick(_ sender: Any) {
         // 判断AreaView是否隐藏
         if catalogTitleView.isHidden {
             // 如隐藏则显示
-            return leftAreaShow()
+            leftAreaIsHidden(false)
+            return catalogBlockShow()
         }
-        // 切换本BlockView的显示与隐藏的状态
-        if catalogBlockView.frame.height == thickness {
-            leftAreaSplitView.setPosition(threshold + thickness, ofDividerAt: 0)
-        } else {
-            leftAreaSplitView.setPosition( thickness, ofDividerAt: 0)
+        
+        // 显示
+        if catalogState {
+            return catalogBlockShow()
         }
+        // 隐藏
+        return catalogBlockHidden()
     }
     
-    // 显示隐藏备注内容， 同上
+    
+    
+    /// 显示隐藏备注内容， 同上
     @IBAction func noteIconClick(_ sender: Any) {
         if noteTitleView.isHidden {
-            return leftAreaShow()
+            leftAreaIsHidden(false)
+            return noteBlockShow()
         }
-        if noteBlockView.frame.height == thickness {
-            leftAreaSplitView.setPosition(noteBlockView.frame.origin.y + threshold + thickness, ofDividerAt: 1)
-        } else {
-            leftAreaSplitView.setPosition(noteBlockView.frame.origin.y + thickness, ofDividerAt: 1)
+        if noteState {
+            return noteBlockShow()
         }
+        return noteBlockHidden()
+        
     }
     
-    // 显示隐藏搜索内容， 同上
+    /// 显示隐藏搜索内容， 同上
     @IBAction func searchIconClick(_ sender: Any) {
         if searchTitleView.isHidden {
-            return leftAreaShow()
+            leftAreaIsHidden(false)
+            return searchBlockShow()
         }
-        if searchBlockView.frame.height == thickness {
-            leftAreaSplitView.setPosition(leftAreaSplitView.frame.height - threshold - thickness, ofDividerAt: 1)
-        } else {
-            leftAreaSplitView.setPosition(leftAreaSplitView.frame.height - thickness, ofDividerAt: 1)
+        if searchState {
+            return searchBlockShow()
         }
+        return searchBlockHidden()
     }
     
-    // 显示隐藏角色内容，同上
+    
+    /// 显示隐藏角色内容，同上
     @IBAction func roleIconClick(_ sender: Any) {
         if roleTitleView.isHidden {
-            return rightAreaShow()
+            rightAreaIsHidden(false)
+            return roleBlockShow()
         }
-        if roleBlockView.frame.height == thickness {
-            rightAreaSplitView.setPosition(threshold + thickness, ofDividerAt: 0)
-        } else {
-            rightAreaSplitView.setPosition( thickness, ofDividerAt: 0)
+        if roleState {
+            return roleBlockShow()
         }
+        return roleBlockHidden()
     }
     
-    // 显示隐藏符号内容， 同上
+    /// 显示隐藏符号内容， 同上
     @IBAction func symbolIconClick(_ sender: Any) {
         if symbolTitleView.isHidden {
-            return rightAreaShow()
+            rightAreaIsHidden(false)
+            return symbolBlockShow()
         }
-        if symbolBlockView.frame.height == thickness {
-            rightAreaSplitView.setPosition(symbolBlockView.frame.origin.y + threshold + thickness, ofDividerAt: 1)
-        } else {
-            rightAreaSplitView.setPosition(symbolBlockView.frame.origin.y + thickness, ofDividerAt: 1)
+        if symbolState {
+            return symbolBlockShow()
         }
+        return symbolBlockHidden()
     }
     
-    // 显示隐藏字典内容， 同上
+    /// 显示隐藏字典内容， 同上
     @IBAction func dictionaryIconClick(_ sender: Any) {
         if dictionaryTitleView.isHidden {
-            return rightAreaShow()
+            rightAreaIsHidden(false)
+            return dictionaryBlockShow()
         }
-        if dictionaryBlockView.frame.height == thickness {
-            rightAreaSplitView.setPosition(rightAreaSplitView.frame.height - threshold - thickness, ofDividerAt: 1)
-        } else {
-            rightAreaSplitView.setPosition(rightAreaSplitView.frame.height - thickness, ofDividerAt: 1)
+        if dictionaryState {
+            return dictionaryBlockShow()
         }
+        return dictionaryBlockHidden()
     }
     
-    // 显示隐藏想法内容，同上，无AreaView判断
+    /// 显示隐藏想法内容，同上，无AreaView判断
     @IBAction func ideaIconClick(_ sender: Any) {
         if ideaBlockView.frame.height == 0 {
             centerAreaSplitView.setPosition(threshold + thickness, ofDividerAt: 0)
@@ -175,7 +242,7 @@ extension ViewController: NSSplitViewDelegate {
         }
     }
     
-    // 显示隐藏大纲内容，同上
+    /// 显示隐藏大纲内容，同上
     @IBAction func outlineIconClick(_ sender: Any) {
         if outlineBlockView.frame.height == thickness {
             centerAreaSplitView.setPosition(centerAreaSplitView.frame.height - threshold - thickness, ofDividerAt: 1)
@@ -183,11 +250,200 @@ extension ViewController: NSSplitViewDelegate {
             centerAreaSplitView.setPosition(centerAreaSplitView.frame.height - thickness, ofDividerAt: 1)
         }
     }
+    
+    /* BlockView Show Or Hidden */
+    
+    /// 显示Catalog Block View
+    func catalogBlockShow(){
+        // 1. 已显示，直接返回
+        if !catalogState {
+            return
+        }
+        
+        // 2. 中显示，向下移动第一个Divider，移一半
+        if !noteState {
+            return leftAreaSplitView.setPosition(searchBlockView.frame.origin.y / 2, ofDividerAt: 0)
+        }
+        
+        // 3. 向下移动第一个Divider
+        leftAreaSplitView.setPosition(threshold + thickness, ofDividerAt: 0)
+    }
+    
+    /// 隐藏Catalog Block View
+    func catalogBlockHidden(){
+        // 1. 中下隐藏，直接隐藏左区
+        if noteState && searchState {
+            return leftAreaIsHidden(true)
+        }
+        
+        // 2. 中隐藏，向上移动第二个Divider
+        if noteState {
+            return leftAreaSplitView.setPosition(thickness * 2, ofDividerAt: 1)
+        }
+        
+        // 3. 向上移动第一个Divider
+        leftAreaSplitView.setPosition(thickness, ofDividerAt: 0)
+    }
+    
+    /// 显示Note Block View
+    func noteBlockShow(){
+        // 1. 已显示，直接返回
+        if !noteState {
+            return
+        }
+        // 2. 下隐藏，向上移动第一个Divider
+        if searchState {
+            return leftAreaSplitView.setPosition(searchBlockView.frame.origin.y / 2, ofDividerAt: 0)
+        }
+        // 3. 向下移动第二个Divider，移一半
+        leftAreaSplitView.setPosition(leftAreaView.frame.height - searchBlockView.frame.height / 2, ofDividerAt: 1)
+    }
+    
+    /// 隐藏Note Block View
+    func noteBlockHidden(){
+        // 1. 中下隐藏，直接隐藏左区
+        if catalogState && searchState {
+            return leftAreaIsHidden(true)
+        }
+        // 2. 下隐藏，向下移动第一个Divider
+        if searchState {
+            return leftAreaSplitView.setPosition(leftAreaView.frame.height - thickness * 2, ofDividerAt: 0)
+        }
+        // 3. 向上移动第二个Divider
+        let number = noteBlockView.frame.origin.y
+        leftAreaSplitView.setPosition(number + thickness, ofDividerAt: 1)
+    }
+    
+    /// 显示Search Block View
+    func searchBlockShow(){
+        // 1. 已显示，直接返回
+        if !searchState {
+            return
+        }
+        
+        // 2. 中显示，向上移动第二个Divider，移一半
+        if !noteState {
+            return leftAreaSplitView.setPosition((noteBlockView.frame.origin.y + leftAreaView.frame.height) / 2, ofDividerAt: 1)
+        }
+        
+        // 3. 向上移动第二个Divider
+        leftAreaSplitView.setPosition(leftAreaView.frame.height - threshold - thickness, ofDividerAt: 1)
+    }
+    
+    /// 隐藏Search Block View
+    func searchBlockHidden(){
+        // 1. 中下隐藏，直接隐藏左区
+        if catalogState && noteState {
+            return leftAreaIsHidden(true)
+        }
+        // 2. 中隐藏，向下移动第一个Divider
+        if noteState {
+            return leftAreaSplitView.setPosition(leftAreaView.frame.height - thickness * 2, ofDividerAt: 0)
+        }
+        // 3. 向下移动第二个Divider
+        leftAreaSplitView.setPosition(leftAreaView.frame.height - thickness, ofDividerAt: 1)
+    }
+    
+    /// 显示Role Block View
+    func roleBlockShow(){
+        // 1. 已显示，直接返回
+        if !roleState {
+            return
+        }
+        
+        // 2. 中显示，向下移动第一个Divider，移一半
+        if !symbolState {
+            return rightAreaSplitView.setPosition(dictionaryBlockView.frame.origin.y / 2, ofDividerAt: 0)
+        }
+        
+        // 3. 向下移动第一个Divider
+        rightAreaSplitView.setPosition(threshold + thickness, ofDividerAt: 0)
+    }
+    
+    /// 隐藏Catalog Block View
+    func roleBlockHidden(){
+        // 1. 中下隐藏，直接隐藏左区
+        if symbolState && dictionaryState {
+            return rightAreaIsHidden(true)
+        }
+        
+        // 2. 中隐藏，向上移动第二个Divider
+        if symbolState {
+            return rightAreaSplitView.setPosition(thickness * 2, ofDividerAt: 1)
+        }
+        
+        // 3. 向上移动第一个Divider
+        rightAreaSplitView.setPosition(thickness, ofDividerAt: 0)
+    }
+    
+    /// 显示Note Block View
+    func symbolBlockShow(){
+        // 1. 已显示，直接返回
+        if !symbolState {
+            return
+        }
+        // 2. 下隐藏，向上移动第一个Divider
+        if dictionaryState {
+            return rightAreaSplitView.setPosition(dictionaryBlockView.frame.origin.y / 2, ofDividerAt: 0)
+        }
+        // 3. 向下移动第二个Divider，移一半
+        rightAreaSplitView.setPosition(rightAreaView.frame.height - dictionaryBlockView.frame.height / 2, ofDividerAt: 1)
+    }
+    
+    /// 隐藏Note Block View
+    func symbolBlockHidden(){
+        // 1. 中下隐藏，直接隐藏左区
+        if roleState && dictionaryState {
+            return rightAreaIsHidden(true)
+        }
+        // 2. 下隐藏，向下移动第一个Divider
+        if dictionaryState {
+            return rightAreaSplitView.setPosition(rightAreaView.frame.height - thickness * 2, ofDividerAt: 0)
+        }
+        // 3. 向上移动第二个Divider
+        rightAreaSplitView.setPosition(symbolBlockView.frame.origin.y + thickness, ofDividerAt: 1)
+    }
+    
+    /// 显示Search Block View
+    func dictionaryBlockShow(){
+        // 1. 已显示，直接返回
+        if !dictionaryState {
+            return
+        }
+        
+        // 2. 中显示，向上移动第二个Divider，移一半
+        if !symbolState {
+            return rightAreaSplitView.setPosition((symbolBlockView.frame.origin.y + rightAreaView.frame.height) / 2, ofDividerAt: 1)
+        }
+        
+        // 3. 向上移动第二个Divider
+        rightAreaSplitView.setPosition(rightAreaView.frame.height - threshold - thickness, ofDividerAt: 1)
+    }
+    
+    /// 隐藏Search Block View
+    func dictionaryBlockHidden(){
+        // 1. 中下隐藏，直接隐藏左区
+        if roleState && symbolState {
+            return rightAreaIsHidden(true)
+        }
+        // 2. 中隐藏，向下移动第一个Divider
+        if symbolState {
+            return rightAreaSplitView.setPosition(rightAreaView.frame.height - thickness * 2, ofDividerAt: 0)
+        }
+        // 3. 向下移动第二个Divider
+        rightAreaSplitView.setPosition(rightAreaView.frame.height - thickness, ofDividerAt: 1)
+    }
+    
 }
 
 /// MARK: - Area Toggle
-extension ViewController {
-    // 知道各个分划线的位置值，并设置新的位置值
+/**
+ ## 通过分隔线控制AreaView、BlockView
+ 1. 各AreaView、BlockView隐藏状态（最小状态）时保留标题栏；
+ 2. AreaView左右区，在阈值范围内自动隐藏。
+ */
+extension ViewController: NSSplitViewDelegate {
+    /// 分隔线位置发生了变化
     func splitView(_ splitView: NSSplitView, constrainSplitPosition proposedPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat{
         // 左边分割线
         if dividerIndex == 0 {
@@ -204,9 +460,10 @@ extension ViewController {
         
         // 右边分割线，如上
         if dividerIndex == 1 {
-            if proposedPosition > splitView.frame.size.width - threshold {
+            if proposedPosition > leftRightSplitView.frame.size.width - threshold {
                 rightAreaSubviewsIsHidden(true)
-                return splitView.frame.size.width - thickness
+                let number = leftRightSplitView.frame.size.width - thickness
+                return number
             }
             rightAreaSubviewsIsHidden(false)
             return proposedPosition
@@ -214,21 +471,23 @@ extension ViewController {
         return proposedPosition
     }
     
-    // 显示左Left Area View的内容
-    func leftAreaShow(){
-        let postion = threshold + thickness
+    
+    /// 显示左Left Area View的内容
+    func leftAreaIsHidden(_ bool: Bool){
+        let postion = bool ? thickness : threshold + thickness
         leftRightSplitView.setPosition(postion, ofDividerAt: 0)
-        leftAreaSubviewsIsHidden(false)
+        leftAreaSubviewsIsHidden(bool)
     }
     
-    // 显示左Right Area View的内容
-    func rightAreaShow() {
-        let postion = leftRightSplitView.frame.size.width - threshold - thickness
+    /// 显示左Right Area View的内容
+    func rightAreaIsHidden(_ bool: Bool) {
+        let number = bool ? thickness : threshold + thickness
+        let postion = leftRightSplitView.frame.size.width - number
         leftRightSplitView.setPosition(postion, ofDividerAt: 1)
-        leftAreaSubviewsIsHidden(false)
+        leftAreaSubviewsIsHidden(bool)
     }
     
-    // 隐藏或显示Left Area View的内容，除IconButton外
+    /// 隐藏或显示Left Area View的内容，除IconButton外
     func leftAreaSubviewsIsHidden(_ bool: Bool){
         catalogTitleView.isHidden = bool
         catalogScrollView.isHidden = bool
@@ -238,7 +497,7 @@ extension ViewController {
         searchScrollView.isHidden = bool
     }
     
-    // 隐藏或显示Right Area View的内容，除IconButton外
+    /// 隐藏或显示Right Area View的内容，除IconButton外
     func rightAreaSubviewsIsHidden(_ bool: Bool){
         roleTitleView.isHidden = bool
         roleScrollView.isHidden = bool
@@ -249,3 +508,61 @@ extension ViewController {
     }
 }
 
+/// MARK: - Layout Config
+extension ViewController {
+    /// 加载板块规格
+    func loadLayoutConfig() {
+        for i in [1, 0] {
+            // Left Right Split View
+            if let leftRightValue: CGFloat = defaults.value(forKey: Divider.leftRightSplitView(at: i)) as? CGFloat {
+                leftRightSplitView.setPosition(leftRightValue, ofDividerAt: i)
+            }
+            
+            
+            // Left Area Split View
+            if let leftAreaValue: CGFloat = defaults.value(forKey: Divider.leftAreaSplitView(at: i)) as? CGFloat {
+                print("leftAreaValue", leftAreaValue, i)
+                leftAreaSplitView.setPosition(leftAreaValue, ofDividerAt: i)
+            }
+            
+            // Center Area Split View
+            if let centerAreaValue: CGFloat = defaults.value(forKey: Divider.centerAreaSplitView(at: i)) as? CGFloat {
+                centerAreaSplitView.setPosition(centerAreaValue, ofDividerAt: i)
+            }
+            
+            // Right Area Split View
+            if let rightAreaValue: CGFloat = defaults.value(forKey: Divider.rightAreaSplitView(at: i)) as? CGFloat {
+                rightAreaSplitView.setPosition(rightAreaValue, ofDividerAt: i)
+            }
+        }
+    }
+    
+    /// 保存板块规格
+    func saveLayoutConfig() {
+        
+        // Left Right Split View
+        let leftRightValue0 = leftAreaView.frame.width
+        defaults.set(leftRightValue0, forKey: Divider.leftRightSplitView(at: 0))
+        let leftRightValue1 = centerAreaView.frame.origin.x + centerAreaSplitView.frame.width
+        defaults.set(leftRightValue1, forKey: Divider.leftRightSplitView(at: 1))
+        
+        
+        // Left Area Split View
+        let leftAreaValue0 = catalogBlockView.frame.height
+        defaults.set(leftAreaValue0, forKey: Divider.leftAreaSplitView(at: 0))
+        let leftAreaValue1 = noteBlockView.frame.origin.y + noteBlockView.frame.height
+        defaults.set(leftAreaValue1, forKey: Divider.leftAreaSplitView(at: 1))
+        
+        // Center Area Split View
+        let centerAreaValue0 = ideaBlockView.frame.height + thickness
+        defaults.set(centerAreaValue0, forKey: Divider.centerAreaSplitView(at: 0))
+        let centerAreaValue1 = contentBlockView.frame.origin.y + contentBlockView.frame.height
+        defaults.set(centerAreaValue1, forKey: Divider.centerAreaSplitView(at: 1))
+        
+        // Right Area Split View
+        let rightAreaValue0 = roleBlockView.frame.height
+        defaults.set(rightAreaValue0, forKey: Divider.rightAreaSplitView(at: 0))
+        let rightAreaValue1 = symbolBlockView.frame.origin.y + symbolBlockView.frame.height
+        defaults.set(rightAreaValue1, forKey: Divider.rightAreaSplitView(at: 1))
+    }
+}

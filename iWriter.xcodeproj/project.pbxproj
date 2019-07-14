@@ -84,6 +84,7 @@
 		78C1019122D5FEA10073416E /* 037画板 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017322D5FEA00073416E /* 037画板 3.png */; };
 		78C1019222D5FEA10073416E /* 037画板 5@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017422D5FEA00073416E /* 037画板 5@1.5x.png */; };
 		78C1019622D616E50073416E /* 037画板 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1019522D616E50073416E /* 037画板 1.png */; };
+		78D0031222DB21D80046A67E /* Divider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D0031122DB21D80046A67E /* Divider.swift */; };
 		78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB474222D4365800A9F4AF /* AppDelegate.swift */; };
 		78FB474522D4365800A9F4AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB474422D4365800A9F4AF /* ViewController.swift */; };
 		78FB474722D4365900A9F4AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78FB474622D4365900A9F4AF /* Assets.xcassets */; };
@@ -220,6 +221,7 @@
 		78C1017322D5FEA00073416E /* 037画板 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 3.png"; sourceTree = "<group>"; };
 		78C1017422D5FEA00073416E /* 037画板 5@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 5@1.5x.png"; sourceTree = "<group>"; };
 		78C1019522D616E50073416E /* 037画板 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "037画板 1.png"; path = "../../../../Downloads/037画板 1.png"; sourceTree = "<group>"; };
+		78D0031122DB21D80046A67E /* Divider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Divider.swift; sourceTree = "<group>"; };
 		78FB473F22D4365800A9F4AF /* iWriter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWriter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FB474222D4365800A9F4AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78FB474422D4365800A9F4AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 				78FB477A22D4386200A9F4AF /* Symbol.swift */,
 				78FB477C22D4387600A9F4AF /* Status.swift */,
 				78FB477E22D4389B00A9F4AF /* WorksDelegate.swift */,
+				78D0031122DB21D80046A67E /* Divider.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -723,6 +726,7 @@
 				78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */,
 				78FB477722D4384800A9F4AF /* Catalog.swift in Sources */,
 				78FB477922D4385700A9F4AF /* Role.swift in Sources */,
+				78D0031222DB21D80046A67E /* Divider.swift in Sources */,
 				78FB477B22D4386200A9F4AF /* Symbol.swift in Sources */,
 				78FB477F22D4389B00A9F4AF /* WorksDelegate.swift in Sources */,
 			);
