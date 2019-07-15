@@ -71,48 +71,80 @@ class ViewController: NSViewController {
     @IBOutlet var ideaTextView: NSTextView!
     @IBOutlet var contentTextView: NSTextView!
     
+    // 内容相关
+    let works = AppDelegate.works
+    var catalogs = [Catalog]()
+    
+    // 布局相关
     let defaults = UserDefaults.standard
-    let threshold:CGFloat = 130          // Left Area View、 Right Area View 宽度最小值
-    let thickness:CGFloat = 30           // 标题栏厚度
+    let threshold: CGFloat = 130                  // Left Area View、 Right Area View 宽度最小值
+    let thickness: CGFloat = 30                   // 标题栏厚度
+    var dividers: [String: CGFloat] = [:]         // 各divider位置
+    var loaded = false                            // 加载完成
+    
+    // Left Area View 处于隐藏状态
+    var leftAreaState: Bool {
+        get {
+            return leftAreaView.frame.width == thickness
+        }
+    }
+    
+    // Right Area View 处于隐藏状态
+    var rightAreaState: Bool {
+        get {
+            return rightAreaView.frame.width == thickness
+        }
+    }
     
     // Catalog Block View 处于隐藏状态
-    var catalogState:Bool{
-        get{
+    var catalogState: Bool {
+        get {
             return catalogBlockView.frame.height == thickness
         }
     }
     
     // Note Block View 处于隐藏状态
-    var noteState:Bool{
-        get{
+    var noteState: Bool {
+        get {
             return noteBlockView.frame.height == thickness
         }
     }
     
     // Search Block View 处于隐藏状态
-    var searchState:Bool{
-        get{
+    var searchState: Bool {
+        get {
             return searchBlockView.frame.height == thickness
         }
     }
     
+    // Search Block View 处于隐藏状态
+    var outlineState: Bool {
+        get {
+            return outlineBlockView.frame.height == thickness
+        }
+    }
+    
     // Role Block View 处于隐藏状态
-    var roleState:Bool{
-        get{
+    var roleState: Bool {
+        get {
             return roleBlockView.frame.height == thickness
         }
     }
     
+    /**
+     ## Func Start
+    */
+    
     // Symbol Block View 处于隐藏状态
-    var symbolState:Bool{
-        get{
+    var symbolState: Bool {
+        get {
             return symbolBlockView.frame.height == thickness
         }
     }
     
     // Dictionary Block View 处于隐藏状态
-    var dictionaryState:Bool{
-        get{
+    var dictionaryState: Bool {
+        get {
             return dictionaryBlockView.frame.height == thickness
         }
     }
@@ -120,11 +152,24 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Split View的委托
+        // 布局的委托
         leftRightSplitView.delegate = self
+        leftAreaSplitView.delegate = self
+        centerAreaSplitView.delegate = self
+        rightAreaSplitView.delegate = self
+        
+        
+        // 数据的委托
+        var catalog = Catalog()
+        catalog.title = "第一章，第一节"
+        catalog.creation = works.creationTime()
+        catalogs = [catalog]
+        catalogOutlineView.delegate = self
+        catalogOutlineView.dataSource = self
         
         // 加载布局配置
         loadLayoutConfig()
+        loaded = true
     }
     
     override func viewDidDisappear() {
@@ -443,34 +488,123 @@ extension ViewController {
  2. AreaView左右区，在阈值范围内自动隐藏。
  */
 extension ViewController: NSSplitViewDelegate {
+    /// 完成子视图的变化
+    func splitViewDidResizeSubviews(_ notification: Notification){
+        // 加载完成了没
+        guard loaded else {
+            return
+        }
+        // 是外部改变大小吗
+        guard notification.userInfo == nil else {
+            return
+        }
+        // 改变了内容大布局了吗
+        guard let view = notification.object as? NSView else {
+            return
+        }
+        // 保持左右AreaView不变，保存Ccenter Area View上下BlockView不变
+        switch view {
+        case leftRightSplitView:
+            if let value = dividers["leftRight0"] {
+                leftRightSplitView.setPosition(value, ofDividerAt: 0)
+            }
+            if let value = dividers["leftRight1"] {
+                leftRightSplitView.setPosition(leftRightSplitView.frame.width - value, ofDividerAt: 1)
+            }
+        case leftAreaSplitView:
+            if let value = dividers["leftArea0"] {
+                leftAreaSplitView.setPosition(value, ofDividerAt: 0)
+            }
+            if let value = dividers["leftArea1"] {
+                leftAreaSplitView.setPosition(leftAreaSplitView.frame.height - value, ofDividerAt: 1)
+            }
+        case centerAreaSplitView:
+            if let value = dividers["centerArea0"] {
+                centerAreaSplitView.setPosition(value, ofDividerAt: 0)
+            }
+            if let value = dividers["centerArea1"] {
+                centerAreaSplitView.setPosition(centerAreaSplitView.frame.height - value, ofDividerAt: 1)
+            }
+        case rightAreaSplitView:
+            if let value = dividers["rightArea0"] {
+                rightAreaSplitView.setPosition(value, ofDividerAt: 0)
+            }
+            if let value = dividers["rightArea1"] {
+                rightAreaSplitView.setPosition(rightAreaSplitView.frame.height - value, ofDividerAt: 1)
+            }
+        default:
+            return
+        }
+    }
+    
     /// 分隔线位置发生了变化
     func splitView(_ splitView: NSSplitView, constrainSplitPosition proposedPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat{
+        guard loaded else {
+            return proposedPosition
+        }
+        switch splitView {
+        case leftRightSplitView:
+            return leftRightSplitViewResize(position: proposedPosition, index: dividerIndex)
+        case leftAreaSplitView:
+            return leftAreaSplitViewResize(position: proposedPosition, index: dividerIndex)
+        case centerAreaSplitView:
+            return centerAreaSplitViewResize(position: proposedPosition, index: dividerIndex)
+        case rightAreaSplitView:
+            return rightAreaSplitViewResize(position: proposedPosition, index: dividerIndex)
+        default:
+            return proposedPosition
+        }
+    }
+    
+    /// Left Right Splite View
+    func leftRightSplitViewResize(position: CGFloat, index: Int) ->CGFloat {
         // 左边分割线
-        if dividerIndex == 0 {
+        let key = "leftRight\(index)"
+        if index == 0 {
+            dividers[key] = position
             // 小于阈值
-            if proposedPosition < threshold {
+            if position < threshold {
                 // 隐藏Left Area View的内容，只保留IconButton
                 leftAreaSubviewsIsHidden(true)
                 // 并保留30的宽
+                dividers[key] = thickness
                 return thickness
             }
             leftAreaSubviewsIsHidden(false)
-            return proposedPosition
+            return position
         }
         
         // 右边分割线，如上
-        if dividerIndex == 1 {
-            if proposedPosition > leftRightSplitView.frame.size.width - threshold {
-                rightAreaSubviewsIsHidden(true)
-                let number = leftRightSplitView.frame.size.width - thickness
-                return number
-            }
-            rightAreaSubviewsIsHidden(false)
-            return proposedPosition
+        
+        if position > leftRightSplitView.frame.size.width - threshold {
+            rightAreaSubviewsIsHidden(true)
+            let number = leftRightSplitView.frame.size.width - thickness
+            dividers[key] = thickness
+            return number
         }
-        return proposedPosition
+        rightAreaSubviewsIsHidden(false)
+        dividers[key] = leftRightSplitView.frame.size.width - position
+        return position
+        
     }
     
+    /// Left Area Split View
+    func leftAreaSplitViewResize(position: CGFloat, index: Int) ->CGFloat {
+        dividers["leftArea\(index)"] = index == 0 ? position : leftAreaSplitView.frame.height - position
+        return position
+    }
+    
+    /// Center Area Split View
+    func centerAreaSplitViewResize(position: CGFloat, index: Int) ->CGFloat {
+        dividers["centerArea\(index)"] = index == 0 ? position : centerAreaSplitView.frame.height - position
+        return position
+    }
+    
+    /// Right Area Split View
+    func rightAreaSplitViewResize(position: CGFloat, index: Int) ->CGFloat {
+        dividers["rightArea\(index)"] = index == 0 ? position : rightAreaSplitView.frame.height - position
+        return position
+    }
     
     /// 显示左Left Area View的内容
     func leftAreaIsHidden(_ bool: Bool){
@@ -512,28 +646,60 @@ extension ViewController: NSSplitViewDelegate {
 extension ViewController {
     /// 加载板块规格
     func loadLayoutConfig() {
-        for i in [1, 0] {
-            // Left Right Split View
-            if let leftRightValue: CGFloat = defaults.value(forKey: Divider.leftRightSplitView(at: i)) as? CGFloat {
-                leftRightSplitView.setPosition(leftRightValue, ofDividerAt: i)
-            }
-            
-            
-            // Left Area Split View
-            if let leftAreaValue: CGFloat = defaults.value(forKey: Divider.leftAreaSplitView(at: i)) as? CGFloat {
-                print("leftAreaValue", leftAreaValue, i)
-                leftAreaSplitView.setPosition(leftAreaValue, ofDividerAt: i)
-            }
-            
-            // Center Area Split View
-            if let centerAreaValue: CGFloat = defaults.value(forKey: Divider.centerAreaSplitView(at: i)) as? CGFloat {
-                centerAreaSplitView.setPosition(centerAreaValue, ofDividerAt: i)
-            }
-            
-            // Right Area Split View
-            if let rightAreaValue: CGFloat = defaults.value(forKey: Divider.rightAreaSplitView(at: i)) as? CGFloat {
-                rightAreaSplitView.setPosition(rightAreaValue, ofDividerAt: i)
-            }
+        // Left Right Split View
+        if let value: CGFloat = defaults.value(forKey: "leftRight0") as? CGFloat {
+            leftRightSplitView.setPosition(value, ofDividerAt: 0)
+            dividers["leftRight0"] = value
+        } else {
+            dividers["leftRight0"] = leftAreaView.frame.width
+        }
+        if let value: CGFloat = defaults.value(forKey: "leftRight1") as? CGFloat {
+            leftRightSplitView.setPosition(leftRightSplitView.frame.width - value, ofDividerAt: 1)
+            dividers["leftRight1"] = value
+        } else {
+            dividers["leftRight1"] = leftRightSplitView.frame.width - rightAreaView.frame.width
+        }
+        
+        // Left Area Split View
+        if let value: CGFloat = defaults.value(forKey: "leftArea0") as? CGFloat {
+            leftAreaSplitView.setPosition(value, ofDividerAt: 0)
+            dividers["leftArea0"] = value
+        } else {
+            dividers["leftArea0"] = catalogBlockView.frame.height
+        }
+        if let value: CGFloat = defaults.value(forKey: "leftArea1") as? CGFloat {
+            leftAreaSplitView.setPosition(leftAreaSplitView.frame.height - value, ofDividerAt: 1)
+            dividers["leftArea1"] = value
+        } else {
+            dividers["leftArea1"] = leftAreaSplitView.frame.height - searchBlockView.frame.height
+        }
+        
+        // Center Area Split View
+        if let value: CGFloat = defaults.value(forKey: "centerArea0") as? CGFloat {
+            centerAreaSplitView.setPosition(value, ofDividerAt: 0)
+            dividers["centerArea0"] = value
+        } else {
+            dividers["centerArea0"] = ideaBlockView.frame.height
+        }
+        if let value: CGFloat = defaults.value(forKey: "centerArea1") as? CGFloat {
+            centerAreaSplitView.setPosition(centerAreaSplitView.frame.height - value, ofDividerAt: 1)
+            dividers["centerArea1"] = value
+        } else {
+            dividers["centerArea1"] = centerAreaSplitView.frame.height - outlineBlockView.frame.height
+        }
+        
+        // Right Area Split View
+        if let value: CGFloat = defaults.value(forKey: "rightArea0") as? CGFloat {
+            rightAreaSplitView.setPosition(value, ofDividerAt: 0)
+            dividers["rightArea0"] = value
+        } else {
+            dividers["rightArea0"] = roleBlockView.frame.height
+        }
+        if let value: CGFloat = defaults.value(forKey: "rightArea1") as? CGFloat {
+            rightAreaSplitView.setPosition(rightAreaSplitView.frame.height - value, ofDividerAt: 1)
+            dividers["rightArea1"] = value
+        } else {
+            dividers["rightArea1"] = rightAreaSplitView.frame.height - dictionaryBlockView.frame.height
         }
     }
     
@@ -541,28 +707,78 @@ extension ViewController {
     func saveLayoutConfig() {
         
         // Left Right Split View
-        let leftRightValue0 = leftAreaView.frame.width
-        defaults.set(leftRightValue0, forKey: Divider.leftRightSplitView(at: 0))
-        let leftRightValue1 = centerAreaView.frame.origin.x + centerAreaSplitView.frame.width
-        defaults.set(leftRightValue1, forKey: Divider.leftRightSplitView(at: 1))
+        defaults.set(dividers["leftRight0"], forKey: "leftRight0")
+        defaults.set(dividers["leftRight1"], forKey: "leftRight1")
         
         
         // Left Area Split View
-        let leftAreaValue0 = catalogBlockView.frame.height
-        defaults.set(leftAreaValue0, forKey: Divider.leftAreaSplitView(at: 0))
-        let leftAreaValue1 = noteBlockView.frame.origin.y + noteBlockView.frame.height
-        defaults.set(leftAreaValue1, forKey: Divider.leftAreaSplitView(at: 1))
+        defaults.set(dividers["leftArea0"], forKey: "leftArea0")
+        defaults.set(dividers["leftArea1"], forKey: "leftArea1")
         
         // Center Area Split View
-        let centerAreaValue0 = ideaBlockView.frame.height + thickness
-        defaults.set(centerAreaValue0, forKey: Divider.centerAreaSplitView(at: 0))
-        let centerAreaValue1 = contentBlockView.frame.origin.y + contentBlockView.frame.height
-        defaults.set(centerAreaValue1, forKey: Divider.centerAreaSplitView(at: 1))
+        defaults.set(dividers["centerArea0"], forKey: "centerArea0")
+        defaults.set(dividers["centerArea1"], forKey: "centerArea1")
         
         // Right Area Split View
-        let rightAreaValue0 = roleBlockView.frame.height
-        defaults.set(rightAreaValue0, forKey: Divider.rightAreaSplitView(at: 0))
-        let rightAreaValue1 = symbolBlockView.frame.origin.y + symbolBlockView.frame.height
-        defaults.set(rightAreaValue1, forKey: Divider.rightAreaSplitView(at: 1))
+        defaults.set(dividers["rightArea0"], forKey: "rightArea0")
+        defaults.set(dividers["rightArea1"], forKey: "rightArea1")
+    }
+}
+
+/// MARK: - catalog
+extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
+    // 顶级元素或子元素数量。
+    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+        if let catalog = item as? Catalog {
+            return catalog.sub.count
+        }
+        return catalogs.count
+    }
+    
+    // 顶级元素或子元素数据。
+    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any{
+        if let catalog = item as? Catalog {
+            return catalog.sub[index]
+        }
+        return catalogs[index]
+    }
+    
+    // 是否有子元素。
+    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool{
+        if let catalog = item as? Catalog {
+            return catalog.sub.count > 0
+        }
+        return false
+    }
+    
+    // 为各Cell添加数据，需要区别各列，所以在Storyboard中需要为各列及Cell添加Identifier。
+    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView?{
+        let view = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("catalogCell"), owner: self) as?  NSTableCellView
+        if let catalog = item as? Catalog {
+            if let textField = view?.textField {
+                textField.stringValue = catalog.title
+            }
+        }
+        return view
+    }
+    
+    func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat{
+        return thickness
+    }
+    
+    func formatCatalog() -> [Catalog]{
+        var array = [Catalog]()
+        var temp = Dictionary<Int, Catalog>()
+        for catalog in AppDelegate.works.catalogData{
+            if catalog.level == 0 {
+                array.append(catalog)
+            }else{
+                if var c = temp[catalog.level - 1] {
+                    c.sub.append(catalog)
+                }
+            }
+            temp[catalog.level] = catalog
+        }
+        return array
     }
 }

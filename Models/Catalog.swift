@@ -21,6 +21,7 @@ struct Catalog: WorksDelegate {
     var info: String                     // 章节信息，概述
     var creation: Int                    // 创建时间，时间戮
     var number: Int                      // 章节字数
+    var sub: [Catalog]
     
     init() {
         self.level = 0
@@ -28,6 +29,7 @@ struct Catalog: WorksDelegate {
         self.info = ""
         self.creation = 0
         self.number = 0
+        self.sub = [Catalog]()
     }
     
     subscript(key:String)->Any?{

@@ -22,8 +22,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-// MARK: - File Menu 
-
 // MARK: - File Menu
 extension AppDelegate{
     
@@ -93,7 +91,7 @@ extension AppDelegate{
         }
     }
     
-    // 事件：另存文件
+    /// 事件：另存文件
     /// - parameter sender 事件发送者
     @IBAction func saveAsFile(_ sender: Any) {
         guard let path = saveFilePanel(title: "Save as File") else {
