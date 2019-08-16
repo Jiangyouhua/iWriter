@@ -9,26 +9,27 @@
 import Foundation
 
 /**
- ## Works Info
-    作品信息
- 1. 支持subscript，方便与Dictionary转换
- 2. 提供forDictionary方法，支持转换为Dictionary
+ ## Works Info。
+    作品信息。
+ 1. 支持subscript，方便与Dictionary转换；
+ 2. 提供forDictionary方法，支持转换为Dictionary。
  */
-struct Info: WorksDelegate {
+struct Info: DataDelegate {
     
-    var file: String                    // 作品名称，含路径
-    var author: String                  // 作者，前期使用iwriter，后期从设置中读取
-    var creation: Int                   // 创建时间，时间戮
-    var chaptersOnBar: [Int]            // 在章节标题栏上的章节，章节索引
-    var currentChapter: Int             // 当前编辑的章节，章节索引
+    var file: String                    // 作品名称，含路径。
+    var author: String                  // 作者，前期使用iwriter，后期从设置中读取。
+    var creation: Int                   // 创建时间，时间戮。
+    var contentTitleOnBar: [Catalog]        // 在章节标题栏上的章节。
+    var currentContent: Catalog?        // 当前编辑的章节。
+    var isTemp: Bool                    // 退出前未保存。
     var other:Dictionary<String, Any>
     
     init() {
         self.file = ""
         self.author = ""
         self.creation = 0
-        self.chaptersOnBar = [Int]()
-        self.currentChapter = 0
+        self.contentTitleOnBar = [Catalog]()
+        self.isTemp = true
         self.other = [:]
     }
     
@@ -42,9 +43,9 @@ struct Info: WorksDelegate {
             case "creation":
                 return self.creation
             case "chaptersOnBar":
-                return self.chaptersOnBar
+                return self.contentTitleOnBar
             case "currentChapter":
-                return self.currentChapter
+                return self.currentContent
             default:
                 return self.other[key]
             }
@@ -58,24 +59,28 @@ struct Info: WorksDelegate {
             case "creation":
                 self.creation = newValue as? Int  ?? 0
             case "chaptersOnBar":
-                self.chaptersOnBar = newValue as? [Int]  ?? [Int]()
+                self.contentTitleOnBar = newValue as? [Catalog]  ?? [Catalog]()
             case "currentChapter":
-                self.currentChapter = newValue as? Int  ?? 0
+                self.currentContent = newValue as? Catalog ?? nil
             default:
                 self.other[key] = newValue
             }
         }
     }
     
-    /// 转为字典
-    /// - returns: 字典
+    /// 转为字典。
+    /// - returns: 字典。
     func forDictionary()->Dictionary<String, Any>{
         var dic:Dictionary<String, Any> = [:]
         dic["file"] = self.file
         dic["author"] = self.author
         dic["creation"] = self.creation
-        dic["chaptersOnBar"] = self.chaptersOnBar
-        dic["currentChapter"] = self.currentChapter
+        var array = [Any]()
+        for catalog in contentTitleOnBar {
+            array.append(catalog.forDictionary())
+        }
+        dic["chaptersOnBar"] = array
+        dic["currentChapter"] = self.currentContent?.forDictionary()
         for (key, value) in self.other {
             dic[key] = value
         }

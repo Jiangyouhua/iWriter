@@ -10,8 +10,8 @@ import Foundation
 import CommonCrypto
 
 /**
- ## Works Data Status
-    作品数据状态，用来判断数据是否更新
+ ## Works Data Status。
+    作品数据状态，用来判断数据是否更新。
  1. 为Info、Catalog、Role、Symbol保存最近的MD5值；
  2. 判断新的MD5值与原值是否相同，不同表示数据有更新，需要保存；
  3. 提供Data的MD5方法。
@@ -29,7 +29,7 @@ struct Status {
         symbolCode = ""
     }
     
-    /// MD5
+    /// MD5.
     func md5(data: Data) -> String{
         let hash = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> [UInt8] in
             var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
@@ -39,7 +39,7 @@ struct Status {
         return hash.map { String(format: "%02x", $0) }.joined()
     }
     
-    /// 判断Info数据是否需要保存
+    /// 判断Info数据是否需要保存。
     mutating func isSave(info: Data) -> Bool {
         let m = md5(data: info)
         if m == infoCode {
@@ -49,7 +49,7 @@ struct Status {
         return true
     }
     
-    /// 判断Catalog数据是否需要保存
+    /// 判断Catalog数据是否需要保存。
     mutating func isSave(catalog: Data) -> Bool {
         let m = md5(data: catalog)
         if m == catalogCode {
@@ -59,7 +59,7 @@ struct Status {
         return true
     }
     
-    /// 判断Role数据是否需要保存
+    /// 判断Role数据是否需要保存。
     mutating func isSave(role: Data) -> Bool {
         let m = md5(data: role)
         if m == roleCode {
@@ -69,7 +69,7 @@ struct Status {
         return true
     }
     
-    /// 判断Symbol数据是否需要保存
+    /// 判断Symbol数据是否需要保存。
     mutating func isSave(symbol: Data) -> Bool {
         let m = md5(data: symbol)
         if m == symbolCode {

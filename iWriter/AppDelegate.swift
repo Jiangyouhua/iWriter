@@ -11,10 +11,14 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    static let works = Works()   // 便于ViewController使用
+    @IBOutlet weak var openRecentMenu: NSMenu!
+    
+    static let works = Works()   // 便于ViewController使用。
+    static let recent = Recent()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        AppDelegate.recent.formatMenu(menu: openRecentMenu)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -22,11 +26,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-// MARK: - File Menu
+// MARK: - File Menu。
 extension AppDelegate{
     
-    /// 事件：新建文件
-    /// - parameter sender 事件发送者
+    /// 事件：新建文件。
+    /// - parameter sender 事件发送者。
     @IBAction func newFile(_ sender: Any) {
         guard let path = saveFilePanel(title: "New File") else {
             return
@@ -48,8 +52,8 @@ extension AppDelegate{
         }
     }
     
-    /// 事件：打开文件
-    /// - parameter sender 事件发送者
+    /// 事件：打开文件。
+    /// - parameter sender 事件发送者。
     @IBAction func openFile(_ sender: Any) {
         guard let path = openFilePanel(title: "Open File") else{
             return
@@ -71,8 +75,8 @@ extension AppDelegate{
         }
     }
     
-    /// 事件：保存文件
-    /// - parameter sender 事件发送者
+    /// 事件：保存文件。
+    /// - parameter sender 事件发送者。
     @IBAction func saveFile(_ sender: Any) {
         do {
             try AppDelegate.works.saveFile()
@@ -91,8 +95,8 @@ extension AppDelegate{
         }
     }
     
-    /// 事件：另存文件
-    /// - parameter sender 事件发送者
+    /// 事件：另存文件。
+    /// - parameter sender 事件发送者。
     @IBAction func saveAsFile(_ sender: Any) {
         guard let path = saveFilePanel(title: "Save as File") else {
             return
@@ -115,11 +119,11 @@ extension AppDelegate{
     }
 }
 
-// MARK: - File Browser
+// MARK: - File Browser。
 extension AppDelegate{
     
-    /// 文件流览器，打开文件
-    /// - parameter title 显示的标题
+    /// 文件流览器，打开文件。
+    /// - parameter title 显示的标题。
     func openFilePanel(title: String)->String?{
         let dialog = NSOpenPanel()
         dialog.title                   = title
@@ -138,8 +142,8 @@ extension AppDelegate{
         return nil
     }
     
-    /// 文件流览器，保存文件
-    /// - parameter title 显示的标题
+    /// 文件流览器，保存文件。
+    /// - parameter title 显示的标题。
     func saveFilePanel(title: String)->String?{
         let dialog = NSSavePanel()
         dialog.title                   = title
@@ -157,4 +161,3 @@ extension AppDelegate{
         return nil
     }
 }
-

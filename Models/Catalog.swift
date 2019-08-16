@@ -9,18 +9,18 @@
 import Foundation
 
 /**
- ## Works Catalog
-    作品目录，使用时确定顺序按层级递进
- 1. 支持subscript，方便与Dictionary转换
- 2. 提供forDictionary方法，支持转换为Dictionary
+ ## Works Catalog。
+    作品目录，使用时确定顺序按层级递进。
+ 1. 支持subscript，方便与Dictionary转换；
+ 2. 提供forDictionary方法，支持转换为Dictionary。
  */
-struct Catalog: WorksDelegate {
+class Catalog: DataDelegate {
     
-    var level: Int                       // 章节的层级
-    var title: String                    // 章节标题
-    var info: String                     // 章节信息，概述
-    var creation: Int                    // 创建时间，时间戮
-    var number: Int                      // 章节字数
+    var level: Int                       // 章节的层级。
+    var title: String                    // 章节标题。
+    var info: String                     // 章节信息，概述。
+    var creation: Int                    // 创建时间，时间戮。
+    var number: Int                      // 章节字数。
     var sub: [Catalog]
     
     init() {
@@ -32,7 +32,7 @@ struct Catalog: WorksDelegate {
         self.sub = [Catalog]()
     }
     
-    subscript(key:String)->Any?{
+    subscript(key:String) -> Any? {
         get{
             switch key {
             case "level":
@@ -67,9 +67,9 @@ struct Catalog: WorksDelegate {
         }
     }
     
-    /// 转为字典
-    /// - returns: 字典
-    func forDictionary()->Dictionary<String, Any>{
+    /// 转为字典。
+    /// - returns: 字典。
+    func forDictionary() -> Dictionary<String, Any> {
         var dic:Dictionary<String, Any> = [:]
         dic["level"] = self.level
         dic["title"] = self.title
@@ -79,3 +79,4 @@ struct Catalog: WorksDelegate {
         return dic
     }
 }
+

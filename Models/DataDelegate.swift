@@ -9,8 +9,8 @@
 import Foundation
 
 /**
- ## 作品数据协议，用多态进行同一处理
+ ## 作品数据协议，用多态进行同一处理。
  */
-protocol WorksDelegate {
+protocol DataDelegate {
     func forDictionary() -> Dictionary<String, Any>
 }

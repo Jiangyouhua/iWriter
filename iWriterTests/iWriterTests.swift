@@ -12,10 +12,12 @@ import XCTest
 class iWriterTests: XCTestCase {
     
     var works: Works!
+    var recent: Recent!
     var folder: String!
     
     override func setUp() {
         works = Works()
+        recent = Recent()
         folder = "/Users/jiangyouhua/Downloads"
     }
     
@@ -32,15 +34,15 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(info.file, "")
         XCTAssertEqual(info.author, "")
         XCTAssertEqual(info.creation, 0)
-        XCTAssertEqual(info.chaptersOnBar, [])
-        XCTAssertEqual(info.currentChapter, 0)
+        XCTAssertTrue(info.contentTitleOnBar.isEmpty)
+        XCTAssertTrue(info.currentContent == nil)
         
         // 赋值
         info.file = "/User/jiangyouhau/work/Sinlge Men.iw"
         info.author = "Jiang Youhua"
         info.creation = 123456
-        info.chaptersOnBar = [1,2,3]
-        info.currentChapter = 2
+        info.contentTitleOnBar = [Catalog()]
+        info.currentContent = Catalog()
         info.other["key"] = "value"
         
         // 转Dictionary
@@ -57,8 +59,8 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(info.file, temp.file)
         XCTAssertEqual(info.author, temp.author)
         XCTAssertEqual(info.creation, temp.creation)
-        XCTAssertEqual(info.chaptersOnBar, temp.chaptersOnBar)
-        XCTAssertEqual(info.currentChapter, temp.currentChapter)
+        XCTAssertEqual(info.contentTitleOnBar[0].creation, temp.contentTitleOnBar[0].creation)
+        XCTAssertEqual(info.currentContent?.creation, temp.currentContent?.creation)
         XCTAssertEqual(info["key"] as! String, temp["key"] as! String)
         
         // 脏数据
@@ -73,15 +75,15 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(info.file, "")
         XCTAssertEqual(info.author, "")
         XCTAssertEqual(info.creation, 0)
-        XCTAssertEqual(info.chaptersOnBar, [])
-        XCTAssertEqual(info.currentChapter, 0)
+        XCTAssertTrue(info.contentTitleOnBar.isEmpty)
+        XCTAssertTrue(info.currentContent == nil)
         XCTAssertEqual(info["key"] as! Int, 123456)
     }
     
     /// 测试Catalog数据模型
     func testCatalog(){
         //  未赋值
-        var catalog = Catalog()
+        let catalog = Catalog()
         
         // 判断是否符合预期
         XCTAssertEqual(catalog.level, 0)
@@ -102,7 +104,7 @@ class iWriterTests: XCTestCase {
         let dic = catalog.forDictionary()
         
         // 转Info
-        var temp = Catalog()
+        let temp = Catalog()
         for (key, value) in dic {
             // 使用Subscript赋值
             temp[key] = value
@@ -128,6 +130,49 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(catalog.info, "")
         XCTAssertEqual(catalog.creation, 0)
         XCTAssertEqual(catalog.number, 0)
+    }
+    
+    // 判断Catalog索引与转换
+    func testCatalogOther(){
+        let root = Catalog()
+        root.title = "Single Man"
+        root.creation = works.creationTime()
+        
+        let chapter1 = Catalog()
+        chapter1.title = "Chapter 1"
+        root.creation = works.creationTime()
+        root.sub.append(chapter1)
+        
+        let chapter2 = Catalog()
+        chapter2.title = "Chapter 2"
+        root.creation =  works.creationTime()
+        root.sub.append(chapter2)
+        
+        let section1_1 = Catalog()
+        section1_1.title = "Section 1.1"
+        section1_1.creation = works.creationTime()
+        chapter1.sub.append(section1_1)
+        
+        let section1_2 = Catalog()
+        section1_2.title = "Section 1.2"
+        section1_2.creation = works.creationTime()
+        chapter1.sub.append(section1_2)
+        
+        let section2_1 = Catalog()
+        section2_1.title = "Section 2.1"
+        section2_1.creation = works.creationTime()
+        chapter2.sub.append(section2_1)
+        
+        let section2_2 = Catalog()
+        section2_2.title = "Section 2.2"
+        section2_2.creation = works.creationTime()
+        chapter2.sub.append(section2_2)
+        
+        let (i, _) = works.indexCatalog(catalogs: [root], catalog: section2_2)
+        XCTAssertEqual(i, 7)
+        
+        let (catalog, _) = works.parentCatalog(catalog: root, index: 7)
+        XCTAssertEqual(catalog?.creation, chapter2.creation)
     }
     
     /// 测试Role数据模型
@@ -224,7 +269,7 @@ class iWriterTests: XCTestCase {
     }
     
     /// 测试Works数据模型
-    func testWorks(){
+    func testWorksForReadAndWrite(){
         // New File
         var file = folder + "/new_file.iw"
         try? works.newFile(path: file)
@@ -235,12 +280,12 @@ class iWriterTests: XCTestCase {
         XCTAssertTrue(works.fileManager.fileExists(atPath: works.symbolFile))
         
         // Save File
-        var catalog = Catalog()
+        let catalog = Catalog()
         catalog.title = "Chapter title"
         catalog.info = "Chapter info"
         catalog.creation = works.creationTime()
         works.catalogData.append(catalog)
-        works.currentChapterData = "Current Chapter Data"
+        works.currentContentData = "Current Chapter Data"
         try? works.saveFile()
         let data = works.fileManager.contents(atPath: works.catalogFile)!
         let array = try! JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [Any]
@@ -255,9 +300,19 @@ class iWriterTests: XCTestCase {
         
         // Open File
         try? works.openFile(path: file)
-        XCTAssertEqual(works.currentChapterData, "Current Chapter Data")
-        let c = works.catalogData[works.currentChapterIndex]
-        XCTAssertEqual(works.currentChapterData.count, c.number)
+        XCTAssertEqual(works.currentContentData, "Current Chapter Data")
+        XCTAssertEqual(works.currentContentData.count, works.currentContent.number)
+    }
+    
+    func testHelperLastFile() {
+        var array = recent.lastFiles()
+        let file = "/Users/jiangyouhua/work/Single Man.iw"
+        array.insert(file, at: 0)
+        let a = recent.lastFiles(file)
+        XCTAssertEqual(array.count, a.count)
+        for (i, item) in array.enumerated() {
+            XCTAssertEqual(item, a[i])
+        }
     }
     
     func testPerformanceExample() {
