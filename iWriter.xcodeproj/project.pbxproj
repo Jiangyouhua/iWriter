@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		780508D322E5C33300A36E18 /* JYHTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780508D222E5C33300A36E18 /* JYHTextField.swift */; };
 		7812000522E4544C00C32B9E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7812000422E4544C00C32B9E /* Extension.swift */; };
+		78231B4A230CFD220046E5FC /* StandInTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78231B49230CFD220046E5FC /* StandInTabView.swift */; };
 		7829A30422D48256003CA1C7 /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7829A2FE22D48249003CA1C7 /* ZipArchive.framework */; };
 		7829A30722D482B9003CA1C7 /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7829A2FE22D48249003CA1C7 /* ZipArchive.framework */; };
 		7829A30822D482BE003CA1C7 /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7829A2FE22D48249003CA1C7 /* ZipArchive.framework */; };
@@ -93,7 +94,6 @@
 		78C1019022D5FEA10073416E /* 037画板 2@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017222D5FEA00073416E /* 037画板 2@1.5x.png */; };
 		78C1019122D5FEA10073416E /* 037画板 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017322D5FEA00073416E /* 037画板 3.png */; };
 		78C1019222D5FEA10073416E /* 037画板 5@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017422D5FEA00073416E /* 037画板 5@1.5x.png */; };
-		78E2C3862306614A00DB8231 /* StandinTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E2C3852306614A00DB8231 /* StandinTabView.swift */; };
 		78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB474222D4365800A9F4AF /* AppDelegate.swift */; };
 		78FB474522D4365800A9F4AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB474422D4365800A9F4AF /* ViewController.swift */; };
 		78FB474722D4365900A9F4AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78FB474622D4365900A9F4AF /* Assets.xcassets */; };
@@ -158,6 +158,7 @@
 /* Begin PBXFileReference section */
 		780508D222E5C33300A36E18 /* JYHTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHTextField.swift; sourceTree = "<group>"; };
 		7812000422E4544C00C32B9E /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		78231B49230CFD220046E5FC /* StandInTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandInTabView.swift; sourceTree = "<group>"; };
 		7829A2F422D48248003CA1C7 /* ZipArchive.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipArchive.xcodeproj; path = "ZipArchive-master/ZipArchive.xcodeproj"; sourceTree = "<group>"; };
 		782CCE3622E33A9C00346D24 /* TitleTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTabView.swift; sourceTree = "<group>"; };
 		782CCE3822E3494C00346D24 /* TitleTabView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TitleTabView.xib; sourceTree = "<group>"; };
@@ -241,7 +242,6 @@
 		78C1017322D5FEA00073416E /* 037画板 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 3.png"; sourceTree = "<group>"; };
 		78C1017422D5FEA00073416E /* 037画板 5@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 5@1.5x.png"; sourceTree = "<group>"; };
 		78C1019522D616E50073416E /* 037画板 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "037画板 1.png"; path = "../../../../Downloads/037画板 1.png"; sourceTree = "<group>"; };
-		78E2C3852306614A00DB8231 /* StandinTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandinTabView.swift; sourceTree = "<group>"; };
 		78FB473F22D4365800A9F4AF /* iWriter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWriter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FB474222D4365800A9F4AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78FB474422D4365800A9F4AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -317,7 +317,7 @@
 				780508D222E5C33300A36E18 /* JYHTextField.swift */,
 				78A96C7B22E4D43A00280327 /* JYHView.swift */,
 				782CCE3A22E36FE300346D24 /* TabsBarView.swift */,
-				78E2C3852306614A00DB8231 /* StandinTabView.swift */,
+				78231B49230CFD220046E5FC /* StandInTabView.swift */,
 				782CCE3622E33A9C00346D24 /* TitleTabView.swift */,
 				782CCE3822E3494C00346D24 /* TitleTabView.xib */,
 			);
@@ -775,9 +775,9 @@
 				782CCE3B22E36FE300346D24 /* TabsBarView.swift in Sources */,
 				78FB477B22D4386200A9F4AF /* Symbol.swift in Sources */,
 				78FB477F22D4389B00A9F4AF /* DataDelegate.swift in Sources */,
-				78E2C3862306614A00DB8231 /* StandinTabView.swift in Sources */,
 				78A6DEA022E2C88700FEAC85 /* CatalogWindowController.swift in Sources */,
 				782CCE3F22E40D9000346D24 /* MainWindowController.swift in Sources */,
+				78231B4A230CFD220046E5FC /* StandInTabView.swift in Sources */,
 				780508D322E5C33300A36E18 /* JYHTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

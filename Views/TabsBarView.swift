@@ -88,11 +88,11 @@ class TabsBarView: NSView {
         let sub = self.subviews
         for view in sub {
             if let v =  view as? TitleTabView {
-                let standin = StandinTabView.init(catalog: v.catalog, active: v.catalog.creation == active.creation)
-                standin.index = v.index
-                standin.frame = v.frame
-                standin.delegate = self
-                self.addSubview(standin, positioned: NSWindow.OrderingMode.above, relativeTo: nil)
+                let standIn = StandInTabView.init(catalog: v.catalog, active: v.catalog.creation == active.creation)
+                standIn.index = v.index
+                standIn.frame = v.frame
+                standIn.delegate = self
+                self.addSubview(standIn, positioned: NSWindow.OrderingMode.above, relativeTo: nil)
             }
         }
     }
@@ -151,32 +151,35 @@ class TabsBarView: NSView {
     }
 }
 
-/// 实现标签方法。
-extension TabsBarView: StandinTabDelegate {
+/// 实现标签的委托方法。
+extension TabsBarView: StandInTabDelegate {
+    // 激活
     func tabClick(view: TitleTabView, catalog: Catalog, index: Int) {
         // 改变激活标签
         updateActive(active: catalog)
         for view in self.subviews {
-            if let v = view as? StandinTabView {
+            if let v = view as? StandInTabView {
                 v.isHidden = v.catalog.creation != active.creation
             }
         }
         delegate?.tabDidClicked(catalog: catalog)
     }
     
+    // 关闭
     func tabClose(catalog: Catalog, index: Int) {
         let (catalogs, catalog) = delCatalog(index: index)
         delegate?.tabDidClosed(catalogs: catalogs, current: catalog)
     }
     
-    func standinDragEnded(standin: StandinTabView) {
-        let point = standin.frame.origin
+    // 排序
+    func standInDragEnded(standIn: StandInTabView) {
+        let point = standIn.frame.origin
         var isInset = false    // 是否被插入
         var array = [Catalog]()
         for view in self.subviews {
             if let v = view as? TitleTabView {
                 // 除替身外和自身外的所有标签
-                if  v is StandinTabView || v.catalog.creation == standin.catalog.creation {
+                if  v is StandInTabView || v.catalog.creation == standIn.catalog.creation {
                     continue
                 }
                 // 排序位置前的
@@ -185,7 +188,7 @@ extension TabsBarView: StandinTabDelegate {
                 } else {
                     // 插入到当前位置
                     if !isInset {
-                        array.append(standin.catalog)
+                        array.append(standIn.catalog)
                         isInset = true
                     }
                     // 排序位置后的
@@ -194,10 +197,9 @@ extension TabsBarView: StandinTabDelegate {
             }
         }
         if !isInset {
-            array.append(standin.catalog)
+            array.append(standIn.catalog)
         }
         self.catalogs = array
         self.needsLayout = true
     }
-    
 }

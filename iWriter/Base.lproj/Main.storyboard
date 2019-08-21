@@ -1657,6 +1657,7 @@ CA
                         <outlet property="catalogBlockView" destination="l0B-e8-kAp" id="XBf-al-3CD"/>
                         <outlet property="catalogIconButton" destination="Rxm-3Z-thN" id="gLm-ga-kUL"/>
                         <outlet property="catalogLine" destination="1LC-zA-TkY" id="wpf-aj-Wyw"/>
+                        <outlet property="catalogMenu" destination="WMI-gn-E5b" id="FSe-dF-DxO"/>
                         <outlet property="catalogOutlineView" destination="p7L-3N-px7" id="aW5-pl-pj8"/>
                         <outlet property="catalogScrollView" destination="81r-Bq-Zdw" id="lmH-G5-tfM"/>
                         <outlet property="catalogTitleView" destination="QEB-hY-8k0" id="Kgt-55-agj"/>

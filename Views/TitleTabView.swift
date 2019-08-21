@@ -49,6 +49,7 @@ class TitleTabView: NSView {
         format()
     }
     
+    /// 独立出来，方便动态更新
     func format(){
         // 设置Label。
         label.stringValue = catalog.title
@@ -72,7 +73,7 @@ class TitleTabView: NSView {
         self.layer?.cornerRadius = 4;
     }
     
-    
+    /// 添加动态更新方法
     func update(catalog: Catalog, active: Bool) {
         self.catalog = catalog
         self.active = active
@@ -80,6 +81,7 @@ class TitleTabView: NSView {
         self.needsLayout = true
     }
     
+    /// 独立出底色修改
     func isActive(b: Bool){
         self.layer?.backgroundColor = b ? CGColor.white : CGColor.init(gray: 0.9, alpha: 1)
     }

@@ -52,7 +52,6 @@ class CatalogWindowController: NSWindowController, NSWindowDelegate {
         works.addCatalog(item: catalog, inParent: works.catalogData[0].sub.last!)
         works.addOtherItem(catalog: catalog)
         self.close()
-        
     }
     
     /// 添加章

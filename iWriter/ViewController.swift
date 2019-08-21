@@ -8,12 +8,18 @@
 
 import Cocoa
 
+/**
+ ## 目录项移动前原位置数据。
+ */
 struct DragItem {
-    var at: Int = -1
-    var item: Any? = nil
-    var inParent: Any? = nil
+    var at: Int = -1          // 在父项的位置。
+    var item: Any? = nil      // 移动的项目。
+    var inParent: Any? = nil  // 父项。
 }
 
+/**
+ ## 各目录项移动前原位置数据。
+ */
 struct DragItems {
     var catalog: DragItem = DragItem()
     var note: DragItem = DragItem()
@@ -93,6 +99,8 @@ class ViewController: NSViewController, WorksDelegate {
     
     @IBOutlet var ideaTextView: NSTextView!
     @IBOutlet var contentTextView: NSTextView!
+    
+    @IBOutlet var catalogMenu: NSMenu!
     
     // 新建目录项对话窗口。
     var catalogWindowController: CatalogWindowController?
@@ -1519,7 +1527,6 @@ extension ViewController: TabsBarDelegate {
     func tabDidClicked(catalog: Catalog) {
         works.currentContent = catalog
         catalogCurrentItem()
-        
     }
     
     func tabDidClosed(catalogs: [Catalog], current: Catalog) {
