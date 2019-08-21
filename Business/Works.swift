@@ -596,9 +596,9 @@ extension Works {
     }
 }
 
-/// MARK: - Catalog Data
+/// MARK: - Catalog Data。
 extension Works {
-    /// 添加节点
+    /// 添加节点。
     func addCatalog(item: Catalog, inParent: Catalog, index: Int = -1) {
         if index < 0 || index >= inParent.sub.count {
             return inParent.sub.append(item)
@@ -606,22 +606,22 @@ extension Works {
         return inParent.sub.insert(item, at: index)
     }
     
-    /// 添加其它项
+    /// 添加其它项。
     func addOtherItem(catalog: Catalog){
         currentContent = catalog
         currentContentData = catalog.title
-        // 添加内容文件
+        // 添加内容文件。
         try? writeCurrentContentFile()
-        // 委托
+        // 委托。
         delegate?.catalogUpdatedItem()
     }
     
-    /// 删除节点
+    /// 删除节点。
     func delCatalog(inParent: Catalog, index: Int) -> Catalog? {
         return inParent.sub.remove(at: index)
     }
     
-    /// 添加其它项
+    /// 添加其它项。
     func delOtherItem(catalog: Catalog){
         var index = -1
         for (i, item) in infoData.contentTitleOnBar.enumerated() {
@@ -643,7 +643,7 @@ extension Works {
         currentContent = infoData.contentTitleOnBar[0]
     }
     
-    /// 移动节点
+    /// 移动节点。
     func moveCatalog(at: Int, atParent: Catalog, to: Int, toParent: Catalog) {
         guard let catalog = delCatalog(inParent: atParent, index: at) else {
             return
@@ -651,7 +651,7 @@ extension Works {
         addCatalog(item: catalog, inParent: toParent, index: to)
     }
     
-    /// 节点序号
+    /// 节点序号。
     func indexCatalog(catalogs: [Catalog],  catalog: Catalog, start: Int = -1) -> (Int, Bool){
         var i = start
         for item in catalogs {
@@ -671,8 +671,8 @@ extension Works {
         return (i, false)
     }
     
-    /// 父节点
-    /// return: 父项、在父项的位置
+    /// 父节点。
+    /// return: 父项、在父项的位置。
     func parentCatalog(inSub: Catalog, catalog: Catalog) -> (Catalog?, Int) {
         if inSub.sub.count == 0 {
             return (nil, -1)
@@ -698,12 +698,12 @@ extension Works {
     }
     
     /// 由于Catalog数据是多层结构，所以需要自己实现增删改。
-    /// 删
+    /// 删。
     func catalogDataRomoveItem(index: Int) -> Bool{
         return catalogDataRomoveItemByRecursive(index: index, catalogs: &catalogData, start: 0)
     }
     
-    /// 递归实现删除
+    /// 递归实现删除。
     private func catalogDataRomoveItemByRecursive(index: Int, catalogs: inout [Catalog], start: Int) -> Bool {
         var j = start
         for (i, catalog) in catalogs.enumerated() {

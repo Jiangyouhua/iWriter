@@ -14,6 +14,9 @@ protocol StandInTabDelegate {
     func standInDragEnded(standIn: StandInTabView)
 }
 
+/**
+ ## 替身类，实现移动的标签在最上面。
+ */
 class StandInTabView: TitleTabView {
     
     var delegate: StandInTabDelegate?
@@ -23,8 +26,9 @@ class StandInTabView: TitleTabView {
         
         // Drawing code here.
     }
+    
     override func mouseDragged(with event: NSEvent) {
-        // 计算偏移量，移动到新位置
+        // 计算偏移量，移动到新位置。
         let point = (self.window?.contentView?.convert(event.locationInWindow, to: self))!
         let offset = NSPoint(x: point.x - firstMouseDownPoint.x, y: point.y - firstMouseDownPoint.y)
         let origin = self.frame.origin
@@ -35,12 +39,12 @@ class StandInTabView: TitleTabView {
     }
     
     override func mouseUp(with event: NSEvent) {
-        // 完成移动
+        // 完成移动。
         delegate?.standInDragEnded(standIn:self)
     }
     
     override func mouseDown(with event: NSEvent) {
-        // 原位置
+        // 原位置。
         firstMouseDownPoint = (self.window?.contentView?
             .convert(event.locationInWindow, to: self))!
         delegate?.tabClick(view:self, catalog: catalog, index: index)

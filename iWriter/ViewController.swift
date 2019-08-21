@@ -31,7 +31,7 @@ struct DragItems {
 
 class ViewController: NSViewController, WorksDelegate {
     
-    /// 布局的组件Outlet
+    /// 布局的组件Outlet。
     @IBOutlet weak var leftRightSplitView: NSSplitView!
     @IBOutlet weak var leftAreaView: NSView!
     @IBOutlet weak var centerAreaView: NSView!
@@ -214,7 +214,7 @@ class ViewController: NSViewController, WorksDelegate {
         }
     }
     
-    /// 显示与隐藏Add Button，没有打开文件时隐藏
+    /// 显示与隐藏Add Button，没有打开文件时隐藏。
     func addButtonIsHidden(bool: Bool){
         catalogAddButton.isHidden = bool
         noteAddButton.isHidden = bool
@@ -230,7 +230,7 @@ class ViewController: NSViewController, WorksDelegate {
         rightAreaSplitView.delegate = self
     }
     
-    /// Outline View Delegate，各区块显示的数据及编辑
+    /// Outline View Delegate，各区块显示的数据及编辑。
     func outlineViewDelegate(){
         catalogOutlineView.delegate = self
         catalogOutlineView.dataSource = self
@@ -1225,7 +1225,7 @@ extension ViewController:  NSOutlineViewDelegate {
         }
     }
     
-    /// 点击各行
+    /// 点击各行。
     func outlineViewSelectionDidChange(_ notification: Notification){
         let outlineView = notification.object as! NSOutlineView
         let index = outlineView.selectedRow
@@ -1297,10 +1297,10 @@ extension ViewController:  NSOutlineViewDelegate {
     }
 }
 
-// MARK: - Add Button
+// MARK: - Add Button。
 
 /**
- ## 为Catalog、Note、Role、Symbol添加子项
+ ## 为Catalog、Note、Role、Symbol添加子项。
  */
 extension ViewController {
     @IBAction func catalogAddButtonClick(_ sender: Any) {
@@ -1331,7 +1331,7 @@ extension ViewController {
 extension ViewController: NSTextFieldDelegate {
     // Catalog Outline View。
     
-    /// 完成编辑
+    /// 完成编辑。
     func controlTextDidEndEditing(_ obj: Notification) {
         let textField = obj.object as! NSTextField
         switch textField.tag {
@@ -1353,10 +1353,10 @@ extension ViewController: NSTextFieldDelegate {
     }
 }
 
-// MARK: - Catalog
+// MARK: - Catalog。
 
 /**
- ## 编辑Catalog
+ ## 编辑Catalog。
  */
 extension ViewController {
     // 增加。
@@ -1429,13 +1429,13 @@ extension ViewController {
         catalogOutlineView.reloadData()
     }
     
-    // 删除
+    // 删除。
     @IBAction func catalogMenuDeleteItemClick(_ sender: Any) {
         let index = catalogOutlineView.selectedRow
         catalogOutlineViewDelItem(index: index)
     }
     
-    // 增，TitleTabsVeiw、ContentText
+    // 增，TitleTabsVeiw、ContentText。
     func catalogOutlineViewAddItem(){
         // 打开设置窗口，添加完成后调用又catalogWindowAddedData。
         catalogWindowController = CatalogWindowController()
@@ -1443,39 +1443,39 @@ extension ViewController {
         catalogWindowController?.showWindow(nil)
     }
     
-    // 删
+    // 删。
     func catalogOutlineViewDelItem(index: Int){
         _ = works.catalogDataRomoveItem(index: index)
         catalogOutlineView.reloadData()
     }
     
-    /// 改
+    /// 改。
     func catalogOutlineViewUpdateItem(textField: NSTextField, index: Int){
         let catalog = catalogOutlineView.item(atRow: index) as! Catalog
         catalog.title = textField.stringValue
     }
     
-    /// 打开
+    /// 打开。
     func catalogOutlineViewOpenItem(index: Int){
         if index < 1 {
             return
         }
         let catalog = catalogOutlineView.item(atRow: index) as! Catalog
-        // 当前的
+        // 当前的。
         works.currentContent = catalog
-        // 标题标签栏上
+        // 标题标签栏上。
         tabsBarView.addCatalog(catalog)
         catalogCurrentItem()
     }
     
-    /// 完成新加或更新
+    /// 完成新加或更新。
     func catalogWindowAddedData(catalog: Catalog) {
-        // 新加
+        // 新加。
         
-        // 加入到当前
+        // 加入到当前。
         works.currentContent = catalog
         do {
-            // 建立当前章节文件
+            // 建立当前章节文件。
             try works.writeCurrentContentFile()
         } catch let error as WorksError{
             let alert = NSAlert()
@@ -1491,38 +1491,38 @@ extension ViewController {
             print(error)
         }
         
-        // 重建标签栏
+        // 重建标签栏。
         catalogCurrentItem()
     }
     
-    // 添加目录节点后，更新Layout
+    // 添加目录节点后，更新Layout。
     func catalogUpdatedItem() {
         catalogOutlineView.reloadData()
         tabsBarView.dataSource(catalogs: works.infoData.contentTitleOnBar, active: works.currentContent)
         catalogCurrentItem()
     }
     
-    // 修改节点后，更新Layout
+    // 修改节点后，更新Layout。
     func catalogMovedItem() {
         catalogOutlineView.reloadData()
     }
     
     func catalogCurrentItem(){
-        // 展天节点
+        // 展天节点。
         catalogOutlineView.expandItem(nil, expandChildren: true)
-        // 选择对应项
+        // 选择对应项。
         let (i, b) = works.indexCatalog(catalogs: works.catalogData, catalog: works.currentContent)
         if b {
             catalogOutlineView.selectRowIndexes(IndexSet.init(integer: i), byExtendingSelection: false)
         }
-        // 读取内容
+        // 读取内容。
         try? works.readCurrentChapterFile()
         ideaTextView.string = works.currentContent.info
         contentTextView.string = works.currentContentData
     }
 }
 
-/// MARK: 标签栏事件
+/// MARK: 标签栏事件。
 extension ViewController: TabsBarDelegate {
     func tabDidClicked(catalog: Catalog) {
         works.currentContent = catalog

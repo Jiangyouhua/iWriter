@@ -8,6 +8,9 @@
 
 import Cocoa
 
+/**
+ ## 为打开、关闭章节准备的委托。
+ */
 protocol TabsBarDelegate {
     func tabDidClicked(catalog: Catalog)
     func tabDidClosed(catalogs: [Catalog], current: Catalog)
@@ -23,8 +26,8 @@ class TabsBarView: NSView {
     
     var delegate: TabsBarDelegate?
     
-    var catalogs: [Catalog] = [Catalog]()   // 显示的章节标题
-    var active: Catalog = Catalog()         // 激活的章节
+    var catalogs: [Catalog] = [Catalog]()   // 显示的章节标题。
+    var active: Catalog = Catalog()         // 激活的章节。
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -49,8 +52,8 @@ class TabsBarView: NSView {
         }
         var x: CGFloat = 0
         let activeView = TitleTabView(catalog: active, active: true)
-        var activeContain = false     // 判断active包含到TabsBarView里了没有
-        // 添加Tab
+        var activeContain = false     // 判断active包含到TabsBarView里了没有。
+        // 添加Tab。
         for (i, catalog) in catalogs.enumerated() {
             // 实例一个TitelTab。
             var view: TitleTabView
@@ -67,12 +70,12 @@ class TabsBarView: NSView {
             frame.origin.x = x - 1
             view.frame = frame
             
-            // 已添加当前章节标签，判断超出则结束
+            // 已添加当前章节标签，判断超出则结束。
             if activeContain && x + view.frame.width > self.frame.width {
                 break
             }
             
-            // 未添加当前章节标签，判断添加当前章节标签后超出则结束
+            // 未添加当前章节标签，判断添加当前章节标签后超出则结束。
             if !activeContain && x + view.frame.width + activeView.frame.width > self.frame.width {
                 frame.size.width = activeView.frame.width
                 activeView.frame = frame
@@ -84,7 +87,7 @@ class TabsBarView: NSView {
 
         }
         
-        // 添加Stand in
+        // 添加Stand In。
         let sub = self.subviews
         for view in sub {
             if let v =  view as? TitleTabView {
