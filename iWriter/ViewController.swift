@@ -255,11 +255,8 @@ class ViewController: NSViewController, WorksDelegate {
         _ = AppDelegate.recent.lastFiles(file)
         catalogUpdatedItem()
         // 展开节点。
-        let (parent, _) = works.parentCatalog(inSub: works.catalogData[0], catalog: works.currentContent)
-        catalogOutlineView.expandItem(works.catalogData[0], expandChildren: false)
-        if  parent !== works.catalogData[0] {
-            catalogOutlineView.expandItem(parent, expandChildren: true)
-        }
+        catalogOutlineView.expandItem(works.catalogData[0], expandChildren: true)
+        selectedCatlogOutlineViewItem(catalog: works.currentContent)
         addButtonIsHidden(bool: false)
     }
 }
@@ -1550,13 +1547,8 @@ extension ViewController {
         ideaTextView.string = works.currentContent.info
         contentTextView.string = works.currentContentData
     }
-}
-
-/// MARK: 标签栏事件。
-extension ViewController: TabsBarDelegate {
-    func tabDidClicked(catalog: Catalog) {
-        works.currentContent = catalog
-        // 选择对应项。
+    
+    func selectedCatlogOutlineViewItem(catalog: Catalog){
         let (parent, _) = works.parentCatalog(inSub: works.catalogData[0], catalog: catalog)
         if parent !== works.catalogData[0] {
             catalogOutlineView.expandItem(parent, expandChildren: true)
@@ -1573,6 +1565,15 @@ extension ViewController: TabsBarDelegate {
             }
             i += 1
         }
+    }
+}
+
+/// MARK: 标签栏事件。
+extension ViewController: TabsBarDelegate {
+    func tabDidClicked(catalog: Catalog) {
+        works.currentContent = catalog
+        // 选择对应项。
+        selectedCatlogOutlineViewItem(catalog: catalog)
         catalogCurrentItem()
     }
     
