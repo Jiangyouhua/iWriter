@@ -606,7 +606,7 @@ extension Works {
         return inParent.sub.insert(item, at: index)
     }
     
-    /// 添加其它项。
+    /// 添加节点后，引起其它项操作。
     func addOtherItem(catalog: Catalog){
         currentContent = catalog
         currentContentData = catalog.title
@@ -621,7 +621,7 @@ extension Works {
         return inParent.sub.remove(at: index)
     }
     
-    /// 添加其它项。
+    /// 删除节点后，引起其它项操作。
     func delOtherItem(catalog: Catalog){
         var index = -1
         for (i, item) in infoData.contentTitleOnBar.enumerated() {
@@ -645,30 +645,13 @@ extension Works {
     
     /// 移动节点。
     func moveCatalog(at: Int, atParent: Catalog, to: Int, toParent: Catalog) {
+        if atParent === toParent && at == to {
+            return
+        }
         guard let catalog = delCatalog(inParent: atParent, index: at) else {
             return
         }
         addCatalog(item: catalog, inParent: toParent, index: to)
-    }
-    
-    /// 节点序号。
-    func indexCatalog(catalogs: [Catalog],  catalog: Catalog, start: Int = -1) -> (Int, Bool){
-        var i = start
-        for item in catalogs {
-            i += 1
-            if item.creation == catalog.creation {
-                return (i, true)
-            }
-            if item.sub.count > 0 {
-                let (j, b) = indexCatalog(catalogs: item.sub, catalog: catalog, start: i)
-                if b {
-                    return (j, b)
-                } else {
-                    i = j
-                }
-            }
-        }
-        return (i, false)
     }
     
     /// 父节点。
@@ -678,7 +661,7 @@ extension Works {
             return (nil, -1)
         }
         for (n, item) in inSub.sub.enumerated() {
-            if item === catalog {
+            if item.creation == catalog.creation {
                 return (inSub, n)
             }
             

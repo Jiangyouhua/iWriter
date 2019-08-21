@@ -13,7 +13,6 @@ import Cocoa
  */
 struct DragItem {
     var at: Int = -1          // 在父项的位置。
-    var item: Any? = nil      // 移动的项目。
     var inParent: Any? = nil  // 父项。
 }
 
@@ -193,8 +192,6 @@ class ViewController: NSViewController, WorksDelegate {
         
         // NSOutliveView的委托。
         outlineViewDelegate()
-        //        catalogBox.frame = CGRect.init(x:30, y: 0, width: 100, height: 1)
-        //  catalogBox.fillColor = NSColor.red
         
         // 布局。
         buttonToolTips()     // Image Button的提示语。
@@ -257,6 +254,12 @@ class ViewController: NSViewController, WorksDelegate {
     func loadedFile(file: String) {
         _ = AppDelegate.recent.lastFiles(file)
         catalogUpdatedItem()
+        // 展开节点。
+        let (parent, _) = works.parentCatalog(inSub: works.catalogData[0], catalog: works.currentContent)
+        catalogOutlineView.expandItem(works.catalogData[0], expandChildren: false)
+        if  parent !== works.catalogData[0] {
+            catalogOutlineView.expandItem(parent, expandChildren: true)
+        }
         addButtonIsHidden(bool: false)
     }
 }
@@ -1056,40 +1059,54 @@ extension ViewController: NSOutlineViewDataSource {
     
     /// 结束拖移，章在章间移动、节在节间移动
     func catalogOutlineViewEndDrag(info: NSDraggingInfo, item: Any?, index: Int) -> Bool {
-        guard let toParent = item as? Catalog else {
-            return false
-        }
-        
-        guard let atParent =  dragItems.catalog.inParent as? Catalog else {
-            return false
-        }
-        
-        // 如果是章，不能移到节的级别中
-        if works.catalogData[0] === atParent && works.catalogData[0] !== toParent {
-            return false
-        }
-        
-        // 如果是节，不能移到章的级别中，可以意的子集尾
-        if works.catalogData[0] !== atParent && works.catalogData[0] === toParent && index > -1{
-            return false
-        }
-        
-        // 移到其前
-        var to = index
-        if index < 0 {
-            // 节，移为另一章的节
-            to = toParent.sub.count
-        } else if to > dragItems.catalog.at && to > 0 && atParent === toParent{
-            // 同级向下
-            to -= 1
-        }
-        AppDelegate.works.moveCatalog(at: dragItems.catalog.at, atParent: atParent, to: to, toParent: toParent)
+        // 复原
+        let at = dragItems.catalog.at
+        let inParent = dragItems.catalog.inParent
         dragItems.catalog.at = -1
-        dragItems.catalog.item = nil
-        dragItems.catalog.inParent = nil
+
+        guard let catalog = item as? Catalog else {
+            return false
+        }
+        
+        guard let atParent = inParent as? Catalog else {
+            return false
+        }
+        
+        let toParent: Catalog? = catalogOutlineView.parent(forItem: item) as? Catalog
+        
+        // 顶级不接收拖移
+        if catalog === works.catalogData[0] && index < 0{
+            return false
+        }
+        
+        // 节项目不能放在节项目里，不能放在章项目前、后
+        if atParent !== works.catalogData[0] {
+            if (index < 0 && toParent !== works.catalogData[0]) || (index > -1 && catalog === works.catalogData[0]) {
+                return false
+            }
+            if index < 0 {
+                let to = toParent?.sub.count ?? 0
+                catalogOutlineViewMoved(at: at, atParent: atParent, to: to, toParent: catalog)
+                return true
+            }
+            let to = atParent === toParent && index >= at ? index - 1 : index
+            catalogOutlineViewMoved(at: at, atParent: atParent, to: to, toParent: catalog)
+            return true
+        }
+        
+        // 章项目只能放在章项目前后
+        if index > -1 && catalog === works.catalogData[0] {
+            let to = index >= at ? index - 1 : index
+            catalogOutlineViewMoved(at: at, atParent: atParent, to: to, toParent: catalog)
+            return true
+        }
+        return false
+    }
+    
+    func catalogOutlineViewMoved(at: Int, atParent: Catalog, to: Int, toParent: Catalog){
+        AppDelegate.works.moveCatalog(at: at, atParent: atParent, to: to, toParent: toParent)
         catalogOutlineView.reloadData()
-        catalogOutlineView.expandItem(item, expandChildren: true)
-        return true
+        catalogOutlineView.expandItem(toParent, expandChildren: true)
     }
     
     func noteOutlineViewEndDrag(info: NSDraggingInfo, item: Any?, index: Int) -> Bool {
@@ -1119,31 +1136,48 @@ extension ViewController: NSOutlineViewDataSource {
     
     /// 开始拖移
     func catalogOutlineViewStartDrag(info: NSDraggingInfo, item: Any?, index: Int) -> NSDragOperation {
+        let dragNullOperation: NSDragOperation = []
         // 开始的节点
-        if index < 0 && dragItems.catalog.at < 0{
+        if dragItems.catalog.at < 0 && index < 0 {
             dragItems.catalog.at = catalogOutlineView.childIndex(forItem: item!)
-            dragItems.catalog.item = item
             dragItems.catalog.inParent = catalogOutlineView.parent(forItem: item!)
             return NSDragOperation.move
         }
-        let dragOperation: NSDragOperation = []
-        // 过程节点
+        
+        // 无有效数据，不处理
+        guard let catalog = item as? Catalog else{
+             return dragNullOperation
+        }
+        
+        // 实施的节点
         guard let atParent = dragItems.catalog.inParent as? Catalog else {
-            return dragOperation
+            return dragNullOperation
         }
-        guard let toParent = item as? Catalog else {
-            return dragOperation
+        
+        // 接收的节点
+        let toParent: Catalog? = catalogOutlineView.parent(forItem: item!) as? Catalog
+        
+        // 顶级不接收拖移
+        if catalog === works.catalogData[0] && index < 0{
+            return dragNullOperation
         }
-        // 如果是章，不能移到节的级别中
-        if works.catalogData[0] === atParent && works.catalogData[0] !== toParent {
-            return dragOperation
+        
+        // 节项目不能放在节项目里，不能放在章项目前、后
+        if atParent !== works.catalogData[0] {
+            if (index < 0 && toParent !== works.catalogData[0]) || (index > -1 && catalog === works.catalogData[0]) {
+                return dragNullOperation
+            }
+            return NSDragOperation.generic
         }
-        // 如果是节，不能移到章的级别中，可以意的子集尾
-        if works.catalogData[0] !== atParent && works.catalogData[0] === toParent && index > -1{
-            return dragOperation
+ 
+        // 章项目只能放在章项目前后
+        if index > -1 && catalog === works.catalogData[0] {
+            print("YES", index, catalog.title)
+            return NSDragOperation.generic
         }
-        // 显示可插入标志
-        return NSDragOperation.generic
+        
+        print("NOT", index, catalog.title)
+        return dragNullOperation
     }
     
     func noteOutlineViewStartDrag(info: NSDraggingInfo, item: Any?, index: Int) -> NSDragOperation {
@@ -1511,13 +1545,6 @@ extension ViewController {
     }
     
     func catalogCurrentItem(){
-        // 展天节点。
-        catalogOutlineView.expandItem(nil, expandChildren: true)
-        // 选择对应项。
-        let (i, b) = works.indexCatalog(catalogs: works.catalogData, catalog: works.currentContent)
-        if b {
-            catalogOutlineView.selectRowIndexes(IndexSet.init(integer: i), byExtendingSelection: false)
-        }
         // 读取内容。
         try? works.readCurrentChapterFile()
         ideaTextView.string = works.currentContent.info
@@ -1529,6 +1556,23 @@ extension ViewController {
 extension ViewController: TabsBarDelegate {
     func tabDidClicked(catalog: Catalog) {
         works.currentContent = catalog
+        // 选择对应项。
+        let (parent, _) = works.parentCatalog(inSub: works.catalogData[0], catalog: catalog)
+        if parent !== works.catalogData[0] {
+            catalogOutlineView.expandItem(parent, expandChildren: true)
+        }
+        let b = true
+        var i = 0
+        while b {
+            guard let item = catalogOutlineView.item(atRow: i) as? Catalog else {
+                break
+            }
+            if item.creation == catalog.creation {
+                catalogOutlineView.selectRowIndexes(IndexSet.init(integer: i), byExtendingSelection: false)
+                break
+            }
+            i += 1
+        }
         catalogCurrentItem()
     }
     

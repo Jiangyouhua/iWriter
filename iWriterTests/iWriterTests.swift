@@ -167,12 +167,6 @@ class iWriterTests: XCTestCase {
         section2_2.title = "Section 2.2"
         section2_2.creation = works.creationTime()
         chapter2.sub.append(section2_2)
-        
-        let (i, _) = works.indexCatalog(catalogs: [root], catalog: section2_2)
-        XCTAssertEqual(i, 7)
-        
-        let (catalog, _) = works.parentCatalog(catalog: root, index: 7)
-        XCTAssertEqual(catalog?.creation, chapter2.creation)
     }
     
     /// 测试Role数据模型
@@ -302,6 +296,10 @@ class iWriterTests: XCTestCase {
         try? works.openFile(path: file)
         XCTAssertEqual(works.currentContentData, "Current Chapter Data")
         XCTAssertEqual(works.currentContentData.count, works.currentContent.number)
+    }
+    
+    func testWorksWithCatalog(){
+        
     }
     
     func testHelperLastFile() {
