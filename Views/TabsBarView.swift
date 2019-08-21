@@ -117,6 +117,12 @@ class TabsBarView: NSView {
         }
     }
     
+    /// 修改数据。
+    func updateCatalogs( catalogs: [Catalog]) {
+        self.catalogs = catalogs
+        self.needsLayout = true
+    }
+    
     /// 添加标签。
     func addCatalog(_ catalog: Catalog){
         if self.catalogs.contains(where: {$0.creation == catalog.creation}) {

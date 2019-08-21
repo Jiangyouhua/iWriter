@@ -1451,8 +1451,11 @@ extension ViewController {
     
     /// 改。
     func catalogOutlineViewUpdateItem(textField: NSTextField, index: Int){
-        let catalog = catalogOutlineView.item(atRow: index) as! Catalog
+        guard let catalog = catalogOutlineView.item(atRow: index) as? Catalog else {
+            return
+        }
         catalog.title = textField.stringValue
+        tabsBarView.updateCatalogs(catalogs: works.infoData.contentTitleOnBar)
     }
     
     /// 打开。
@@ -1502,7 +1505,7 @@ extension ViewController {
         catalogCurrentItem()
     }
     
-    // 修改节点后，更新Layout。
+    // 节点移动后，更新Layout。
     func catalogMovedItem() {
         catalogOutlineView.reloadData()
     }
