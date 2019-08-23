@@ -902,7 +902,6 @@ extension ViewController: NSOutlineViewDataSource {
     
     /// 拖动的接收方，index = -1时表示放在某项中，在这里不处理
     func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
-        print(2)
         switch outlineView {
         case catalogOutlineView:
             return catalogOutlineViewEndDrag(info: info, item: item, index: index)
@@ -924,7 +923,6 @@ extension ViewController: NSOutlineViewDataSource {
     /// 拖动的发起方与经过方，index = -1时表示拖某项
     func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) ->
         NSDragOperation {
-            print(1)
             switch outlineView {
             case catalogOutlineView:
                 return catalogOutlineViewStartDrag(info: info, item: item, index: index)
@@ -945,7 +943,6 @@ extension ViewController: NSOutlineViewDataSource {
     
     /// 是否可拖移
     func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
-        print(0)
         switch outlineView {
         case catalogOutlineView:
             return catalogOutlineViewIsDrag(item: item)
@@ -1094,14 +1091,25 @@ extension ViewController: NSOutlineViewDataSource {
                 catalogOutlineViewMoved(at: at, atParent: atParent, to: to, toParent: catalog)
                 return true
             }
-            let to = atParent === toParent && index >= at ? index - 1 : index
+            var to = index
+            print("section", at, index)
+            // 处理同级
+            if atParent === catalog {
+                if index > at {
+                    to = index - 1
+                }
+            }
             catalogOutlineViewMoved(at: at, atParent: atParent, to: to, toParent: catalog)
             return true
         }
         
         // 章项目只能放在章项目前后
         if index > -1 && catalog === works.catalogData[0] {
-            let to = index >= at ? index - 1 : index
+            print("chapter", at, index)
+            var to = index
+            if index > at {
+                to = index - 1
+            }
             catalogOutlineViewMoved(at: at, atParent: atParent, to: to, toParent: catalog)
             return true
         }
