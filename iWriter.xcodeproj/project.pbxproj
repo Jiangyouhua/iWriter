@@ -314,8 +314,8 @@
 		786726D122E2B3B700C3DB05 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				780508D222E5C33300A36E18 /* JYHTextField.swift */,
 				78A96C7B22E4D43A00280327 /* JYHView.swift */,
+				780508D222E5C33300A36E18 /* JYHTextField.swift */,
 				782CCE3A22E36FE300346D24 /* TabsBarView.swift */,
 				78231B49230CFD220046E5FC /* StandInTabView.swift */,
 				782CCE3622E33A9C00346D24 /* TitleTabView.swift */,

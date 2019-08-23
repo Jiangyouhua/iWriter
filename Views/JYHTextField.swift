@@ -13,7 +13,6 @@ import Cocoa
  1. 实现获取焦点后全选文本。
  */
 class JYHTextField: NSTextField {
-    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         

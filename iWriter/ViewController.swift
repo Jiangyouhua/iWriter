@@ -743,6 +743,11 @@ extension ViewController: NSSplitViewDelegate {
 }
 
 // MARK: - Layout Config。
+/**
+ ## 区块格式的连续性。
+ 1. 关才时保存区块格局；
+ 2. 打开时加载保存的格局。
+ */
 extension ViewController {
     /// 加载板块规格。
     func loadLayoutConfig() {
@@ -830,7 +835,8 @@ extension ViewController {
 /**
  ## 实现OutlineView委托。
  1. Cell Based，4个必须实现的委托;
- 2. View Based, 只需要实现非Colmun数据的3个，使用NSView来替换。
+ 2. View Based, 只需要实现非Colmun数据的3个，使用NSView来替换；
+ 3. 拖动OutlineView项，实现了3个委托。
  */
 extension ViewController: NSOutlineViewDataSource {
     
@@ -896,6 +902,7 @@ extension ViewController: NSOutlineViewDataSource {
     
     /// 拖动的接收方，index = -1时表示放在某项中，在这里不处理
     func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
+        print(2)
         switch outlineView {
         case catalogOutlineView:
             return catalogOutlineViewEndDrag(info: info, item: item, index: index)
@@ -917,6 +924,7 @@ extension ViewController: NSOutlineViewDataSource {
     /// 拖动的发起方与经过方，index = -1时表示拖某项
     func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) ->
         NSDragOperation {
+            print(1)
             switch outlineView {
             case catalogOutlineView:
                 return catalogOutlineViewStartDrag(info: info, item: item, index: index)
@@ -937,6 +945,7 @@ extension ViewController: NSOutlineViewDataSource {
     
     /// 是否可拖移
     func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
+        print(0)
         switch outlineView {
         case catalogOutlineView:
             return catalogOutlineViewIsDrag(item: item)
@@ -1059,7 +1068,6 @@ extension ViewController: NSOutlineViewDataSource {
         // 复原
         let at = dragItems.catalog.at
         let inParent = dragItems.catalog.inParent
-        dragItems.catalog.at = -1
 
         guard let catalog = item as? Catalog else {
             return false
@@ -1134,12 +1142,6 @@ extension ViewController: NSOutlineViewDataSource {
     /// 开始拖移
     func catalogOutlineViewStartDrag(info: NSDraggingInfo, item: Any?, index: Int) -> NSDragOperation {
         let dragNullOperation: NSDragOperation = []
-        // 开始的节点
-        if dragItems.catalog.at < 0 && index < 0 {
-            dragItems.catalog.at = catalogOutlineView.childIndex(forItem: item!)
-            dragItems.catalog.inParent = catalogOutlineView.parent(forItem: item!)
-            return NSDragOperation.move
-        }
         
         // 无有效数据，不处理
         guard let catalog = item as? Catalog else{
@@ -1169,11 +1171,9 @@ extension ViewController: NSOutlineViewDataSource {
  
         // 章项目只能放在章项目前后
         if index > -1 && catalog === works.catalogData[0] {
-            print("YES", index, catalog.title)
             return NSDragOperation.generic
         }
-        
-        print("NOT", index, catalog.title)
+    
         return dragNullOperation
     }
     
@@ -1203,6 +1203,11 @@ extension ViewController: NSOutlineViewDataSource {
         guard let catalog = item as? Catalog else {
             return nil
         }
+        
+        // 初始拖移位置
+        dragItems.catalog.at = catalogOutlineView.childIndex(forItem: catalog)
+        dragItems.catalog.inParent = catalogOutlineView.parent(forItem: catalog)
+        
         let  pb = NSPasteboardItem.init()
         pb.setString(catalog.title, forType: NSPasteboard.PasteboardType.string)
         return pb
@@ -1237,6 +1242,7 @@ extension ViewController: NSOutlineViewDataSource {
  1. 实现ICON与View可编辑；
  */
 extension ViewController:  NSOutlineViewDelegate {
+    /// 设置各项内容
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView?{
         switch outlineView {
         case catalogOutlineView:
@@ -1278,7 +1284,6 @@ extension ViewController:  NSOutlineViewDelegate {
         }
     }
     
-    
     func catalogOutlineViewItemView(column: NSTableColumn?, item: Any) -> NSView?{
         // 数据未传入。
         guard let catalog = item as? Catalog else {
@@ -1301,6 +1306,7 @@ extension ViewController:  NSOutlineViewDelegate {
         tableCellView.imageView!.image =  NSImage.init(named: NSImage.Name("catalogLevel\(catalog.level)"))
         return tableCellView
     }
+    
     
     func noteOutlineViewItemView(column: NSTableColumn?, item: Any) -> NSView?{
         // TODO
@@ -1354,10 +1360,9 @@ extension ViewController {
 /// MARK: - Right Menu。
 
 /**
- ## OutlineView Item的操作。
- 1. 增、删、改；
- 2. 位移、排序；
- 3. 打开章节内容。
+ ## OutlineView Item的操作, tableCellView, textField。
+ 1. tableCell 开始拖移；
+ 2. textField 完成编辑。
  */
 extension ViewController: NSTextFieldDelegate {
     // Catalog Outline View。
