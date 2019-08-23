@@ -198,6 +198,7 @@ class ViewController: NSViewController, WorksDelegate {
         splitViewDelegate()  // NSSplitView的委托。
         loadLayoutConfig()   // 继承上一次的格式。
         loaded = true        // 判断加载是否完成 ，用来区分Window.Resize。
+        try? works.autoLoadLast()
     }
     
     override func viewDidDisappear() {
@@ -251,8 +252,10 @@ class ViewController: NSViewController, WorksDelegate {
         symbolAddButton.toolTip = "Add Symbol"
     }
     
+    /// 实现WorksDelegate方法。
     func loadedFile(file: String) {
-        _ = AppDelegate.recent.lastFiles(file)
+        // 保存到允许加载目录里
+        _ = works.lastFiles(file)
         catalogUpdatedItem()
         // 展开节点。
         catalogOutlineView.expandItem(works.catalogData[0], expandChildren: true)
@@ -1556,7 +1559,7 @@ extension ViewController {
     
     func catalogCurrentItem(){
         // 读取内容。
-        try? works.readCurrentChapterFile()
+        try? works.readCurrentContentFile()
         ideaTextView.string = works.currentContent.info
         contentTextView.string = works.currentContentData
     }

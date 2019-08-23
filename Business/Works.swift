@@ -93,6 +93,12 @@ class Works: NSObject {
     // 数据状态。
     var dataStatus: Status
     
+    // 最近打开
+    let lastTag = "LastFiles"
+    let defaults = UserDefaults.standard
+    var menu: NSMenu?                      // 菜单上的最近打开
+    var select: NSPopUpButton?             // 标题栏上的最近打开
+    
     // 作品路径。
     private var path: String {
         set{
@@ -198,6 +204,16 @@ extension Works {
         }
     }
     
+    /// 加载最近编辑
+    func autoLoadLast() throws {
+        do{
+            try openWorksFromCacheFolder()    // 从缓存文件夹打开作品。
+            delegate?.loadedFile(file: path)
+        } catch {
+            throw error
+        }
+    }
+    
     /// 打开作品
     /// - throws: 读写错误、JSON解析错误
     func openWorksFromCacheFolder() throws {
@@ -206,7 +222,7 @@ extension Works {
             try readCatalogFile()             // 读作品目录。
             try readRoleFile()                // 读作品角色。
             try readSymbolFile()              // 读作品符号。
-            try readCurrentChapterFile()      // 读作品当前章节。
+            try readCurrentContentFile()      // 读作品当前章节。
         } catch {
             throw error
         }
@@ -369,14 +385,14 @@ extension Works {
     
     /// 写默认数据到Catalog File。
     private func writeDefaultDataToCatalogFile() throws {
-        // 书名
+        // 书名。
         let book = Catalog()
         book.title =  infoData.file.fileName()
         book.info = infoData.author
         book.creation = infoData.creation
         catalogData = [book]
         
-        // 默认章
+        // 默认章。
         let chapter = Catalog()
         chapter.title =  "Chapter Title"
         chapter.info = ""
@@ -385,11 +401,11 @@ extension Works {
         book.sub = [chapter]
         currentContent = chapter
         do {
-            try writeCurrentContentFile()    // 建立内容文件
+            try writeCurrentContentFile()    // 建立内容文件。
         } catch {
             throw error
         }
-        // 默认节
+        // 默认节。
         let section = Catalog()
         section.title =  "Section Title"
         section.info = ""
@@ -496,7 +512,7 @@ extension Works {
     
     // MARK: - Current Chpater File。
     /// 读当前章节。
-    func readCurrentChapterFile() throws {
+    func readCurrentContentFile() throws {
         guard currentContent.creation > 0 else {
             return
         }
@@ -525,9 +541,14 @@ extension Works {
     
     /// 压宿文件到用户指定位置。
     func zipCacheFolderToUsers() throws {
+        guard let url = urlBookmark(file: path) else {
+            return
+        }
+        url.startAccessingSecurityScopedResource()
         guard SSZipArchive.createZipFile(atPath: path, withContentsOfDirectory: cache) else {
             throw WorksError.operateError(OperateCode.folderZip, #function, fileError)
         }
+        url.stopAccessingSecurityScopedResource()
     }
     
     /// 解压文件到缓存区。
@@ -674,6 +695,140 @@ extension Works {
     }
 }
 
+// MARK: - Last Files
+extension Works {
+    /// 最近打开。
+    func lastFiles(_ file: String = "") -> [String]{
+        var array = [String]()
+        // 获取数据。
+        
+        let a = defaults.value(forKey: lastTag) as? [String]
+        if a != nil {
+            array = a!
+        }
+        // 返回数据。
+        if file.isEmpty {
+            return array
+        }
+        
+        // 保存到bookmarks。
+        saveBookmark(file: file)
+        
+        // 保存到UserDefaults。
+        if array.isEmpty {
+            array.append(file)
+            defaults.set(array, forKey: lastTag)
+            return array
+        }
+        
+        array = array.filter{$0 != file}
+        array.insert(file, at: 0)
+        if array.count > 10 {
+            array = Array(array.suffix(10))
+        }
+        defaults.set(array, forKey: lastTag)
+        return array
+    }
+    
+    /// 移除所有缓存下来的文件名。
+    func clearLastFiles(){
+        defaults.removeObject(forKey: lastTag)
+    }
+    
+    /// 格式化标题栏最近打开。
+    func formatSelect(select: NSPopUpButton){
+        self.select = select
+        let array = lastFiles()
+        if array.isEmpty {
+            return
+        }
+        for file in array {
+            self.select?.addItem(withTitle: file.fileName())
+            let item = self.select?.lastItem
+            item?.toolTip = file
+        }
+    }
+    
+    /// 获取权限打开文件。
+    func openLastFile(file: String){
+        guard let url = urlBookmark(file: file) else {
+            return
+        }
+        url.startAccessingSecurityScopedResource()
+        do {
+            try AppDelegate.works.openFile(path: file)
+        } catch {
+            // 显示提示窗。
+            let alert = NSAlert()
+            alert.messageText = "File does not exist"
+            alert.informativeText = "\(file), No such file or directory"
+            alert.runModal()
+            removeLastFile(file)
+            removMenuItem(file: file)
+            removSelectItem(file: file)
+        }
+        url.stopAccessingSecurityScopedResource()
+    }
+    
+    /// 菜单点击事件。
+    @objc func openRecentFile(sender: Any){
+        let file = (sender as! NSMenuItem).toolTip!
+        openLastFile(file: file)
+    }
+    
+    /// 移除缓存下来的文件名。
+    private func removeLastFile(_ file: String){
+        var array = defaults.value(forKey: lastTag) as? [String]
+        array = array?.filter{$0 != file}
+        defaults.set(array, forKey: lastTag)
+    }
+}
+
+// MARK: - Menu Edit
+extension Works {
+    /// 格式化主菜单最近打开。
+    func formatMenu(menu: NSMenu){
+        self.menu = menu
+        let array = lastFiles()
+        if array.isEmpty {
+            return
+        }
+        for (i, file) in array.enumerated() {
+            let item = NSMenuItem.init(title: file.fileName(), action: #selector(openRecentFile(sender:)), keyEquivalent: "")
+            item.toolTip = file
+            self.menu!.insertItem(item, at: i)
+        }
+    }
+    
+    /// 删除子项。
+    private func removMenuItem(file: String){
+        guard let array = menu?.items else {
+            return
+        }
+        
+        for item in array {
+            if item.toolTip == file {
+                item.isHidden = true
+                return
+            }
+        }
+    }
+    
+    /// 删除子项。
+    private func removSelectItem(file: String){
+        guard let array = select?.itemArray else {
+            return
+        }
+        
+        for item in array {
+            if item.toolTip == file {
+                item.isHidden = true
+                return
+            }
+        }
+    }
+}
+
 // MARK: - Helper。
 extension Works {
     func authorName() -> String{
@@ -700,6 +855,24 @@ extension Works {
             }
         }
         return false
+    }
+    
+    /// 沙盒外权限保存，缓存bookmarkData。
+    private func saveBookmark(file: String){
+        let url = URL.init(fileURLWithPath: file)
+        guard let bookmarkData = try? url.bookmarkData(options: URL.BookmarkCreationOptions.withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil) else {
+            return
+        }
+        defaults.set(bookmarkData, forKey: file)
+    }
+    
+    /// 沙盒外权限获取， 从bookmarkData获取Url。
+    private func urlBookmark(file: String) -> NSURL? {
+        guard let bookmarkData = defaults.data(forKey: file) else {
+            return nil
+        }
+        
+        return try? NSURL.init(resolvingBookmarkData: bookmarkData, options: [NSURL.BookmarkResolutionOptions.withSecurityScope, NSURL.BookmarkResolutionOptions.withoutUI], relativeTo: nil, bookmarkDataIsStale: nil)
     }
     
     /// 全局ID，以时间戳为基础。

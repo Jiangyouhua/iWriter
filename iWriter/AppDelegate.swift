@@ -14,11 +14,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var openRecentMenu: NSMenu!
     
     static let works = Works()   // 便于ViewController使用。
-    static let recent = Recent()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        AppDelegate.recent.formatMenu(menu: openRecentMenu)
+        AppDelegate.works.formatMenu(menu: openRecentMenu)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

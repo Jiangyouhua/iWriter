@@ -16,7 +16,7 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var lastFilesSelect: NSPopUpButton!
     override func windowDidLoad() {
         super.windowDidLoad()
-        AppDelegate.recent.formatSelect(select: lastFilesSelect)
+        AppDelegate.works.formatSelect(select: lastFilesSelect)
     }
 }
 
@@ -28,7 +28,7 @@ extension MainWindowController {
         guard let file = lastFilesSelect.item(at: i)?.toolTip else {
             return
         }
-        AppDelegate.recent.openFile(file: file)
+        AppDelegate.works.openLastFile(file: file)
     }
     
 }

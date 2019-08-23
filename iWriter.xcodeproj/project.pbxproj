@@ -61,7 +61,6 @@
 		784D27D422D704A7001CDEE1 /* 047画板 22.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27AD22D704A6001CDEE1 /* 047画板 22.png */; };
 		78A6DEA022E2C88700FEAC85 /* CatalogWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6DE9E22E2C88700FEAC85 /* CatalogWindowController.swift */; };
 		78A6DEA122E2C88700FEAC85 /* CatalogWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A6DE9F22E2C88700FEAC85 /* CatalogWindowController.xib */; };
-		78A96C7422E459A400280327 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A96C7322E459A400280327 /* Recent.swift */; };
 		78A96C7C22E4D43A00280327 /* JYHView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A96C7B22E4D43A00280327 /* JYHView.swift */; };
 		78C1015622D5FE070073416E /* 037画板 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1015522D5FE070073416E /* 037画板 1.png */; };
 		78C1017522D5FEA10073416E /* 037画板 1@16x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1015722D5FE9C0073416E /* 037画板 1@16x.png */; };
@@ -208,7 +207,6 @@
 		784D27AD22D704A6001CDEE1 /* 047画板 22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 22.png"; sourceTree = "<group>"; };
 		78A6DE9E22E2C88700FEAC85 /* CatalogWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogWindowController.swift; sourceTree = "<group>"; };
 		78A6DE9F22E2C88700FEAC85 /* CatalogWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CatalogWindowController.xib; sourceTree = "<group>"; };
-		78A96C7322E459A400280327 /* Recent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		78A96C7B22E4D43A00280327 /* JYHView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHView.swift; sourceTree = "<group>"; };
 		78C1015522D5FE070073416E /* 037画板 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "037画板 1.png"; path = "../../../../Downloads/037画板 1.png"; sourceTree = "<group>"; };
 		78C1015722D5FE9C0073416E /* 037画板 1@16x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@16x.png"; sourceTree = "<group>"; };
@@ -500,7 +498,6 @@
 			isa = PBXGroup;
 			children = (
 				78FB478022D442B200A9F4AF /* Works.swift */,
-				78A96C7322E459A400280327 /* Recent.swift */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -768,7 +765,6 @@
 				78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */,
 				7812000522E4544C00C32B9E /* Extension.swift in Sources */,
 				78FB477722D4384800A9F4AF /* Catalog.swift in Sources */,
-				78A96C7422E459A400280327 /* Recent.swift in Sources */,
 				78A96C7C22E4D43A00280327 /* JYHView.swift in Sources */,
 				78FB477922D4385700A9F4AF /* Role.swift in Sources */,
 				78FEDAC922DC9926001AFCB2 /* Search.swift in Sources */,
