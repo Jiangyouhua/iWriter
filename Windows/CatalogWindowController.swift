@@ -51,6 +51,7 @@ class CatalogWindowController: NSWindowController, NSWindowDelegate {
         catalog.creation = works.creationTime()
         works.addCatalog(item: catalog, inParent: works.catalogData[0].sub.last!)
         works.addOtherItem(catalog: catalog)
+        try? works.writeCatalogFile()
         self.close()
     }
     
@@ -67,6 +68,7 @@ class CatalogWindowController: NSWindowController, NSWindowDelegate {
         
         works.addCatalog(item: catalog, inParent: works.catalogData[0])
         works.addOtherItem(catalog: catalog)
+        try? works.writeCatalogFile()
         self.close()
     }
 }

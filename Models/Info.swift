@@ -19,9 +19,9 @@ struct Info: DataDelegate {
     var file: String                    // 作品名称，含路径。
     var author: String                  // 作者，前期使用iwriter，后期从设置中读取。
     var creation: Int                   // 创建时间，时间戮。
-    var contentTitleOnBar: [Catalog]        // 在章节标题栏上的章节。
+    var contentTitleOnBar: [Catalog]    // 在章节标题栏上的章节。
     var currentContent: Catalog?        // 当前编辑的章节。
-    var isTemp: Bool                    // 退出前未保存。
+    var needSaveToFile: Bool                  // 退出前未保存。
     var other:Dictionary<String, Any>
     
     init() {
@@ -29,7 +29,7 @@ struct Info: DataDelegate {
         self.author = ""
         self.creation = 0
         self.contentTitleOnBar = [Catalog]()
-        self.isTemp = true
+        self.needSaveToFile = true
         self.other = [:]
     }
     

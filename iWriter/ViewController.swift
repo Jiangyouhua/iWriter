@@ -112,7 +112,8 @@ class ViewController: NSViewController, WorksDelegate {
     let threshold: CGFloat = 130                  // Left Area View、 Right Area View 宽度最小值。
     let thickness: CGFloat = 30                   // 标题栏厚度。
     var dividers: [String: CGFloat] = [:]         // 各divider位置。
-    var loaded = false                            // 加载完成。
+    var layoutLoaded = false                      // 布局是否加载完成。
+    var dataLoaded = false                        // 数据是否加载完成。
     
     // 拖动相关。
     var dragItems = DragItems()                   // 起点位置。
@@ -189,6 +190,8 @@ class ViewController: NSViewController, WorksDelegate {
         
         works.delegate = self
         addButtonIsHidden(bool: true)
+        ideaTextView.delegate = self
+        contentTextView.delegate = self
         
         // NSOutliveView的委托。
         outlineViewDelegate()
@@ -197,7 +200,7 @@ class ViewController: NSViewController, WorksDelegate {
         buttonToolTips()     // Image Button的提示语。
         splitViewDelegate()  // NSSplitView的委托。
         loadLayoutConfig()   // 继承上一次的格式。
-        loaded = true        // 判断加载是否完成 ，用来区分Window.Resize。
+        layoutLoaded = true        // 判断加载是否完成 ，用来区分Window.Resize。
         try? works.autoLoadLast()
     }
     
@@ -254,10 +257,10 @@ class ViewController: NSViewController, WorksDelegate {
     
     /// 实现WorksDelegate方法。
     func loadedFile(file: String) {
-        // 保存到允许加载目录里
         _ = works.lastFiles(file)
-        catalogUpdatedItem()
         // 展开节点。
+        catalogOutlineView.reloadData()
+        tabsBarView.dataSource(catalogs: works.infoData.contentTitleOnBar, active: works.currentContent)
         catalogOutlineView.expandItem(works.catalogData[0], expandChildren: true)
         selectedCatlogOutlineViewItem(catalog: works.currentContent)
         addButtonIsHidden(bool: false)
@@ -588,7 +591,7 @@ extension ViewController: NSSplitViewDelegate {
     /// 完成子视图的变化。
     func splitViewDidResizeSubviews(_ notification: Notification){
         // 加载完成了没。
-        guard loaded else {
+        guard layoutLoaded else {
             return
         }
         // 是外部改变大小吗？
@@ -636,7 +639,7 @@ extension ViewController: NSSplitViewDelegate {
     
     /// 分隔线位置发生了变化。
     func splitView(_ splitView: NSSplitView, constrainSplitPosition proposedPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat{
-        guard loaded else {
+        guard layoutLoaded else {
             return proposedPosition
         }
         switch splitView {
@@ -1493,6 +1496,7 @@ extension ViewController {
     // 删。
     func catalogOutlineViewDelItem(index: Int){
         _ = works.catalogDataRomoveItem(index: index)
+        try? works.writeCatalogFile()
         catalogOutlineView.reloadData()
     }
     
@@ -1502,6 +1506,7 @@ extension ViewController {
             return
         }
         catalog.title = textField.stringValue
+        try? works.writeCatalogFile()
         tabsBarView.updateCatalogs(catalogs: works.infoData.contentTitleOnBar)
     }
     
@@ -1515,7 +1520,8 @@ extension ViewController {
         works.currentContent = catalog
         // 标题标签栏上。
         tabsBarView.addCatalog(catalog)
-        catalogCurrentItem()
+        showCurrentCatalogItemText(dataLoaded)
+        dataLoaded = true
     }
     
     /// 完成新加或更新。
@@ -1542,14 +1548,14 @@ extension ViewController {
         }
         
         // 重建标签栏。
-        catalogCurrentItem()
+        showCurrentCatalogItemText()
     }
     
     // 添加目录节点后，更新Layout。
     func catalogUpdatedItem() {
         catalogOutlineView.reloadData()
         tabsBarView.dataSource(catalogs: works.infoData.contentTitleOnBar, active: works.currentContent)
-        catalogCurrentItem()
+        showCurrentCatalogItemText()
     }
     
     // 节点移动后，更新Layout。
@@ -1557,8 +1563,11 @@ extension ViewController {
         catalogOutlineView.reloadData()
     }
     
-    func catalogCurrentItem(){
+    func showCurrentCatalogItemText(_ isSave: Bool = true){
         // 读取内容。
+        if isSave {
+            try? works.writeInfoFile()
+        }
         try? works.readCurrentContentFile()
         ideaTextView.string = works.currentContent.info
         contentTextView.string = works.currentContentData
@@ -1590,12 +1599,32 @@ extension ViewController: TabsBarDelegate {
         works.currentContent = catalog
         // 选择对应项。
         selectedCatlogOutlineViewItem(catalog: catalog)
-        catalogCurrentItem()
+        showCurrentCatalogItemText()
     }
     
     func tabDidClosed(catalogs: [Catalog], current: Catalog) {
         works.currentContent = current
         works.infoData.contentTitleOnBar = catalogs
-        catalogCurrentItem()
+        showCurrentCatalogItemText()
+    }
+}
+
+/// MARK: 文本编辑
+extension ViewController: NSTextViewDelegate {
+    // 触发保存到缓存
+    func textDidChange(_ notification: Notification) {
+        guard let view = notification.object as? NSTextView else {
+            return
+        }
+        switch view {
+        case ideaTextView:
+            // 保存目录
+            works.currentContent.info = view.string
+            try? works.writeCatalogFile()
+        default:
+            // 保存内容
+            works.currentContentData = view.string
+            try? works.writeCurrentContentFile()
+        }
     }
 }

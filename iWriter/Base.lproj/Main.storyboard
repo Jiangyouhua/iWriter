@@ -441,16 +441,10 @@ CA
                                     <popUpButton key="view" verticalHuggingPriority="750" id="ZFB-wZ-e4i">
                                         <rect key="frame" x="0.0" y="14" width="100" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <popUpButtonCell key="cell" type="roundTextured" title="Open Recent" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="deq-wG-v6T">
+                                        <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="deq-wG-v6T">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
-                                            <menu key="menu" id="8lF-fY-MB5">
-                                                <items>
-                                                    <menuItem title="Open Recent" hidden="YES" id="WTh-lg-Po1">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
+                                            <menu key="menu" id="8lF-fY-MB5"/>
                                             <connections>
                                                 <action selector="lastFilesSelected:" target="tnp-yD-59n" id="Ogd-An-Mi4"/>
                                             </connections>

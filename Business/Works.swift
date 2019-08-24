@@ -64,7 +64,8 @@ protocol WorksDelegate {
  */
 class Works: NSObject {
     var delegate: WorksDelegate?
-    var timeInterval = 0     // 最近生成的时间戳
+    var timeInterval = 0         // 最近生成的时间戳
+    var isUserOperate = true     // 是否为用户操作
     
     // 文件管理。
     var fileManager: FileManager
@@ -96,8 +97,8 @@ class Works: NSObject {
     // 最近打开
     let lastTag = "LastFiles"
     let defaults = UserDefaults.standard
-    var menu: NSMenu?                      // 菜单上的最近打开
-    var select: NSPopUpButton?             // 标题栏上的最近打开
+    var recentMenu: NSMenu?                // 菜单上的最近打开
+    var reeentSelect: NSPopUpButton?       // 标题栏上的最近打开
     
     // 作品路径。
     private var path: String {
@@ -122,9 +123,9 @@ class Works: NSObject {
         }
     }
     // 当前章节内容。
-    var currentContentData: String = ""
+    var currentContentData: String
     
-    
+    /// 初始化
     override init(){
         fileManager = FileManager.default
         
@@ -132,7 +133,6 @@ class Works: NSObject {
         catalogFile = cache + "/catalog.txt"
         roleFile = cache + "/role.txt"
         symbolFile = cache + "/symbol.txt"
-        
         infoData = Info()
         catalogData = [Catalog]()
         roleData = [Role]()
@@ -141,6 +141,22 @@ class Works: NSObject {
         searchData = [Search]()
         dictionaryData = []
         dataStatus = Status()
+        currentContentData = ""
+    }
+    
+    func initWordsData(){
+        let filePath = path
+        infoData = Info()
+        path = filePath
+        catalogData = [Catalog]()
+        roleData = [Role]()
+        symbolData = [Symbol]()
+        noteData = [:]
+        searchData = [Search]()
+        dictionaryData = []
+        dataStatus = Status()
+        currentContentData = ""
+        
     }
 }
 
@@ -152,6 +168,7 @@ extension Works {
     /// - throws: 读写错误、JSON解析错误。
     func newFile(path: String) throws {
         self.path = path
+        isUserOperate = true
         do{
             try emptyOrCreatCacheFolder()       // 清空或创建缓存文件夹。
             try defaultFilesInCacheFolder()     // 在缓存文件夹创建默认的文件。
@@ -161,6 +178,8 @@ extension Works {
             try openWorksFromCacheFolder()      // 从缓存文件夹打开作品。
             // 调用完成方法
             delegate?.loadedFile(file: path)
+            formatRecentMenu()
+            formatRecentSelect()
         } catch {
             throw error
         }
@@ -171,11 +190,14 @@ extension Works {
     /// - throws: 读写错误、JSON解析错误。
     func openFile(path: String) throws {
         self.path = path
+        isUserOperate = false
         do{
             try emptyOrCreatCacheFolder()     // 清空或创建缓存文件夹。
             try unZipUsersToCacheFolder()     // 解压指定文件（含路径）到缓存文件夹。
             try openWorksFromCacheFolder()    // 从缓存文件夹打开作品。
             delegate?.loadedFile(file: path)
+            formatRecentMenu()
+            formatRecentSelect()
         } catch {
             throw error
         }
@@ -184,6 +206,9 @@ extension Works {
     /// 保存文件。
     /// - throws: 读写错误、JSON解析错误。
     func saveFile() throws {
+        guard !infoData.needSaveToFile else {
+            return
+        }
         do{
             try saveWorksToCacheFolder()      // 保存作品数据到缓存文件。
             try zipCacheFolderToUsers()       // 将缓存文件夹打包到用户指定的位置。
@@ -249,6 +274,7 @@ extension Works {
     // MARK: - Init Cache Folder。
     /// 清空或新建缓存文件夹。
     private func emptyOrCreatCacheFolder() throws {
+        initWordsData()
         do {
             if fileManager.fileExists(atPath: cache) {
                 try fileManager.removeItem(atPath: cache)
@@ -301,7 +327,8 @@ extension Works {
     }
     
     /// 写Info File。
-    private func writeInfoFile() throws {
+    func writeInfoFile() throws {
+        infoData.needSaveToFile = true
         let dic = infoData.forDictionary()
         let data:Data
         do {
@@ -365,7 +392,8 @@ extension Works {
     }
     
     /// 写Catalog File。
-    private func writeCatalogFile() throws {
+    func writeCatalogFile() throws {
+        infoData.needSaveToFile = true
         let array = arrayWorksDelegates(objects: catalogData, isCatalog: true)
         let data:Data
         do {
@@ -450,7 +478,8 @@ extension Works {
     }
     
     /// 写Role File。
-    private func writeRoleFile() throws {
+    func writeRoleFile() throws {
+        infoData.needSaveToFile = true
         let array = arrayWorksDelegates(objects: roleData, isCatalog: false)
         let data:Data
         do {
@@ -492,7 +521,8 @@ extension Works {
     }
     
     /// 写Symbol File。
-    private func writeSymbolFile() throws {
+    func writeSymbolFile() throws {
+        infoData.needSaveToFile = true
         let array = arrayWorksDelegates(objects: symbolData, isCatalog: false)
         let data:Data
         do {
@@ -519,6 +549,7 @@ extension Works {
         // 章节以创建时间为标识保存。
         let file = cache + "/chapter\(currentContent.creation).txt"
         do {
+            currentContentData = ""
             currentContentData = try String(contentsOfFile: file)
         } catch {
             throw WorksError.operateError(OperateCode.fileRead, #function, fileError)
@@ -527,6 +558,7 @@ extension Works {
     
     /// 写当前章节。
     func writeCurrentContentFile() throws {
+        infoData.needSaveToFile = true
         guard currentContent.creation > 0 else {
             return
         }
@@ -541,6 +573,16 @@ extension Works {
     
     /// 压宿文件到用户指定位置。
     func zipCacheFolderToUsers() throws {
+        infoData.needSaveToFile = false
+        // 用户操作
+        if isUserOperate {
+            guard SSZipArchive.createZipFile(atPath: path, withContentsOfDirectory: cache) else {
+                throw WorksError.operateError(OperateCode.folderZip, #function, fileError)
+            }
+            return
+        }
+        
+        // 非用户操作
         guard let url = urlBookmark(file: path) else {
             return
         }
@@ -553,6 +595,7 @@ extension Works {
     
     /// 解压文件到缓存区。
     func unZipUsersToCacheFolder() throws {
+        infoData.needSaveToFile = false
         guard SSZipArchive.unzipFile(atPath: path, toDestination: cache) else {
             throw WorksError.operateError(OperateCode.folderZip, #function, fileError)
         }
@@ -630,7 +673,6 @@ extension Works {
     /// 添加节点后，引起其它项操作。
     func addOtherItem(catalog: Catalog){
         currentContent = catalog
-        currentContentData = catalog.title
         // 添加内容文件。
         try? writeCurrentContentFile()
         // 委托。
@@ -673,6 +715,7 @@ extension Works {
             return
         }
         addCatalog(item: catalog, inParent: toParent, index: to)
+        try? writeCatalogFile()
     }
     
     /// 父节点。
@@ -735,45 +778,29 @@ extension Works {
         defaults.removeObject(forKey: lastTag)
     }
     
-    /// 格式化标题栏最近打开。
-    func formatSelect(select: NSPopUpButton){
-        self.select = select
-        let array = lastFiles()
-        if array.isEmpty {
-            return
-        }
-        for file in array {
-            self.select?.addItem(withTitle: file.fileName())
-            let item = self.select?.lastItem
-            item?.toolTip = file
-        }
-    }
-    
     /// 获取权限打开文件。
-    func openLastFile(file: String){
+    func openLastFile(file: String, index: Int){
         guard let url = urlBookmark(file: file) else {
-            return
+            return removeInvalidFile(file: file, index: index)
         }
         url.startAccessingSecurityScopedResource()
         do {
-            try AppDelegate.works.openFile(path: file)
+            try openFile(path: file)
         } catch {
-            // 显示提示窗。
-            let alert = NSAlert()
-            alert.messageText = "File does not exist"
-            alert.informativeText = "\(file), No such file or directory"
-            alert.runModal()
-            removeLastFile(file)
-            removMenuItem(file: file)
-            removSelectItem(file: file)
+            removeInvalidFile(file: file, index:index)
         }
         url.stopAccessingSecurityScopedResource()
     }
     
-    /// 菜单点击事件。
-    @objc func openRecentFile(sender: Any){
-        let file = (sender as! NSMenuItem).toolTip!
-        openLastFile(file: file)
+    func removeInvalidFile(file: String, index: Int) {
+        // 显示提示窗。
+        let alert = NSAlert()
+        alert.messageText = "File does not exist"
+        alert.informativeText = "\(file), No such file or directory"
+        alert.runModal()
+        removeLastFile(file)
+        removRecentMenuItem(index: index)
+        removRecentSelectItem(index: index)
     }
     
     /// 移除缓存下来的文件名。
@@ -782,50 +809,63 @@ extension Works {
         array = array?.filter{$0 != file}
         defaults.set(array, forKey: lastTag)
     }
+    
+    /// 菜单点击事件。
+    @objc func openRecentFile(sender: Any){
+        let item = sender as! NSMenuItem
+        
+        let file = item.toolTip!
+        let index = item.parent?.submenu?.index(of: item) ?? 0
+        openLastFile(file: file, index: index)
+    }
 }
 
 // MARK: - Menu Edit
 extension Works {
     /// 格式化主菜单最近打开。
-    func formatMenu(menu: NSMenu){
-        self.menu = menu
+    func formatRecentMenu(){
+        if recentMenu == nil {
+            return
+        }
+        // 清除当前
+        recentMenu!.removeAllItems()
+        // 获取数据
         let array = lastFiles()
         if array.isEmpty {
             return
         }
-        for (i, file) in array.enumerated() {
+        // 实例菜单项
+        for file in array {
             let item = NSMenuItem.init(title: file.fileName(), action: #selector(openRecentFile(sender:)), keyEquivalent: "")
             item.toolTip = file
-            self.menu!.insertItem(item, at: i)
+            recentMenu!.addItem(item)
         }
     }
     
     /// 删除子项。
-    private func removMenuItem(file: String){
-        guard let array = menu?.items else {
+    private func removRecentMenuItem(index: Int){
+        recentMenu?.removeItem(at: index)
+    }
+    
+    /// 格式化标题栏最近打开。
+    func formatRecentSelect(){
+        if reeentSelect == nil {
             return
         }
-        
-        for item in array {
-            if item.toolTip == file {
-                item.isHidden = true
-                return
-            }
+        reeentSelect!.removeAllItems()
+        let array = lastFiles()
+        if array.isEmpty {
+            return
+        }
+        for file in array {
+            reeentSelect!.addItem(withTitle: file.fileName())
+            let item = reeentSelect!.lastItem
+            item?.toolTip = file
         }
     }
     
-    /// 删除子项。
-    private func removSelectItem(file: String){
-        guard let array = select?.itemArray else {
-            return
-        }
-        
-        for item in array {
-            if item.toolTip == file {
-                item.isHidden = true
-                return
-            }
-        }
+    private func removRecentSelectItem(index: Int){
+        reeentSelect?.removeItem(at: index)
     }
 }
 

@@ -302,17 +302,6 @@ class iWriterTests: XCTestCase {
         
     }
     
-    func testHelperLastFile() {
-        var array = recent.lastFiles()
-        let file = "/Users/jiangyouhua/work/Single Man.iw"
-        array.insert(file, at: 0)
-        let a = recent.lastFiles(file)
-        XCTAssertEqual(array.count, a.count)
-        for (i, item) in array.enumerated() {
-            XCTAssertEqual(item, a[i])
-        }
-    }
-    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
