@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="JYHTitleTabView" customModule="iWriter" customModuleProvider="target">
+            <connections>
+                <outlet property="button" destination="llo-K5-3qR" id="JPU-kj-Dcg"/>
+                <outlet property="label" destination="ZXl-Rh-GZJ" id="Jn8-ib-zXJ"/>
+                <outlet property="view" destination="c22-O7-iKe" id="42I-JH-hc1"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="90" height="30"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZXl-Rh-GZJ">
+                    <rect key="frame" x="8" y="8" width="61" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="left" title="Label" usesSingleLineMode="YES" id="8zb-2Y-mKJ">
+                        <font key="font" metaFont="menu" size="11"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="llo-K5-3qR">
+                    <rect key="frame" x="70" y="7" width="17" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="17" id="Yha-zB-8eG"/>
+                        <constraint firstAttribute="height" constant="17" id="lw1-x2-j0F"/>
+                    </constraints>
+                    <buttonCell key="cell" type="inline" title="✗" bezelStyle="inline" imagePosition="left" inset="2" id="ZSK-bt-23i">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystemBold"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="buttonClick:" target="-2" id="cyr-zi-u7m"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="llo-K5-3qR" secondAttribute="trailing" constant="3" id="GD3-Xl-eUo"/>
+                <constraint firstAttribute="bottom" secondItem="ZXl-Rh-GZJ" secondAttribute="bottom" constant="8" id="HhU-al-76J"/>
+                <constraint firstItem="llo-K5-3qR" firstAttribute="leading" secondItem="ZXl-Rh-GZJ" secondAttribute="trailing" constant="3" id="Txd-7N-hqk"/>
+                <constraint firstItem="llo-K5-3qR" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="WUI-2M-V6w"/>
+                <constraint firstItem="ZXl-Rh-GZJ" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="10" id="fLq-la-6a4"/>
+            </constraints>
+            <point key="canvasLocation" x="-36" y="33"/>
+        </customView>
+    </objects>
+</document>

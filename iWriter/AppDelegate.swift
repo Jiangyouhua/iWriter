@@ -11,23 +11,39 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var openRecentMenu: NSMenu!
+    @IBOutlet weak var recentFilesMenu: NSMenu!
     
-    static let works = Works()   // 便于ViewController使用。
+    var works: Works = Works()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        AppDelegate.works.recentMenu = openRecentMenu
-        AppDelegate.works.formatRecentMenu()
+        // 打开当前缓存文件。
+        if FileManager.default.fileExists(atPath: CACHE_PATH) {
+            do {
+                // 从缓存读取。
+                try works.openFilesFromCache()
+                NSApp.mainWindow?.title = works.info.file
+                formatRecentOpenMenu()
+            } catch let error as WorksError {
+                // 显示提示窗。
+                let alert = NSAlert()
+                alert.addButton(withTitle: "OK")
+                alert.messageText = "Open File From Cache Error"
+                switch error {
+                case .operateError(let code, let function,  let info) :
+                    print(code, function)
+                    alert.informativeText = info
+                }
+                alert.runModal()
+            } catch {
+                print(error)
+            }
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-}
-
-// MARK: - File Menu。
-extension AppDelegate{
     
     /// 事件：新建文件。
     /// - parameter sender 事件发送者。
@@ -36,7 +52,8 @@ extension AppDelegate{
             return
         }
         do {
-            try AppDelegate.works.newFile(path: path)
+            // 新建。
+            try works.newFile(path: path)
         } catch let error as WorksError{
             let alert = NSAlert()
             alert.addButton(withTitle: "OK")
@@ -59,7 +76,8 @@ extension AppDelegate{
             return
         }
         do {
-            try AppDelegate.works.openFile(path: path)
+            // 打开。
+            try works.openFile(path: path)
         } catch let error as WorksError{
             let alert = NSAlert()
             alert.addButton(withTitle: "OK")
@@ -79,7 +97,8 @@ extension AppDelegate{
     /// - parameter sender 事件发送者。
     @IBAction func saveFile(_ sender: Any) {
         do {
-            try AppDelegate.works.saveFile()
+            // 保存。
+            try works.saveFile()
         } catch let error as WorksError{
             let alert = NSAlert()
             alert.addButton(withTitle: "OK")
@@ -102,7 +121,9 @@ extension AppDelegate{
             return
         }
         do {
-            try AppDelegate.works.saveAsFile(path: path)
+            // 另存。
+            try works.saveAsFile(path: path)
+            // TODO
         } catch let error as WorksError{
             let alert = NSAlert()
             alert.addButton(withTitle: "OK")
@@ -117,11 +138,32 @@ extension AppDelegate{
             print(error)
         }
     }
+
+    func formatRecentOpenMenu() {
+        // 清除当前
+        for i in 0..<(recentFilesMenu.numberOfItems - 2) {
+            recentFilesMenu.removeItem(at: i)
+        }
+        // 获取数据
+        guard let array = cache.getOpenedFiles() else {
+            return
+        }
+        // 实例菜单项
+        for (j, file) in array.enumerated() {
+            // 判断文件是否存在，不存在则移除。
+            if !FileManager.default.fileExists(atPath: file) {
+                _ = cache.deleteOpenedFile(file: file)
+                continue
+            }
+            let item = NSMenuItem.init(title: file.fileName(), action: #selector(works.openRecentFile(sender:)), keyEquivalent: "")
+            item.toolTip = file
+            recentFilesMenu.insertItem(item, at: j)
+        }
+    }
 }
 
 // MARK: - File Browser。
-extension AppDelegate{
-    
+extension AppDelegate {
     /// 文件流览器，打开文件。
     /// - parameter title 显示的标题。
     func openFilePanel(title: String)->String?{

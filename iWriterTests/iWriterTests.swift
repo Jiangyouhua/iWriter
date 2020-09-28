@@ -31,18 +31,18 @@ class iWriterTests: XCTestCase {
         var info = Info()
         
         // 判断是否符合预期
-        XCTAssertEqual(info.file, "")
-        XCTAssertEqual(info.author, "")
+        XCTAssertEqual(info.pathToFile, "")
+        XCTAssertEqual(info.version, "")
         XCTAssertEqual(info.creation, 0)
         XCTAssertTrue(info.contentTitleOnBar.isEmpty)
         XCTAssertTrue(info.currentContent == nil)
         
         // 赋值
-        info.file = "/User/jiangyouhau/work/Sinlge Men.iw"
-        info.author = "Jiang Youhua"
+        info.pathToFile = "/User/jiangyouhau/work/Sinlge Men.iw"
+        info.version = "Jiang Youhua"
         info.creation = 123456
-        info.contentTitleOnBar = [Catalog()]
-        info.currentContent = Catalog()
+        info.contentTitleOnBar = [Chapter()]
+        info.currentContent = Chapter()
         info.other["key"] = "value"
         
         // 转Dictionary
@@ -56,8 +56,8 @@ class iWriterTests: XCTestCase {
         }
         
         // 判断是否符合预期
-        XCTAssertEqual(info.file, temp.file)
-        XCTAssertEqual(info.author, temp.author)
+        XCTAssertEqual(info.pathToFile, temp.pathToFile)
+        XCTAssertEqual(info.version, temp.version)
         XCTAssertEqual(info.creation, temp.creation)
         XCTAssertEqual(info.contentTitleOnBar[0].creation, temp.contentTitleOnBar[0].creation)
         XCTAssertEqual(info.currentContent?.creation, temp.currentContent?.creation)
@@ -72,8 +72,8 @@ class iWriterTests: XCTestCase {
         info["key"] = 123456
         
         // 判断是否符合预期
-        XCTAssertEqual(info.file, "")
-        XCTAssertEqual(info.author, "")
+        XCTAssertEqual(info.pathToFile, "")
+        XCTAssertEqual(info.version, "")
         XCTAssertEqual(info.creation, 0)
         XCTAssertTrue(info.contentTitleOnBar.isEmpty)
         XCTAssertTrue(info.currentContent == nil)
@@ -83,14 +83,14 @@ class iWriterTests: XCTestCase {
     /// 测试Catalog数据模型
     func testCatalog(){
         //  未赋值
-        let catalog = Catalog()
+        let catalog = Chapter()
         
         // 判断是否符合预期
         XCTAssertEqual(catalog.level, 0)
         XCTAssertEqual(catalog.title, "")
         XCTAssertEqual(catalog.info, "")
         XCTAssertEqual(catalog.creation, 0)
-        XCTAssertEqual(catalog.number, 0)
+        XCTAssertEqual(catalog.count, 0)
         
         
         // 赋值
@@ -98,13 +98,13 @@ class iWriterTests: XCTestCase {
         catalog.title = "Chapter 1"
         catalog.info = "Chapter Info"
         catalog.creation = 123456
-        catalog.number = 3650
+        catalog.count = 3650
         
         // 转Dictionary
         let dic = catalog.forDictionary()
         
         // 转Info
-        let temp = Catalog()
+        let temp = Chapter()
         for (key, value) in dic {
             // 使用Subscript赋值
             temp[key] = value
@@ -115,7 +115,7 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(catalog.title, temp.title)
         XCTAssertEqual(catalog.info, temp.info)
         XCTAssertEqual(catalog.creation, temp.creation)
-        XCTAssertEqual(catalog.number, temp.number)
+        XCTAssertEqual(catalog.count, temp.count)
         
         // 脏数据
         catalog["level"] = "0"
@@ -129,44 +129,44 @@ class iWriterTests: XCTestCase {
         XCTAssertEqual(catalog.title, "")
         XCTAssertEqual(catalog.info, "")
         XCTAssertEqual(catalog.creation, 0)
-        XCTAssertEqual(catalog.number, 0)
+        XCTAssertEqual(catalog.count, 0)
     }
     
     // 判断Catalog索引与转换
     func testCatalogOther(){
-        let root = Catalog()
+        let root = Chapter()
         root.title = "Single Man"
         root.creation = works.creationTime()
         
-        let chapter1 = Catalog()
+        let chapter1 = Chapter()
         chapter1.title = "Chapter 1"
         root.creation = works.creationTime()
-        root.sub.append(chapter1)
+        root.children.append(chapter1)
         
-        let chapter2 = Catalog()
+        let chapter2 = Chapter()
         chapter2.title = "Chapter 2"
         root.creation =  works.creationTime()
-        root.sub.append(chapter2)
+        root.children.append(chapter2)
         
-        let section1_1 = Catalog()
+        let section1_1 = Chapter()
         section1_1.title = "Section 1.1"
         section1_1.creation = works.creationTime()
-        chapter1.sub.append(section1_1)
+        chapter1.children.append(section1_1)
         
-        let section1_2 = Catalog()
+        let section1_2 = Chapter()
         section1_2.title = "Section 1.2"
         section1_2.creation = works.creationTime()
-        chapter1.sub.append(section1_2)
+        chapter1.children.append(section1_2)
         
-        let section2_1 = Catalog()
+        let section2_1 = Chapter()
         section2_1.title = "Section 2.1"
         section2_1.creation = works.creationTime()
-        chapter2.sub.append(section2_1)
+        chapter2.children.append(section2_1)
         
-        let section2_2 = Catalog()
+        let section2_2 = Chapter()
         section2_2.title = "Section 2.2"
         section2_2.creation = works.creationTime()
-        chapter2.sub.append(section2_2)
+        chapter2.children.append(section2_2)
     }
     
     /// 测试Role数据模型
@@ -274,7 +274,7 @@ class iWriterTests: XCTestCase {
         XCTAssertTrue(works.fileManager.fileExists(atPath: works.symbolFile))
         
         // Save File
-        let catalog = Catalog()
+        let catalog = Chapter()
         catalog.title = "Chapter title"
         catalog.info = "Chapter info"
         catalog.creation = works.creationTime()
@@ -295,7 +295,7 @@ class iWriterTests: XCTestCase {
         // Open File
         try? works.openFile(path: file)
         XCTAssertEqual(works.currentContentData, "Current Chapter Data")
-        XCTAssertEqual(works.currentContentData.count, works.currentContent.number)
+        XCTAssertEqual(works.currentContentData.count, works.currentContent.count)
     }
     
     func testWorksWithCatalog(){
