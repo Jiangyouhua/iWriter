@@ -38,7 +38,7 @@ class JYHStuntmanOfTitleTabView: JYHTitleTabView {
         self.label.textColor = NSColor.init(white: 0, alpha: 0.9)
     }
     
-    override func mouseUp(with event: NSEvent) {
+    override func mouseUp(with event: NSEvent) {    
         // 完成移动。
         delegate?.standInDragEnded(stuntman: self)
     }

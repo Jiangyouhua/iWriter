@@ -23,7 +23,7 @@ struct Info: FileDelegate {
     var saved: Bool                      // 是否被保存。
     var chapterEditing: Chapter          // 正编辑的。
     var chapterSelection: Chapter        // 被选中的。
-    var chapterOpened: [Chapter]         // 在打开的。
+    var chapterOpened: [Chapter]         // 打开了的，不作序列化。
     
     init() {
         self.file = ""
@@ -49,7 +49,7 @@ struct Info: FileDelegate {
         self.saved = dictionary["saved"] as? Bool ?? false
         self.chapterEditing = Chapter(dictionary: dictionary["chapterEditing"] as! [String : Any])
         self.chapterSelection = Chapter(dictionary: dictionary["chapterSelection"] as! [String : Any])
-        self.chapterOpened = dictionaryToStructWith(array: dictionary["chapterOpened"] as! [Any])
+        self.chapterOpened = [Chapter]()
     }
     
     /// 转为字典。
@@ -66,7 +66,6 @@ struct Info: FileDelegate {
         dic["saved"] = self.saved
         dic["chapterEditing"] = self.chapterEditing.forDictionary()
         dic["chapterSelection"] = self.chapterSelection.forDictionary()
-        dic["chapterOpened"] = structToDictionaryWith(array: self.chapterOpened)
         return dic
     }
 }

@@ -27,6 +27,7 @@ class Chapter: FileDelegate {
     var y: Int                           // 在画布中y轴的位置。
     var creation: Int                    // 创建时间，时间戮。
     var expanded: Bool                   // 节点是否为展开状态。
+    var opened: Bool                     // 被打开的。
     var naming: Bool                     // 节点是否为命名状态。
     var status: Bool                     // 是否有效。
     
@@ -41,6 +42,7 @@ class Chapter: FileDelegate {
         self.y = 0
         self.creation = 0
         self.expanded = false
+        self.opened = false
         self.naming = false
         self.status = true
     }
@@ -57,6 +59,7 @@ class Chapter: FileDelegate {
         self.y = dictionary["y"] as? Int ?? 0
         self.creation = dictionary["creation"] as? Int ?? 0
         self.expanded = dictionary["expanded"] as? Bool ?? false
+        self.opened = dictionary["opened"] as? Bool ??  false
         self.naming = dictionary["naming"] as? Bool ?? false
         self.status = dictionary["status"] as? Bool ?? false
         
@@ -93,9 +96,10 @@ class Chapter: FileDelegate {
         dic["snapshot"] = self.snapshot
         dic["x"] = self.x
         dic["y"] = self.y
+        dic["creation"] = self.creation
         dic["expanded"] = self.expanded
         dic["naming"] = self.naming
-        dic["creation"] = self.creation
+        dic["opened"] = self.opened
         dic["status"] = self.status
         
         // 递归处理children。
@@ -165,7 +169,6 @@ class Chapter: FileDelegate {
         // 从自身的父节点中移除自己。
         let i = indexParent()
         self.parent?.children.remove(at: i)
-        self.parent = nil
         return i
     }
 }

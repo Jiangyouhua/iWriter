@@ -498,7 +498,7 @@ CA
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y2p-XL-oYQ">
-                                                <rect key="frame" x="0.0" y="420" width="200" height="30"/>
+                                                <rect key="frame" x="0.0" y="418" width="200" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VzC-sa-bgh">
@@ -512,36 +512,18 @@ CA
                                                             <action selector="ideaButtonClick:" target="FcE-CA-Yky" id="HB5-3t-GkI"/>
                                                         </connections>
                                                     </button>
-                                                    <scrollView wantsLayer="YES" fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZfK-yq-ToM">
-                                                        <rect key="frame" x="0.0" y="0.0" width="170" height="30"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                        <clipView key="contentView" id="tbl-ZC-9ad">
-                                                            <rect key="frame" x="0.0" y="0.0" width="170" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <collectionView id="SvY-Wk-d3h">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="170" height="30"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="ohe-4B-dSj">
-                                                                        <size key="itemSize" width="50" height="50"/>
-                                                                    </collectionViewFlowLayout>
-                                                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </collectionView>
-                                                            </subviews>
-                                                        </clipView>
-                                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Wx6-7O-66o">
-                                                            <rect key="frame" x="-100" y="-100" width="147" height="16"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="drZ-bZ-pej">
-                                                            <rect key="frame" x="153" y="1" width="16" height="28"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                    </scrollView>
+                                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8kT-hj-Seo" customClass="JYHTitlesBarView" customModule="iWriter" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="1" width="170" height="31"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    </customView>
+                                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DsP-D0-gj4" customClass="JYHLineView" customModule="iWriter" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="1" width="200" height="1"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    </customView>
                                                 </subviews>
                                             </customView>
                                             <splitView fixedFrame="YES" arrangesAllSubviews="NO" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="ZAr-DZ-wWl">
-                                                <rect key="frame" x="0.0" y="0.0" width="200" height="423"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="200" height="421"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <customView fixedFrame="YES" id="7gR-Ek-MG6">
@@ -549,18 +531,18 @@ CA
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yeW-R7-9yx">
-                                                                <rect key="frame" x="0.0" y="0.0" width="200" height="124"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="200" height="122"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="5U0-77-Opx">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="124"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="122"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="deN-ch-Sev" customClass="JYHIdeaView" customModule="iWriter" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="124"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="122"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <size key="minSize" width="200" height="124"/>
+                                                                            <size key="minSize" width="200" height="122"/>
                                                                             <size key="maxSize" width="300" height="10000000"/>
                                                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                         </textView>
@@ -571,29 +553,29 @@ CA
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="t2e-UE-Ubv">
-                                                                    <rect key="frame" x="184" y="0.0" width="16" height="124"/>
+                                                                    <rect key="frame" x="184" y="0.0" width="16" height="122"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
                                                         </subviews>
                                                     </customView>
                                                     <customView fixedFrame="YES" id="TNl-Nj-sR8">
-                                                        <rect key="frame" x="0.0" y="125" width="200" height="151"/>
+                                                        <rect key="frame" x="0.0" y="125" width="200" height="149"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGO-qk-HHY">
-                                                                <rect key="frame" x="0.0" y="0.0" width="200" height="151"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="200" height="149"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Ohh-S5-AgN">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="151"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="149"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="0Sj-lJ-Ate" customClass="JYHContentView" customModule="iWriter" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="151"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="149"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <size key="minSize" width="200" height="151"/>
+                                                                            <size key="minSize" width="200" height="149"/>
                                                                             <size key="maxSize" width="300" height="10000000"/>
                                                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                         </textView>
@@ -604,14 +586,14 @@ CA
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Ci4-VQ-be5">
-                                                                    <rect key="frame" x="184" y="0.0" width="16" height="151"/>
+                                                                    <rect key="frame" x="184" y="0.0" width="16" height="149"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
                                                         </subviews>
                                                     </customView>
                                                     <customView id="KPp-W6-bdL" customClass="JYHOutlineView" customModule="iWriter" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="277" width="200" height="146"/>
+                                                        <rect key="frame" x="0.0" y="275" width="200" height="146"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="gZ6-OB-RNG"/>
@@ -696,24 +678,12 @@ CA
                         <outlet property="roleBlockView" destination="bCw-oc-gSd" id="rHd-FP-M1v"/>
                         <outlet property="searchBlockView" destination="Xx1-J5-7r0" id="Oob-Lu-UUv"/>
                         <outlet property="symbolBlockView" destination="Tvt-DC-Qzp" id="zuL-7f-klN"/>
+                        <outlet property="titlesBarView" destination="8kT-hj-Seo" id="uPV-GK-vRl"/>
                     </connections>
                 </viewController>
                 <customObject id="sbn-Z3-XGA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="129" y="669"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="E64-uM-M32">
-            <objects>
-                <viewController id="sSo-jb-WMX" sceneMemberID="viewController">
-                    <view key="view" id="b3R-JJ-7Pf">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </view>
-                </viewController>
-                <customObject id="cb1-2u-YDX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="803" y="389"/>
         </scene>
     </scenes>
     <resources>

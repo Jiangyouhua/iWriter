@@ -81,9 +81,8 @@
 		78C1018F22D5FEA10073416E /* 037画板 1@8x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017122D5FEA00073416E /* 037画板 1@8x.png */; };
 		78D386CE2522261900496EA9 /* JYHTitleTabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D386CC2522261900496EA9 /* JYHTitleTabView.xib */; };
 		78D386CF2522261900496EA9 /* JYHTitleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386CD2522261900496EA9 /* JYHTitleTabView.swift */; };
-		78D386D92522265200496EA9 /* JYHTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386D82522265200496EA9 /* JYHTabBarView.swift */; };
+		78D386D92522265200496EA9 /* JYHTitlesBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386D82522265200496EA9 /* JYHTitlesBarView.swift */; };
 		78D386E12522269700496EA9 /* JYHDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386E02522269700496EA9 /* JYHDictionaryView.swift */; };
-		78D386E9252226D100496EA9 /* JYHStuntmanOfTitleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386E8252226D100496EA9 /* JYHStuntmanOfTitleTabView.swift */; };
 		78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB474222D4365800A9F4AF /* AppDelegate.swift */; };
 		78FB474522D4365800A9F4AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB474422D4365800A9F4AF /* ViewController.swift */; };
 		78FB474722D4365900A9F4AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78FB474622D4365900A9F4AF /* Assets.xcassets */; };
@@ -216,9 +215,8 @@
 		78C1017122D5FEA00073416E /* 037画板 1@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@8x.png"; sourceTree = "<group>"; };
 		78D386CC2522261900496EA9 /* JYHTitleTabView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JYHTitleTabView.xib; sourceTree = "<group>"; };
 		78D386CD2522261900496EA9 /* JYHTitleTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTitleTabView.swift; sourceTree = "<group>"; };
-		78D386D82522265200496EA9 /* JYHTabBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTabBarView.swift; sourceTree = "<group>"; };
+		78D386D82522265200496EA9 /* JYHTitlesBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTitlesBarView.swift; sourceTree = "<group>"; };
 		78D386E02522269700496EA9 /* JYHDictionaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHDictionaryView.swift; sourceTree = "<group>"; };
-		78D386E8252226D100496EA9 /* JYHStuntmanOfTitleTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHStuntmanOfTitleTabView.swift; sourceTree = "<group>"; };
 		78FB473F22D4365800A9F4AF /* iWriter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWriter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FB474222D4365800A9F4AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78FB474422D4365800A9F4AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -291,12 +289,11 @@
 			children = (
 				78A96C7B22E4D43A00280327 /* JYHLineView.swift */,
 				780508D222E5C33300A36E18 /* JYHTextField.swift */,
-				78B71ED02459C1A500EDACF4 /* JYHBlockView.swift */,
-				78B71ECE2459BDCA00EDACF4 /* JYHBlockView.xib */,
-				78D386E8252226D100496EA9 /* JYHStuntmanOfTitleTabView.swift */,
 				78D386CD2522261900496EA9 /* JYHTitleTabView.swift */,
 				78D386CC2522261900496EA9 /* JYHTitleTabView.xib */,
-				78D386D82522265200496EA9 /* JYHTabBarView.swift */,
+				78D386D82522265200496EA9 /* JYHTitlesBarView.swift */,
+				78B71ED02459C1A500EDACF4 /* JYHBlockView.swift */,
+				78B71ECE2459BDCA00EDACF4 /* JYHBlockView.xib */,
 				78B71ED62462D9E200EDACF4 /* JYHCatalogView.swift */,
 				78B71ED82462D9F900EDACF4 /* JYHNoteView.swift */,
 				78B71EDA2462DA0C00EDACF4 /* JYHRoleView.swift */,
@@ -723,8 +720,7 @@
 				7832601C245466F600F13658 /* Note.swift in Sources */,
 				78B71ED12459C1A500EDACF4 /* JYHBlockView.swift in Sources */,
 				78FB477722D4384800A9F4AF /* Chapter.swift in Sources */,
-				78D386D92522265200496EA9 /* JYHTabBarView.swift in Sources */,
-				78D386E9252226D100496EA9 /* JYHStuntmanOfTitleTabView.swift in Sources */,
+				78D386D92522265200496EA9 /* JYHTitlesBarView.swift in Sources */,
 				78A96C7C22E4D43A00280327 /* JYHLineView.swift in Sources */,
 				78FB477922D4385700A9F4AF /* Role.swift in Sources */,
 				78B71EDD2462DA1D00EDACF4 /* JYHSymbolView.swift in Sources */,

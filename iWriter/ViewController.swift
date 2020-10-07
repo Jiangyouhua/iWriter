@@ -33,7 +33,8 @@ class ViewController: NSViewController, WorksDelegate {
     @IBOutlet weak var searchBlockView: JYHSearchView!
     
     /// 中视图顶部留出标签栏 + 按钮。
-
+    @IBOutlet weak var titlesBarView: JYHTitlesBarView!
+    
     
     /// 中视图余下部分垂直分割为上中下视图：想法、内容、大纲。
     /// 想法。
@@ -74,6 +75,7 @@ class ViewController: NSViewController, WorksDelegate {
         outlineBlockView.delegate = self
         
         works.delegate = self
+        titlesBarView.delegate = self
         
         windowDidResize()                                        // 继承上一次的格式。
     }
@@ -93,11 +95,22 @@ class ViewController: NSViewController, WorksDelegate {
         symbolBlockView.format()
         
         // 4. 展开节点。
-        // tabsBarView.dataSource(catalogs: &works.info.chapterOpened, active: works.info.chapterEditing)
+        titlesBarView.needsLayout = true
     }
     
     func selectedLeaf(chapter: Chapter) {
-        // <#code#>
+        titlesBarView.opened(chapter: chapter)
+    }
+    
+    func namedLeaf(chapter: Chapter) {
+        titlesBarView.needsLayout = true
+    }
+    
+    func deletedLeaf(chapter: Chapter) {
+        guard let index = works.info.chapterOpened.firstIndex(where: {return $0.creation == chapter.creation}) else {
+            return
+        }
+        titlesBarView.deleted(index: index)
     }
 }
 
@@ -336,5 +349,17 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
             p = iconWidth
         }
         leftRightSplitView.setPosition(windowSize.width - p, ofDividerAt: 1)
+    }
+}
+
+
+extension ViewController: JYHTitlesBarViewDelegate {
+    
+    func clickedTabItem(chapter: Chapter) {
+        catalogBlockView.contentOutlineView.reloadData()
+    }
+    
+    func closedTabItem(chapter: Chapter) {
+        catalogBlockView.contentOutlineView.reloadData()
     }
 }

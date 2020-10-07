@@ -63,7 +63,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         let node = addNode(title:"New Text", leaf: true, isSelect: isSelect)
         works.info.chapterSelection = node
         works.info.chapterEditing = node
-//        works.info.addOpened(chapter: node)
         writeAndReloadList()
         
         // 添加并打开对应的文本。
@@ -355,10 +354,9 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         if node?.parent?.creation == chapter.creation && i < x {
             x -= 1
         }
-        outlineView.moveItem(at: i, inParent: node?.parent, to: x, inParent: item)
+        outlineView.moveItem(at: i, inParent: node?.parent, to: x, inParent: chapter)
         
         // 同步更新数据。
-        node!.parent?.children.remove(at: i)        // 从原来的移走；
         chapter.children.insert(node!, at: x)       // 添加到新的里面；
         node?.parent = chapter                      // 更新其父节点。
         try? works.writeOutlineFile()
@@ -394,10 +392,16 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         guard let chapter = outlineView.item(atRow: outlineView.selectedRow) as? Chapter else {
             return
         }
+        if !chapter.leaf {
+            return
+        }
+        chapter.opened = true
         works.info.chapterEditing = chapter
-//        works.info.addOpened(chapter: chapter)
+        works.info.chapterSelection = chapter
+        works.delegate?.selectedLeaf(chapter: chapter)
         do {
-            try works.readCurrentContentFile()
+            try works.writeInfoFile()
+            try works.writeOutlineFile()
         } catch {
             print(error)
         }
@@ -444,6 +448,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         }
         chapter.title = textField.stringValue
         chapter.naming = false
+        works.delegate?.namedLeaf(chapter: chapter)
         
         writeAndReloadList()
     }
@@ -466,6 +471,10 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         for item in items {
             if item.expanded {
                 contentOutlineView.expandItem(item)
+            }
+            // 同步标题栏
+            if item.leaf && item.opened {
+                works.delegate?.selectedLeaf(chapter: item)
             }
             if item.children.isEmpty {
                 continue

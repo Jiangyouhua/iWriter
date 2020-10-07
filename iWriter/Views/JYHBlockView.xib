@@ -33,7 +33,7 @@
                         <constraint firstAttribute="height" constant="1" id="t02-Ff-J0r"/>
                     </constraints>
                 </customView>
-                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="23" horizontalPageScroll="10" verticalLineScroll="23" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RkE-TJ-gx9">
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="23" horizontalPageScroll="10" verticalLineScroll="23" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RkE-TJ-gx9">
                     <rect key="frame" x="0.0" y="0.0" width="156" height="101"/>
                     <clipView key="contentView" drawsBackground="NO" id="8Y4-K0-A7T">
                         <rect key="frame" x="0.0" y="0.0" width="156" height="101"/>
@@ -122,7 +122,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="displayP3"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="wF8-r0-daP">
-                        <rect key="frame" x="0.0" y="85" width="156" height="16"/>
+                        <rect key="frame" x="-100" y="-100" width="156" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="muX-83-slG">
@@ -212,7 +212,7 @@
             <connections>
                 <outlet property="horizontalLineView" destination="3hf-Oj-rNd" id="5um-oF-JNr"/>
             </connections>
-            <point key="canvasLocation" x="22" y="69"/>
+            <point key="canvasLocation" x="21" y="76"/>
         </customView>
         <menu title="Menu" id="SD0-ma-PFQ">
             <items>

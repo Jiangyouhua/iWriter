@@ -39,6 +39,8 @@ enum WorksError: Error {
 protocol WorksDelegate {
     func loadedFile(file: String)
     func selectedLeaf(chapter: Chapter)
+    func deletedLeaf(chapter: Chapter)
+    func namedLeaf(chapter: Chapter)
 }
 
 /**
@@ -159,7 +161,6 @@ extension Works {
             try readRoleFile()                      // 读角色。
             try readSymbolFile()                    // 读符号。
             try readCurrentContentFile()            // 读当前章节内容。
-            try readCurrentAnnotationFile()         // 读当前章节批注。
             
             delegate?.loadedFile(file: info.file)
         } catch {
@@ -454,45 +455,6 @@ extension Works {
         let file = chapter.contentFile()
         do{
             try "Please ...".write(toFile: file, atomically: false, encoding: .utf8)
-        } catch {
-            throw WorksError.operateError(OperateCode.fileWrite, #function, FILE_ERROR)
-        }
-    }
-    
-    func readCurrentAnnotationFile() throws {
-        if info.chapterEditing.creation == 0 {
-            return
-        }
-        info.saved = false
-        // 章节以创建时间为标识保存。
-        let file = info.chapterEditing.annotationFile()
-        guard let data = fileManager.contents(atPath: file) else {
-            throw WorksError.operateError(OperateCode.fileRead, #function, FILE_ERROR)
-        }
-        if data.count == 0 {
-            return
-        }
-        do {
-            let map = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-            currentAnnotations = dictionaryToStructWith(dic: map as! [Int: Any])
-        } catch {
-            throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
-        }
-    }
-    
-    /// 写当前章节。
-    func writeCurrentAnnotationFile() throws {
-        if info.chapterEditing.creation == 0 {
-            return
-        }
-        info.saved = false
-        // 章节以创建时间为标识保存。
-        let file = info.chapterEditing.annotationFile()
-        let dic = structToDictionaryWith(dic: currentAnnotations)
-        let data:Data
-        do {
-            data = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-            try data.write(to: URL(fileURLWithPath: file))
         } catch {
             throw WorksError.operateError(OperateCode.fileWrite, #function, FILE_ERROR)
         }
