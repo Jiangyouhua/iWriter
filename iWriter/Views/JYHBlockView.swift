@@ -19,7 +19,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     @IBOutlet weak var titleTextButton: NSButton!
     @IBOutlet weak var leftAddButton: NSButton!
     @IBOutlet weak var rightAddButton: NSButton!
-    @IBOutlet weak var horizontalLineView: JYHLineView!
+    @IBOutlet weak var horizontalLineView: JYHView!
     @IBOutlet weak var contentScrollView: NSScrollView!
     @IBOutlet weak var contentOutlineView: NSOutlineView!
     @IBOutlet weak var titleColumn: NSTableColumn!
@@ -98,6 +98,8 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         // 表格处理。
         contentOutlineView.delegate = self
         contentOutlineView.dataSource = self
+        contentOutlineView.target = self
+        contentOutlineView.action = #selector(outlineViewDidClick)
         contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
         contentOutlineView.doubleAction = #selector(doubleClicked(_:))
         
@@ -179,5 +181,33 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     
     func deleteItemClicked(){
         print("deleteItemClicked")
+    }
+    
+    @objc func outlineViewDidClick(){
+        let row = contentOutlineView.clickedRow
+        let column = contentOutlineView.clickedColumn
+        let unselected = -1
+
+        if row == unselected && column == unselected{
+            tableViewDidDeselectRow()
+            return
+        }else if row != unselected && column != unselected{
+            tableViewDidSelectRow(row)
+            return
+        }else if column != unselected && row == unselected{
+            tableviewDidSelectHeader(column)
+        }
+    }
+    
+    func tableViewDidDeselectRow() {
+        print(#function)
+    }
+
+    func tableViewDidSelectRow(_ row : Int){
+        print(#function)
+    }
+
+    func tableviewDidSelectHeader(_ column : Int){
+        print(#function)
     }
 }

@@ -501,6 +501,28 @@ CA
                                                 <rect key="frame" x="0.0" y="418" width="200" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <subviews>
+                                                    <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="0.0" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="xYl-cs-umW" customClass="JYHTitlesBarView" customModule="iWriter" customModuleProvider="target">
+                                                        <rect key="frame" x="-1" y="2" width="172" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <clipView key="contentView" copiesOnScroll="NO" id="JHh-IT-GEI">
+                                                            <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <view id="hH4-hf-RFT">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="157" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                </view>
+                                                            </subviews>
+                                                        </clipView>
+                                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="BYE-w3-3ly">
+                                                            <rect key="frame" x="0.0" y="14" width="172" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="bdo-p6-meu">
+                                                            <rect key="frame" x="-100" y="-100" width="15" height="31"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                    </scrollView>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VzC-sa-bgh">
                                                         <rect key="frame" x="170" y="1" width="30" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
@@ -512,88 +534,31 @@ CA
                                                             <action selector="ideaButtonClick:" target="FcE-CA-Yky" id="HB5-3t-GkI"/>
                                                         </connections>
                                                     </button>
-                                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8kT-hj-Seo" customClass="JYHTitlesBarView" customModule="iWriter" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="1" width="170" height="31"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    </customView>
-                                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DsP-D0-gj4" customClass="JYHLineView" customModule="iWriter" customModuleProvider="target">
+                                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DsP-D0-gj4" customClass="JYHView" customModule="iWriter" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="1" width="200" height="1"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                                <color key="value" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                     </customView>
                                                 </subviews>
                                             </customView>
                                             <splitView fixedFrame="YES" arrangesAllSubviews="NO" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="ZAr-DZ-wWl">
-                                                <rect key="frame" x="0.0" y="0.0" width="200" height="421"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="200" height="419"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <customView fixedFrame="YES" id="7gR-Ek-MG6">
+                                                    <customView fixedFrame="YES" id="7gR-Ek-MG6" customClass="JYHInfoView" customModule="iWriter" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="200" height="124"/>
                                                         <autoresizingMask key="autoresizingMask"/>
-                                                        <subviews>
-                                                            <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yeW-R7-9yx">
-                                                                <rect key="frame" x="0.0" y="0.0" width="200" height="122"/>
-                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="5U0-77-Opx">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="122"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <subviews>
-                                                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="deN-ch-Sev" customClass="JYHIdeaView" customModule="iWriter" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="122"/>
-                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <size key="minSize" width="200" height="122"/>
-                                                                            <size key="maxSize" width="300" height="10000000"/>
-                                                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                        </textView>
-                                                                    </subviews>
-                                                                </clipView>
-                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bmx-N2-Z4c">
-                                                                    <rect key="frame" x="-100" y="-100" width="240" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                </scroller>
-                                                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="t2e-UE-Ubv">
-                                                                    <rect key="frame" x="184" y="0.0" width="16" height="122"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                </scroller>
-                                                            </scrollView>
-                                                        </subviews>
                                                     </customView>
-                                                    <customView fixedFrame="YES" id="TNl-Nj-sR8">
-                                                        <rect key="frame" x="0.0" y="125" width="200" height="149"/>
+                                                    <customView fixedFrame="YES" id="TNl-Nj-sR8" customClass="JYHContentView" customModule="iWriter" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="125" width="200" height="147"/>
                                                         <autoresizingMask key="autoresizingMask"/>
-                                                        <subviews>
-                                                            <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGO-qk-HHY">
-                                                                <rect key="frame" x="0.0" y="0.0" width="200" height="149"/>
-                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Ohh-S5-AgN">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="149"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <subviews>
-                                                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="0Sj-lJ-Ate" customClass="JYHContentView" customModule="iWriter" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="149"/>
-                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <size key="minSize" width="200" height="149"/>
-                                                                            <size key="maxSize" width="300" height="10000000"/>
-                                                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                        </textView>
-                                                                    </subviews>
-                                                                </clipView>
-                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Env-S1-bR8">
-                                                                    <rect key="frame" x="-100" y="-100" width="240" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                </scroller>
-                                                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Ci4-VQ-be5">
-                                                                    <rect key="frame" x="184" y="0.0" width="16" height="149"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                </scroller>
-                                                            </scrollView>
-                                                        </subviews>
                                                     </customView>
                                                     <customView id="KPp-W6-bdL" customClass="JYHOutlineView" customModule="iWriter" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="275" width="200" height="146"/>
+                                                        <rect key="frame" x="0.0" y="273" width="200" height="146"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="gZ6-OB-RNG"/>
@@ -662,12 +627,10 @@ CA
                         <outlet property="catalogBlockView" destination="fRv-zQ-081" id="y8d-s8-75Q"/>
                         <outlet property="centerAreaSplitView" destination="ZAr-DZ-wWl" id="5Md-B5-cZg"/>
                         <outlet property="centerAreaView" destination="5IQ-8S-vNT" id="IBc-yc-6nl"/>
-                        <outlet property="contentBlockView" destination="TNl-Nj-sR8" id="OM2-Jf-4OP"/>
+                        <outlet property="contentBlockView" destination="TNl-Nj-sR8" id="VeV-5M-tOQ"/>
                         <outlet property="dictionaryBlockView" destination="AcB-cZ-3BH" id="WTh-18-R0B"/>
-                        <outlet property="ideaBlockView" destination="7gR-Ek-MG6" id="l86-vm-cAT"/>
                         <outlet property="ideaIconButton" destination="VzC-sa-bgh" id="8sy-oX-vbq"/>
-                        <outlet property="ideaScrollView" destination="yeW-R7-9yx" id="lIf-hX-jwr"/>
-                        <outlet property="ideaTextView" destination="deN-ch-Sev" id="nhZ-ER-zR2"/>
+                        <outlet property="infoBlockView" destination="7gR-Ek-MG6" id="iST-oW-zev"/>
                         <outlet property="leftAreaSplitView" destination="1M7-cG-R64" id="Z6Z-Bm-PJt"/>
                         <outlet property="leftAreaView" destination="ahv-Cw-sKB" id="6qA-0V-4c3"/>
                         <outlet property="leftRightSplitView" destination="8M3-c7-zL8" id="l4H-yf-5zG"/>
@@ -678,7 +641,7 @@ CA
                         <outlet property="roleBlockView" destination="bCw-oc-gSd" id="rHd-FP-M1v"/>
                         <outlet property="searchBlockView" destination="Xx1-J5-7r0" id="Oob-Lu-UUv"/>
                         <outlet property="symbolBlockView" destination="Tvt-DC-Qzp" id="zuL-7f-klN"/>
-                        <outlet property="titlesBarView" destination="8kT-hj-Seo" id="uPV-GK-vRl"/>
+                        <outlet property="titlesBarView" destination="xYl-cs-umW" id="Grm-YG-Pns"/>
                     </connections>
                 </viewController>
                 <customObject id="sbn-Z3-XGA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

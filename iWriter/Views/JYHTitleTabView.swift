@@ -9,8 +9,10 @@
 import Cocoa
 
 protocol JYHTitleTabViewDelegate {
-    func tabClicked(tab: JYHTitleTabView, dragged: Bool)
+    func tabClicked(tab: JYHTitleTabView)
     func tabClosed(tab: JYHTitleTabView)
+    func tabDragStart(tab: JYHTitleTabView, x: CGFloat)
+    func tabDragEnd(tab: JYHTitleTabView, x: CGFloat)
 }
 
 /**
@@ -22,18 +24,17 @@ class JYHTitleTabView: NSView {
     
     // file's Owner 绑定该类后再建立Outlet。
     @IBOutlet var view: NSView!
+    @IBOutlet weak var backView: JYHView!
     @IBOutlet weak var label: NSTextField!
     @IBOutlet weak var button: NSButton!
-    @IBOutlet weak var splitLine: JYHLineView!
     
     var delegate: JYHTitleTabViewDelegate?
-    var oldPoint: NSPoint?
-    var dragTab: JYHTitleTabView?
-    var dragged: Int = 0            // 是否被拖移。
+    var position: NSPoint?
     
     var chapter: Chapter
     var active: Bool
-    var index: Int = 0
+    var index: Int = 0                      // 在数据中的顺序。
+    var sort: Int = 0                       // 在视图中的顺序。
     var isInit: Bool = true
     
     init(chapter: Chapter, active: Bool) {
@@ -63,6 +64,7 @@ class JYHTitleTabView: NSView {
     /// 独立出来，方便动态更新。
     func format(){
         // 设置Label。
+        backView.backgroundColor = NSColor.selectedControlColor
         label.stringValue = chapter.title
         label.sizeToFit()
         
@@ -90,7 +92,7 @@ class JYHTitleTabView: NSView {
     
     /// 独立出底色修改。
     func isActive(b: Bool){
-        self.layer?.backgroundColor = b ? tabBackgroundColorOfActiveState() : tabBackgroundColorOfNormalState()
+        backView.isHidden =  !b
     }
     
     func copyItem() -> JYHTitleTabView {
@@ -98,51 +100,40 @@ class JYHTitleTabView: NSView {
         item.frame = self.frame
         item.layer?.backgroundColor = self.layer?.backgroundColor?.copy(alpha: 0.5)
         item.label.textColor = NSColor(cgColor: self.label.textColor?.cgColor.copy(alpha: 0.5) ?? CGColor.white)
-        item.splitLine.isHidden = true
         // 添加到上级会失去焦点，而无法拖动，所以加两层。
-        self.superview?.superview?.addSubview(item)
+        // macOS里没有bringSubviewToFront.
+        self.superview?.addSubview(item)
         return item
     }
     
     override func draw(_ dirtyRect: NSRect) {
         /// 改变底图颜色。
-//        NSColor.white.setFill()
+//        NSColor.linkColor.setFill()
 //        dirtyRect.fill()
         super.draw(dirtyRect)
-    
     }
     
-    override func mouseDragged(with event: NSEvent) {
-        print("mouseDragged")
-        if oldPoint == nil || dragTab == nil {
+    /// 鼠标点击。
+    override func mouseDown(with event: NSEvent) {
+        // 原位置。
+        position = (self.window?.contentView?
+                        .convert(event.locationInWindow, to: self.superview))!
+        delegate?.tabDragStart(tab: self, x: position!.x)
+    }
+    
+    /// 鼠标释放。
+    override func mouseUp(with event: NSEvent) {
+        if position == nil {
             return
         }
-        dragged += 1
-        // 计算偏移量，移动到新位置。
-        let newPoint = (self.window?.contentView?.convert(event.locationInWindow, to: dragTab!))!
-        let x = newPoint.x - oldPoint!.x + dragTab!.frame.origin.x
-        let y = dragTab!.frame.origin.y
-        dragTab!.frame = NSRect(x: x, y: y, width: dragTab!.frame.width, height: dragTab!.frame.height)
-//        dragTab!.translateOrigin(to: NSPoint(x: x, y: y))
-    }
-    
-    
-    override func mouseUp(with event: NSEvent) {
         // 完成移动。
-        print("mouseUp")
-        delegate?.tabClicked(tab: dragTab!, dragged: dragged > 1)
-        dragTab?.removeFromSuperview()
-        oldPoint = nil
-        dragTab = nil
-    }
-    
-    override func mouseDown(with event: NSEvent) {
-        print("mouseDown")
-        // 原位置。
-        dragTab = self.copyItem()
-        oldPoint = (self.window?.contentView?
-            .convert(event.locationInWindow, to: dragTab))!
-        dragged = 0
+        let point = (self.window?.contentView?.convert(event.locationInWindow, to: self.superview))!
+        if abs(point.x - position!.x) > 1 || abs(point.y - position!.y) > 1 {
+            delegate?.tabDragEnd(tab: self, x: point.x)
+        } else {
+            delegate?.tabClicked(tab: self)
+        }
+        position = nil
     }
     
     /// 关闭Tab。

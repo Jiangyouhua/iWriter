@@ -22,6 +22,7 @@ class Chapter: FileDelegate {
     var children: [Chapter]              // 章节的层级。
     var count: Int                       // 章节字数。
     var leaf: Bool                       // 是否为叶节点。
+    var content: String                  // 当前节点的内容。
     var snapshot: [String]               // 每个快照加一串关键词, 将索引加在另存文件名后。
     var x: Int                           // 在画布中x轴的位置。
     var y: Int                           // 在画布中y轴的位置。
@@ -37,6 +38,7 @@ class Chapter: FileDelegate {
         self.children = [Chapter]()
         self.count = 0
         self.leaf = false
+        self.content = ""
         self.snapshot = [String]()
         self.x = 0
         self.y = 0
@@ -54,6 +56,7 @@ class Chapter: FileDelegate {
         self.children = [Chapter]()
         self.count = dictionary["count"] as? Int ?? 0
         self.leaf = dictionary["leaf"] as? Bool ?? false
+        self.content = ""
         self.snapshot = dictionary["snapshot"] as? [String] ?? [String]()
         self.x = dictionary["x"] as? Int ?? 0
         self.y = dictionary["y"] as? Int ?? 0

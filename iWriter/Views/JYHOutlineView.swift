@@ -21,7 +21,7 @@ class JYHOutlineView: NSView {
     @IBOutlet weak var leftAddButton: NSButton!
     @IBOutlet weak var centerAddButton: NSButton!
     @IBOutlet weak var rightAddButton: NSButton!
-    @IBOutlet weak var horizontalLineView: JYHLineView!
+    @IBOutlet weak var horizontalLineView: JYHView!
     @IBOutlet weak var contentMainView: NSView!
     
     var delegate: JYHOutlineViewDelegate?

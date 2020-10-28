@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -51,7 +50,7 @@
                         <action selector="titleIconButtonClick:" target="-2" id="RDz-1I-1bG"/>
                     </connections>
                 </button>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="cn0-eI-RGv" customClass="JYHLineView" customModule="iWriter" customModuleProvider="target">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="cn0-eI-RGv" customClass="JYHView" customModule="iWriter" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="241" width="480" height="1"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="q05-Xl-ifT"/>

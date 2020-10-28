@@ -68,7 +68,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         // 添加并打开对应的文本。
         do {
             try works.defaultContentFile(chapter: node)
-            try works.readCurrentContentFile()
+            try works.readContentFile(chapter: node)
         } catch {
             print(error)
         }
@@ -253,7 +253,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
     /// 行添加后的方法了处理当前项。
     func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
         // 当前项。没有当前项，则选择根目录，有则选择其为当前项。
-        if row == 0 {
+        if works.info.chapterSelection.creation == 0 && row == 0 {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
             return
         }
@@ -385,11 +385,8 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
     }
     
     /// 叶节点的选择发生变化。
-    func outlineViewSelectionDidChange(_ notification: Notification) {
-        guard let outlineView = notification.object as? NSOutlineView else {
-            return
-        }
-        guard let chapter = outlineView.item(atRow: outlineView.selectedRow) as? Chapter else {
+    override func tableViewDidSelectRow(_ row : Int) {
+        guard let chapter = contentOutlineView.item(atRow: row) as? Chapter else {
             return
         }
         if !chapter.leaf {

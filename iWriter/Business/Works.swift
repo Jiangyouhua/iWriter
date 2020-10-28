@@ -53,16 +53,13 @@ class Works: NSObject {
     
     // 文件管理。
     var fileManager = FileManager.default
-
-    var currentContent: String                    // 当前内容。
-    var currentAnnotations: [Int: Annotation]     // 当前标注。
     
     // 初始数据。
-    var info: Info                                // 信息。
-    var outlines: [Chapter]                       // 大纲，目录为索引0。
-    var notes: [Note]                             // 便条。
-    var roles: [Role]                             // 角色。
-    var symbols: [Symbol]                         // 符号。
+    var info: Info                                      // 信息。
+    var outlines: [Chapter]                             // 大纲，目录为索引0。
+    var notes: [Note]                                   // 便条。
+    var roles: [Role]                                   // 角色。
+    var symbols: [Symbol]                               // 符号。
     
     // 最近打开的文件的两处菜单。
     var openedFilesMenu: NSMenu?
@@ -70,9 +67,6 @@ class Works: NSObject {
     
     /// 初始化
     override init(){
-        currentContent = ""
-        currentAnnotations = [:]
-        
         info = Info()
         outlines = [Chapter]()
         notes = [Note]()
@@ -160,7 +154,6 @@ extension Works {
             try readNoteFile()                      // 读便条。
             try readRoleFile()                      // 读角色。
             try readSymbolFile()                    // 读符号。
-            try readCurrentContentFile()            // 读当前章节内容。
             
             delegate?.loadedFile(file: info.file)
         } catch {
@@ -416,31 +409,31 @@ extension Works {
     
     // MARK: - Current Catalog File。
     /// 读当前章节。
-    func readCurrentContentFile() throws {
+    func readContentFile(chapter: Chapter) throws {
         // 没有正在编辑的文档。
-        if info.chapterEditing.creation == 0 {
+        if chapter.creation == 0 {
             return
         }
 
         // 章节以创建时间为标识保存。
-        let file = info.chapterEditing.contentFile()
+        let file = chapter.contentFile()
         do {
-            currentContent = try String(contentsOfFile: file)
+            chapter.content = try String(contentsOfFile: file)
         } catch {
             throw WorksError.operateError(OperateCode.fileRead, #function, FILE_ERROR)
         }
     }
     
     /// 写当前章节。
-    func writeCurrentContentFile() throws {
-        if info.chapterEditing.creation == 0 {
+    func writeContentFile(chapter: Chapter) throws {
+        if chapter.creation == 0 {
             return
         }
         info.saved = false
         // 章节以创建时间为标识保存。
-        let file = info.chapterEditing.contentFile()
+        let file = chapter.contentFile()
         do{
-            try currentContent.write(toFile: file, atomically: false, encoding: .utf8)
+            try chapter.content.write(toFile: file, atomically: false, encoding: .utf8)
         } catch {
             throw WorksError.operateError(OperateCode.fileWrite, #function, FILE_ERROR)
         }
@@ -454,7 +447,8 @@ extension Works {
         // 章节以创建时间为标识保存。
         let file = chapter.contentFile()
         do{
-            try "Please ...".write(toFile: file, atomically: false, encoding: .utf8)
+            chapter.content = ""
+            try chapter.content.write(toFile: file, atomically: false, encoding: .utf8)
         } catch {
             throw WorksError.operateError(OperateCode.fileWrite, #function, FILE_ERROR)
         }

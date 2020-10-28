@@ -8,15 +8,21 @@
 
 import Cocoa
 
-class JYHLineView: NSView {
+class JYHView: NSView {
+    // 使用10%不透明度的黑色。
+    var backgroundColor: NSColor = NSColor.init(calibratedWhite: 0.5, alpha: 0.1) {
+        didSet{
+            self.needsLayout = true
+        }
+    }
     // 作水平分割线用。
     override func draw(_ dirtyRect: NSRect) {
-        // 使用10%不透明度的黑色。
-        NSColor.init(calibratedWhite: 0.5, alpha: 0.1).setFill()
+        backgroundColor.setFill()
         dirtyRect.fill();
         super.draw(dirtyRect)
 
         // Drawing code here.
     }
+    
     
 }

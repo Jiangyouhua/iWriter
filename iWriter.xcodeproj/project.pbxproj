@@ -12,6 +12,9 @@
 		7808239F2340E79500E0DA39 /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 780823992340E77400E0DA39 /* ZipArchive.framework */; };
 		780823A02340E79C00E0DA39 /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 780823992340E77400E0DA39 /* ZipArchive.framework */; };
 		7812000522E4544C00C32B9E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7812000422E4544C00C32B9E /* Extension.swift */; };
+		781B881C253096D9006AB5DC /* JYHContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781B881B253096D9006AB5DC /* JYHContentView.swift */; };
+		781B88212531C695006AB5DC /* JYHInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781B88202531C695006AB5DC /* JYHInfoView.swift */; };
+		781B883D2535F3CA006AB5DC /* JYHTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781B883C2535F3CA006AB5DC /* JYHTextView.swift */; };
 		781C728E2358890A00763F04 /* RoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781C728C2358890A00763F04 /* RoleWindowController.swift */; };
 		781C728F2358890A00763F04 /* RoleWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 781C728D2358890A00763F04 /* RoleWindowController.xib */; };
 		782344FD2449D1DB006DDF85 /* Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782344FC2449D1DB006DDF85 /* Define.swift */; };
@@ -61,9 +64,8 @@
 		788319172340E05F006FFD61 /* 037画板 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 788319162340E05F006FFD61 /* 037画板 1.png */; };
 		78845520241C787700F2C971 /* DragItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884551F241C787700F2C971 /* DragItem.swift */; };
 		7884F6DC247158BD005FC6BF /* JYHIdeaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884F6DB247158BD005FC6BF /* JYHIdeaView.swift */; };
-		7884F6E2247158E5005FC6BF /* JYHContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884F6E1247158E5005FC6BF /* JYHContentView.swift */; };
 		7884F6E524740031005FC6BF /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 7884F6E424740031005FC6BF /* index.html */; };
-		78A96C7C22E4D43A00280327 /* JYHLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A96C7B22E4D43A00280327 /* JYHLineView.swift */; };
+		78A96C7C22E4D43A00280327 /* JYHView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A96C7B22E4D43A00280327 /* JYHView.swift */; };
 		78B71ECF2459BDCA00EDACF4 /* JYHBlockView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B71ECE2459BDCA00EDACF4 /* JYHBlockView.xib */; };
 		78B71ED12459C1A500EDACF4 /* JYHBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B71ED02459C1A500EDACF4 /* JYHBlockView.swift */; };
 		78B71ED32459CA2B00EDACF4 /* JYHOutlineView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B71ED22459CA2B00EDACF4 /* JYHOutlineView.xib */; };
@@ -146,6 +148,9 @@
 		780508D222E5C33300A36E18 /* JYHTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHTextField.swift; sourceTree = "<group>"; };
 		7808238F2340E77400E0DA39 /* ZipArchive.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipArchive.xcodeproj; path = "ZipArchive-master/ZipArchive.xcodeproj"; sourceTree = "<group>"; };
 		7812000422E4544C00C32B9E /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		781B881B253096D9006AB5DC /* JYHContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHContentView.swift; sourceTree = "<group>"; };
+		781B88202531C695006AB5DC /* JYHInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHInfoView.swift; sourceTree = "<group>"; };
+		781B883C2535F3CA006AB5DC /* JYHTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHTextView.swift; sourceTree = "<group>"; };
 		781C728C2358890A00763F04 /* RoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleWindowController.swift; sourceTree = "<group>"; };
 		781C728D2358890A00763F04 /* RoleWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoleWindowController.xib; sourceTree = "<group>"; };
 		782344FC2449D1DB006DDF85 /* Define.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Define.swift; sourceTree = "<group>"; };
@@ -195,9 +200,8 @@
 		788319162340E05F006FFD61 /* 037画板 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1.png"; sourceTree = "<group>"; };
 		7884551F241C787700F2C971 /* DragItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragItem.swift; sourceTree = "<group>"; };
 		7884F6DB247158BD005FC6BF /* JYHIdeaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHIdeaView.swift; sourceTree = "<group>"; };
-		7884F6E1247158E5005FC6BF /* JYHContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHContentView.swift; sourceTree = "<group>"; };
 		7884F6E424740031005FC6BF /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		78A96C7B22E4D43A00280327 /* JYHLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHLineView.swift; sourceTree = "<group>"; };
+		78A96C7B22E4D43A00280327 /* JYHView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHView.swift; sourceTree = "<group>"; };
 		78B71ECE2459BDCA00EDACF4 /* JYHBlockView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JYHBlockView.xib; sourceTree = "<group>"; };
 		78B71ED02459C1A500EDACF4 /* JYHBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHBlockView.swift; sourceTree = "<group>"; };
 		78B71ED22459CA2B00EDACF4 /* JYHOutlineView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JYHOutlineView.xib; sourceTree = "<group>"; };
@@ -287,7 +291,7 @@
 		786726D122E2B3B700C3DB05 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				78A96C7B22E4D43A00280327 /* JYHLineView.swift */,
+				78A96C7B22E4D43A00280327 /* JYHView.swift */,
 				780508D222E5C33300A36E18 /* JYHTextField.swift */,
 				78D386CD2522261900496EA9 /* JYHTitleTabView.swift */,
 				78D386CC2522261900496EA9 /* JYHTitleTabView.xib */,
@@ -301,9 +305,11 @@
 				78B71EDE2462DA3400EDACF4 /* JYHSearchView.swift */,
 				78D386E02522269700496EA9 /* JYHDictionaryView.swift */,
 				7884F6DB247158BD005FC6BF /* JYHIdeaView.swift */,
-				7884F6E1247158E5005FC6BF /* JYHContentView.swift */,
 				78B71ED42459CB4200EDACF4 /* JYHOutlineView.swift */,
 				78B71ED22459CA2B00EDACF4 /* JYHOutlineView.xib */,
+				781B881B253096D9006AB5DC /* JYHContentView.swift */,
+				781B88202531C695006AB5DC /* JYHInfoView.swift */,
+				781B883C2535F3CA006AB5DC /* JYHTextView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -706,12 +712,12 @@
 				7873E4B0244F0D7900FC186B /* Cache.swift in Sources */,
 				78FB477522D4383900A9F4AF /* Info.swift in Sources */,
 				78845520241C787700F2C971 /* DragItem.swift in Sources */,
-				7884F6E2247158E5005FC6BF /* JYHContentView.swift in Sources */,
 				78D386E12522269700496EA9 /* JYHDictionaryView.swift in Sources */,
 				78FB474522D4365800A9F4AF /* ViewController.swift in Sources */,
 				78FB478122D442B200A9F4AF /* Works.swift in Sources */,
 				7884F6DC247158BD005FC6BF /* JYHIdeaView.swift in Sources */,
 				78B71ED92462D9F900EDACF4 /* JYHNoteView.swift in Sources */,
+				781B88212531C695006AB5DC /* JYHInfoView.swift in Sources */,
 				78B71EDF2462DA3400EDACF4 /* JYHSearchView.swift in Sources */,
 				78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */,
 				7812000522E4544C00C32B9E /* Extension.swift in Sources */,
@@ -720,11 +726,13 @@
 				7832601C245466F600F13658 /* Note.swift in Sources */,
 				78B71ED12459C1A500EDACF4 /* JYHBlockView.swift in Sources */,
 				78FB477722D4384800A9F4AF /* Chapter.swift in Sources */,
+				781B881C253096D9006AB5DC /* JYHContentView.swift in Sources */,
 				78D386D92522265200496EA9 /* JYHTitlesBarView.swift in Sources */,
-				78A96C7C22E4D43A00280327 /* JYHLineView.swift in Sources */,
+				78A96C7C22E4D43A00280327 /* JYHView.swift in Sources */,
 				78FB477922D4385700A9F4AF /* Role.swift in Sources */,
 				78B71EDD2462DA1D00EDACF4 /* JYHSymbolView.swift in Sources */,
 				7840B81C251CDDFD00D065FC /* MainWindowController.swift in Sources */,
+				781B883D2535F3CA006AB5DC /* JYHTextView.swift in Sources */,
 				78FB477B22D4386200A9F4AF /* Symbol.swift in Sources */,
 				78B71ED72462D9E200EDACF4 /* JYHCatalogView.swift in Sources */,
 				78FB477F22D4389B00A9F4AF /* FileDelegate.swift in Sources */,

@@ -38,15 +38,13 @@ class ViewController: NSViewController, WorksDelegate {
     
     /// 中视图余下部分垂直分割为上中下视图：想法、内容、大纲。
     /// 想法。
-    @IBOutlet weak var ideaBlockView: NSView!
-    @IBOutlet weak var ideaScrollView: NSScrollView!
-    @IBOutlet var ideaTextView: NSTextView!
+    @IBOutlet weak var infoBlockView: JYHInfoView!
+    
     /// 内容。
-    @IBOutlet weak var contentBlockView: NSView!
-    @IBOutlet weak var contentScrollView: NSScrollView!
-    @IBOutlet var contentTextView: NSTextView!
+    @IBOutlet weak var contentBlockView: JYHContentView!
+    
+
     /// 大纲。
-    @IBOutlet var catalogMenu: NSMenu!
     @IBOutlet weak var outlineBlockView: JYHOutlineView!
     
     /// 右视图垂直分割后的上中下视图：便条、符号、字典。
@@ -75,7 +73,7 @@ class ViewController: NSViewController, WorksDelegate {
         outlineBlockView.delegate = self
         
         works.delegate = self
-        titlesBarView.delegate = self
+        titlesBarView.target = self
         
         windowDidResize()                                        // 继承上一次的格式。
     }
@@ -93,6 +91,8 @@ class ViewController: NSViewController, WorksDelegate {
         noteBlockView.format()
         roleBlockView.format()
         symbolBlockView.format()
+        infoBlockView.format()
+        contentBlockView.format()
         
         // 4. 展开节点。
         titlesBarView.needsLayout = true
@@ -100,6 +100,8 @@ class ViewController: NSViewController, WorksDelegate {
     
     func selectedLeaf(chapter: Chapter) {
         titlesBarView.opened(chapter: chapter)
+        infoBlockView.opened(chapter: chapter)
+        contentBlockView.opened(chapter: chapter)
     }
     
     func namedLeaf(chapter: Chapter) {
@@ -111,6 +113,8 @@ class ViewController: NSViewController, WorksDelegate {
             return
         }
         titlesBarView.deleted(index: index)
+        infoBlockView.deleted(chapter: chapter)
+        contentBlockView.deleted(chapter: chapter)
     }
 }
 
@@ -273,7 +277,7 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
     
     @IBAction func ideaButtonClick(_ sender: Any) {
         // 关闭。
-        if ideaBlockView.frame.height > iconWidth {
+        if infoBlockView.frame.height > iconWidth {
             return centerAreaSplitView.setPosition(0, ofDividerAt: 0)
         }
         if contentBlockView.frame.height < minBlockHeight {
@@ -357,9 +361,13 @@ extension ViewController: JYHTitlesBarViewDelegate {
     
     func clickedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
+        infoBlockView.action(chapter: chapter)
+        contentBlockView.action(chapter: chapter)
     }
     
     func closedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
+        infoBlockView.action(chapter: chapter)
+        contentBlockView.action(chapter: chapter)
     }
 }
