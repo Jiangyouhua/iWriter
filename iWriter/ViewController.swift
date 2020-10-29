@@ -91,7 +91,7 @@ class ViewController: NSViewController, WorksDelegate {
         noteBlockView.format()
         roleBlockView.format()
         symbolBlockView.format()
-        infoBlockView.format()
+//        infoBlockView.format()
         contentBlockView.format()
         
         // 4. 展开节点。
@@ -100,7 +100,6 @@ class ViewController: NSViewController, WorksDelegate {
     
     func selectedLeaf(chapter: Chapter) {
         titlesBarView.opened(chapter: chapter)
-        infoBlockView.opened(chapter: chapter)
         contentBlockView.opened(chapter: chapter)
     }
     
@@ -112,8 +111,7 @@ class ViewController: NSViewController, WorksDelegate {
         guard let index = works.info.chapterOpened.firstIndex(where: {return $0.creation == chapter.creation}) else {
             return
         }
-        titlesBarView.deleted(index: index)
-        infoBlockView.deleted(chapter: chapter)
+        titlesBarView.deleted(index: index) 
         contentBlockView.deleted(chapter: chapter)
     }
 }
@@ -154,11 +152,11 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
         case leftRightSplitView:
             return dividerIndex == 0 ? leftAreaState(position: proposedPosition) : rightAreaState(position: proposedPosition)
         case leftAreaSplitView:
-            return dividerIndex == 0 ? leftTopAreaState(position: proposedPosition) : leftBottomAreaState(position: proposedPosition)
+            return leftBlockState(position: proposedPosition)
         case centerAreaSplitView:
             return dividerIndex == 0 ? centerTopAreaState(position: proposedPosition) : centerBottomAreaState(position: proposedPosition)
         case rightAreaSplitView:
-            return dividerIndex == 0 ? rightTopAreaState(position: proposedPosition) : rightBottomAreaState(position: proposedPosition)
+            return  rightBlockState(position: proposedPosition)
         default:
             return proposedPosition
         }
@@ -167,61 +165,62 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
     /// 左区状态，有两种：隐藏、显示。
     func leftAreaState(position: CGFloat) -> CGFloat {
         // 左侧小于阈值的一半，则隐藏。
-        var p = position
-        if p < minAreaWidth / 2 {
+        if position < minAreaWidth / 2 {
             cache.setStateWithBlock(block: .left, value: true)
             return iconWidth
         }
         
         // 左侧大于阈值的一半，则显示。
         cache.setStateWithBlock(block: .left, value: false)
-        if p < minAreaWidth {
+        if position < minAreaWidth {
             // 显示的最小尺寸为阈值。
-            p = minAreaWidth
+            cache.setPositionWithSplitView(position: .leftOfHorizontal, value:minAreaWidth)
+            return minAreaWidth
         }
         
         // 左侧不能影响右侧，右侧显示时不能小于阈值。
         let v = cache.getStateWithBlock(block: .right) ? iconWidth : minAreaWidth
-        if windowSize.width - p < v + minAreaWidth {
-            p = windowSize.width - v - minAreaWidth
+        if windowSize.width - position < v + minAreaWidth {
+            let p = windowSize.width - v - minAreaWidth
+            cache.setPositionWithSplitView(position: .leftOfHorizontal, value:p)
+            return p
         }
         
-        cache.setPositionWithSplitView(position: .leftOfHorizontal, value:p)
-        return p
+        cache.setPositionWithSplitView(position: .leftOfHorizontal, value:position)
+        return position
     }
     
     /// 左区状态，有两种：隐藏、显示。
     func rightAreaState(position: CGFloat) -> CGFloat {
         // 右侧小于阈值的一半，则隐藏。
-        var p = position
-        if windowSize.width - p < minAreaWidth / 2 {
+        if windowSize.width - position < minAreaWidth / 2 {
             cache.setStateWithBlock(block: .right, value: true)
             return windowSize.width - iconWidth
         }
         
         // 右侧大于阈值的一半，则显示。
         cache.setStateWithBlock(block: .right, value: false)
-        if windowSize.width - p < minAreaWidth {
+        if windowSize.width - position < minAreaWidth {
             // 显示的最小尺寸为阈值
-            p = windowSize.width - minAreaWidth
+            let p = windowSize.width - minAreaWidth
+            cache.setPositionWithSplitView(position: .rightOfHorizontal, value: p)
+            return p
         }
         
         // 右侧不能影响左侧，左侧显示时不能小于阈值。
         // 注意：因为约束了centerAreaView的宽不小于200，所以设置右侧是最小宽度才有用。
         let v = cache.getStateWithBlock(block: .left) ? iconWidth : minAreaWidth
-        if p < v + minAreaWidth {
-            p =  v + minAreaWidth
+        if position < v + minAreaWidth {
+            let p =  v + minAreaWidth
+            cache.setPositionWithSplitView(position: .rightOfHorizontal, value: p)
+            return p
         }
         
-        cache.setPositionWithSplitView(position: .rightOfHorizontal, value: p)
-        return p
-    }
-    
-    func leftTopAreaState(position: CGFloat) -> CGFloat {
+        cache.setPositionWithSplitView(position: .rightOfHorizontal, value: position)
         return position
     }
     
-    func leftBottomAreaState(position: CGFloat) -> CGFloat {
+    func leftBlockState(position: CGFloat) -> CGFloat {
         return position
     }
     
@@ -242,11 +241,7 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
         return p
     }
     
-    func rightTopAreaState(position: CGFloat) -> CGFloat {
-        return position
-    }
-    
-    func rightBottomAreaState(position: CGFloat) -> CGFloat {
+    func rightBlockState(position: CGFloat) -> CGFloat {
         return position
     }
     
@@ -286,73 +281,128 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
         centerAreaSplitView.setPosition(minBlockHeight, ofDividerAt: 0)
     }
     
+    /**
+     三个都是隐藏状态，则隐藏当前侧。
+     */
     func toggleCatalogBlockState(){
-        let b = catalogBlockView.frame.height > minBlockHeight
-        let s = cache.getStateWithBlock(block: .left)
-        var p = cache.getPositionWithSplitView(position: .leftOfHorizontal)
-        leftAreaSplitView.setPosition(windowSize.height - iconWidth * 2, ofDividerAt: 0)
-        if !s && b{
-            p = iconWidth
+        // 1. 左则展开状态，则隐藏。
+        if !cache.getStateWithBlock(block: .left) {
+            leftRightSplitView.setPosition(iconWidth, ofDividerAt: 0)
+            return
         }
+        // 2. 左则隐藏状态，则展开。
+        let p = cache.getPositionWithSplitView(position: .leftOfHorizontal)
         leftRightSplitView.setPosition(p, ofDividerAt: 0)
+        // 3. 当前展开状态，则不变。
+        if catalogBlockView.frame.height > minBlockHeight {
+            return
+        }
+        // 4. 调高于最小值的其它项，使之为最小值。
+        if searchBlockView.frame.height > minBlockHeight {
+            leftAreaSplitView.setPosition(windowSize.height - minBlockHeight, ofDividerAt: 1)
+        }
+        var h = roleBlockView.frame.height
+        if h > minBlockHeight {
+            h = minBlockHeight
+        }
+        leftAreaSplitView.setPosition(windowSize.height - minBlockHeight - h, ofDividerAt: 0)
     }
     
     func toggleNoteBlockState(){
-        let b = noteBlockView.frame.height > minBlockHeight
-        let s = cache.getStateWithBlock(block: .right)
-        var p = cache.getPositionWithSplitView(position: .rightOfHorizontal)
-        rightAreaSplitView.setPosition(windowSize.height - iconWidth * 2, ofDividerAt: 0)
-        if !s && b{
-            p = iconWidth
+        if !cache.getStateWithBlock(block: .right) {
+            leftRightSplitView.setPosition(windowSize.width - iconWidth, ofDividerAt: 1)
+            return
         }
-        leftRightSplitView.setPosition(windowSize.width - p, ofDividerAt: 1)
+        let p = cache.getPositionWithSplitView(position: .rightOfHorizontal)
+        leftRightSplitView.setPosition(p, ofDividerAt: 1)
+        if noteBlockView.frame.height > minBlockHeight {
+            return
+        }
+        // 4. 调高于最小值的其它项，使之为最小值。
+        if dictionaryBlockView.frame.height > minBlockHeight {
+            rightAreaSplitView.setPosition(windowSize.height - minBlockHeight, ofDividerAt: 1)
+        }
+        var h = symbolBlockView.frame.height
+        if h > minBlockHeight {
+            h = minBlockHeight
+        }
+        rightAreaSplitView.setPosition(windowSize.height - minBlockHeight - h, ofDividerAt: 0)
     }
     
     func toggleRoleBlockState(){
-        let b = roleBlockView.frame.height > minBlockHeight
-        let s = cache.getStateWithBlock(block: .left)
-        var p = cache.getPositionWithSplitView(position: .leftOfHorizontal)
-        leftAreaSplitView.setPosition(iconWidth, ofDividerAt: 0)
-        leftAreaSplitView.setPosition(windowSize.height - iconWidth, ofDividerAt: 1)
-        if !s && b{
-            p = iconWidth
+        if !cache.getStateWithBlock(block: .left) {
+            leftRightSplitView.setPosition(iconWidth, ofDividerAt: 0)
+            return
         }
+        let p = cache.getPositionWithSplitView(position: .leftOfHorizontal)
         leftRightSplitView.setPosition(p, ofDividerAt: 0)
+        if roleBlockView.frame.height > minBlockHeight {
+            return
+        }
+        if searchBlockView.frame.height > minBlockHeight {
+            leftAreaSplitView.setPosition(windowSize.height - minBlockHeight, ofDividerAt: 1)
+        }
+        if catalogBlockView.frame.height > minBlockHeight {
+            leftAreaSplitView.setPosition(minBlockHeight, ofDividerAt: 0)
+        }
     }
     
     func toggleSymbolBlockState(){
-        let b = symbolBlockView.frame.height > minBlockHeight
-        let s = cache.getStateWithBlock(block: .right)
-        var p = cache.getPositionWithSplitView(position: .rightOfHorizontal)
-        rightAreaSplitView.setPosition(iconWidth, ofDividerAt: 0)
-        rightAreaSplitView.setPosition(windowSize.height - iconWidth, ofDividerAt: 1)
-        if !s && b{
-            p = iconWidth
+        if !cache.getStateWithBlock(block: .right) {
+            leftRightSplitView.setPosition(windowSize.width - iconWidth, ofDividerAt: 1)
+            return
         }
-        leftRightSplitView.setPosition(windowSize.width - p, ofDividerAt: 1)
+        let p = cache.getPositionWithSplitView(position: .rightOfHorizontal)
+        leftRightSplitView.setPosition(p, ofDividerAt: 1)
+        if symbolBlockView.frame.height > minBlockHeight  {
+            return
+        }
+        if dictionaryBlockView.frame.height > minBlockHeight {
+            rightAreaSplitView.setPosition(windowSize.height - minBlockHeight, ofDividerAt: 1)
+        }
+        if noteBlockView.frame.height > minBlockHeight {
+            rightAreaSplitView.setPosition(minBlockHeight, ofDividerAt: 0)
+        }
     }
     
     func toggleSearchBlockState(){
-        let b = searchBlockView.frame.height > minBlockHeight
-        let s = cache.getStateWithBlock(block: .left)
-        var p = cache.getPositionWithSplitView(position: .leftOfHorizontal)
-        leftAreaSplitView.setPosition(iconWidth * 2, ofDividerAt: 1)
-        if !s && b{
-            p = iconWidth
+        if !cache.getStateWithBlock(block: .left) {
+            leftRightSplitView.setPosition(iconWidth, ofDividerAt: 0)
+            return
         }
+        let p = cache.getPositionWithSplitView(position: .leftOfHorizontal)
         leftRightSplitView.setPosition(p, ofDividerAt: 0)
+        if searchBlockView.frame.height > minBlockHeight {
+            return
+        }
+        if catalogBlockView.frame.height > minBlockHeight {
+            leftAreaSplitView.setPosition(minBlockHeight, ofDividerAt: 0)
+        }
+        var h = roleBlockView.frame.height
+        if h > minBlockHeight {
+            h = minBlockHeight
+        }
+        leftAreaSplitView.setPosition(windowSize.height - minBlockHeight - h, ofDividerAt: 1)
     }
     
     func toggleDictionaryBlockState(){
-        let b = dictionaryBlockView.frame.height > minBlockHeight
-        let s = cache.getStateWithBlock(block: .right)
-        var p = cache.getPositionWithSplitView(position: .rightOfHorizontal)
-        rightAreaSplitView.setPosition(iconWidth, ofDividerAt: 0)
-        rightAreaSplitView.setPosition(iconWidth * 2, ofDividerAt: 1)
-        if !s && b{
-            p = iconWidth
+        if !cache.getStateWithBlock(block: .right) {
+            leftRightSplitView.setPosition(windowSize.width - iconWidth, ofDividerAt: 1)
+            return
         }
-        leftRightSplitView.setPosition(windowSize.width - p, ofDividerAt: 1)
+        let p = cache.getPositionWithSplitView(position: .rightOfHorizontal)
+        leftRightSplitView.setPosition(p, ofDividerAt: 1)
+        if dictionaryBlockView.frame.height > minBlockHeight{
+            return
+        }
+        if noteBlockView.frame.height > minBlockHeight {
+            rightAreaSplitView.setPosition(minBlockHeight, ofDividerAt: 0)
+        }
+        var h = symbolBlockView.frame.height
+        if h > minBlockHeight {
+            h = minBlockHeight
+        }
+        rightAreaSplitView.setPosition(windowSize.height - minBlockHeight - h, ofDividerAt: 1)
     }
 }
 
@@ -361,13 +411,11 @@ extension ViewController: JYHTitlesBarViewDelegate {
     
     func clickedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
-        infoBlockView.action(chapter: chapter)
         contentBlockView.action(chapter: chapter)
     }
     
     func closedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
-        infoBlockView.action(chapter: chapter)
         contentBlockView.action(chapter: chapter)
     }
 }

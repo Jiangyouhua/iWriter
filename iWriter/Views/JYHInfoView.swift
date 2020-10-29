@@ -115,7 +115,7 @@ class JYHInfoView: NSView, NSTextViewDelegate {
         }
         view.chapter!.info = view.string
         do {
-            try works.writeContentFile(chapter: view.chapter!)
+            try works.writeOutlineFile()
         } catch {
             print(error)
         }

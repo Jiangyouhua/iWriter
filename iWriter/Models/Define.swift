@@ -46,15 +46,6 @@ enum SplitLine {
 enum AreaBlock {
     case left
     case right
-    case leftTop
-    case leftMiddle
-    case leftBottom
-    case centerTop
-    case centerMiddle
-    case centerBottom
-    case rightTop
-    case rightMiddle
-    case rightBottom
 }
 
 /// 是否为深色模式。
