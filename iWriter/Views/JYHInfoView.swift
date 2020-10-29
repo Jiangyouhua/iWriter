@@ -42,6 +42,7 @@ class JYHInfoView: NSView, NSTextViewDelegate {
             view = item(chapter: works.info.chapterEditing)
         }
         view!.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: self.frame.size)
+        placeHolder(view: view!)
         if view == editing {
             return
         }
@@ -81,16 +82,13 @@ class JYHInfoView: NSView, NSTextViewDelegate {
         
         // 实例化。
         let scrollView = JYHTextView.scrollableTextView()
-        
         scrollView.hasHorizontalScroller = true
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         let textView = scrollView.documentView as! JYHTextView
         textView.allowsUndo = true
         textView.string = chapter.info
         textView.delegate = self
         textView.chapter = chapter
-        textView.placeHolder = chapter.title + "：提要"
         views[chapter.creation] = scrollView
         return scrollView
     }
@@ -119,5 +117,20 @@ class JYHInfoView: NSView, NSTextViewDelegate {
         } catch {
             print(error)
         }
+    }
+    
+    func placeHolder(view: NSScrollView) {
+        guard let v = view.documentView as? JYHTextView else {
+            return
+        }
+        guard let title = v.chapter?.title else {
+            return
+        }
+        let s = "Synopsis: " + title
+        if v.placeHolder == s {
+            return
+        }
+        v.placeHolder = s
+        v.needsDisplay = true
     }
 }

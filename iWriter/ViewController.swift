@@ -100,18 +100,22 @@ class ViewController: NSViewController, WorksDelegate {
     
     func selectedLeaf(chapter: Chapter) {
         titlesBarView.opened(chapter: chapter)
+        infoBlockView.opened(chapter: chapter)
         contentBlockView.opened(chapter: chapter)
     }
     
     func namedLeaf(chapter: Chapter) {
-        titlesBarView.needsLayout = true
+        titlesBarView.opened(chapter: chapter)
+        infoBlockView.opened(chapter: chapter)
+        contentBlockView.opened(chapter: chapter)
     }
     
     func deletedLeaf(chapter: Chapter) {
         guard let index = works.info.chapterOpened.firstIndex(where: {return $0.creation == chapter.creation}) else {
             return
         }
-        titlesBarView.deleted(index: index) 
+        titlesBarView.deleted(index: index)
+        infoBlockView.deleted(chapter: chapter)
         contentBlockView.deleted(chapter: chapter)
     }
 }
@@ -411,11 +415,13 @@ extension ViewController: JYHTitlesBarViewDelegate {
     
     func clickedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
+        infoBlockView.action(chapter: chapter)
         contentBlockView.action(chapter: chapter)
     }
     
     func closedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
+        infoBlockView.action(chapter: chapter)
         contentBlockView.action(chapter: chapter)
     }
 }

@@ -10,17 +10,16 @@ import Cocoa
 
 class JYHTextView: NSTextView {
     
-    var placeHolder = "Please enter content ..."
+    var placeHolder: String = "Please enter ..."
+    
     var chapter: Chapter?
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
         if string.isEmpty {
             let m = [NSAttributedString.Key.foregroundColor: NSColor.gray]
             let s = NSAttributedString(string: placeHolder, attributes: m)
             s.draw(at: NSMakePoint(4, 4))
         }
     }
-    
 }
