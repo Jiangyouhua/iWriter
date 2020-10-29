@@ -23,6 +23,4 @@ class JYHView: NSView {
 
         // Drawing code here.
     }
-    
-    
 }

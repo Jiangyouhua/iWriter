@@ -95,21 +95,7 @@ class JYHTitleTabView: NSView {
         backView.isHidden =  !b
     }
     
-    func copyItem() -> JYHTitleTabView {
-        let item = JYHTitleTabView(chapter: self.chapter, active: self.active)
-        item.frame = self.frame
-        item.layer?.backgroundColor = self.layer?.backgroundColor?.copy(alpha: 0.5)
-        item.label.textColor = NSColor(cgColor: self.label.textColor?.cgColor.copy(alpha: 0.5) ?? CGColor.white)
-        // 添加到上级会失去焦点，而无法拖动，所以加两层。
-        // macOS里没有bringSubviewToFront.
-        self.superview?.addSubview(item)
-        return item
-    }
-    
     override func draw(_ dirtyRect: NSRect) {
-        /// 改变底图颜色。
-//        NSColor.linkColor.setFill()
-//        dirtyRect.fill()
         super.draw(dirtyRect)
     }
     
