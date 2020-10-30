@@ -264,6 +264,8 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         // 如果与编辑项相同，则为当前选择项。
         if chapter.creation == works.info.chapterSelection.creation {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+            outlineView.scrollRowToVisible(row)
+            return
         }
         
         // 命名项。只有新建项为命名项，失去编辑模则naming = false.
@@ -273,6 +275,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
             }
             // 命名项一定是当前项。
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+            outlineView.scrollRowToVisible(row)
             // 命名项一定为可见，所以必然展开上一级。
             outlineView.expandItem(chapter.parent)
             // 命名项设置为第一响应者，即进入命名状态。
