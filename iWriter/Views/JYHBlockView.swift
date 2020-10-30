@@ -107,7 +107,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         rightClickMenu.autoenablesItems = false       // 可自己设置菜单项的可用状态。
         rightClickMenu.delegate = self
         
-        format()
+        interface()
     }
     
     override func draw(_ dirtyRect: NSRect) {
@@ -152,6 +152,10 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     
     func menuWillOpen(_ menu: NSMenu){
         print("menuWillOpen")
+    }
+    
+    func interface(){
+        print(#function)
     }
     
     // 处理各子类的结构。

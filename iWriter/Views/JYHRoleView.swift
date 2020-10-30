@@ -11,10 +11,10 @@ import Cocoa
 class JYHRoleView: JYHBlockView {
     
     override func format(){
-        if works.outlines.isEmpty {
-            return
-        }
         
+    }
+    
+    override func interface() {
         rightAddButtonState = false
         rightAddButton.isHidden = false
         self.titleIconButton.image = NSImage(named: NSImage.Name("Role"))

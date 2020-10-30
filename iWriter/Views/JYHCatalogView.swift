@@ -10,20 +10,19 @@ import Cocoa
 
 class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
     
-    var data: [Chapter] = [Chapter]() {
-        didSet {
-            contentOutlineView.reloadData()
-        }
-    }
+    var data: [Chapter] = [Chapter]()
     
     var node: Chapter?
     
     // MARK: - Override
     override func format(){
-        if works.outlines.isEmpty {
-            return
-        }
-        
+        // 状态。
+        data = [works.outlines[0]]
+        contentOutlineView.reloadData()
+        expandedChildren(items: data)
+    }
+    
+    override func interface(){
         // 初始界面。
         leftAddButtonState = false
         rightAddButtonState = false
@@ -36,10 +35,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         self.rightAddButton.image = NSImage(named: NSImage.Name("AddSection"))
         self.titleIconButton.toolTip = "Show or Hide the Catalog Block"
         
-        // 状态。
-        data = [works.outlines[0]]
-        expandedChildren(items: data)
-        
         // 菜单
         let addNote = NSMenuItem(title: "Add Note", action: #selector(addNodeMenuClick(_:)), keyEquivalent: "")
         let addText = NSMenuItem(title: "Add Text", action: #selector(addTextMenuClick(_:)), keyEquivalent: "")
@@ -50,7 +45,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         rightClickMenu.insertItem(importText, at: 2)
         rightClickMenu.insertItem(exportText, at: 3)
         contentOutlineView.menu = rightClickMenu
-        return
     }
     
     override func leftButtonClicked(isSelect: Bool) {
@@ -62,7 +56,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
     override func rightButtonClicked(isSelect: Bool) {
         let node = addNode(title:"New Text", leaf: true, isSelect: isSelect)
         works.info.chapterSelection = node
-        works.info.chapterEditing = node
+        works.info.chapterEditingId = node.creation
         writeAndReloadList()
         
         // 添加并打开对应的文本。
@@ -396,7 +390,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
             return
         }
         chapter.opened = true
-        works.info.chapterEditing = chapter
+        works.info.chapterEditingId = chapter.creation
         works.info.chapterSelection = chapter
         works.delegate?.selectedLeaf(chapter: chapter)
         do {
@@ -474,6 +468,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
             }
             // 同步标题栏
             if item.leaf && item.opened {
+                works.opened(chapter: item)
                 works.delegate?.selectedLeaf(chapter: item)
             }
             if item.children.isEmpty {

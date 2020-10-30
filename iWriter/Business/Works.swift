@@ -37,7 +37,11 @@ enum WorksError: Error {
 
 
 protocol WorksDelegate {
-    func loadedFile(file: String)
+    func loadedInfo()
+    func loadedCatalog()
+    func loadedNote()
+    func loadedRole()
+    func loadedSymbol()
     func selectedLeaf(chapter: Chapter)
     func deletedLeaf(chapter: Chapter)
     func namedLeaf(chapter: Chapter)
@@ -92,9 +96,6 @@ extension Works {
             try defaultOutlineFile()             // 写入作品初始目录信息。文件信息需要章节信息，所以在后。
             try zipCacheToFile()                 // 将缓存文件夹打包到用户指定的位置。
             try openFilesFromCache()             // 从缓存文件夹打开作品。
-            
-            // 调用完成方法
-            delegate?.loadedFile(file: path)
         } catch {
             throw error
         }
@@ -111,8 +112,6 @@ extension Works {
             try emptyOrCreateCacheFolder()       // 清空或创建缓存文件夹。
             try unZipFileToCache()               // 解压指定文件（含路径）到缓存文件夹。
             try openFilesFromCache()             // 从缓存文件夹打开作品。
-
-            delegate?.loadedFile(file: path)
         } catch {
             throw error
         }
@@ -154,8 +153,6 @@ extension Works {
             try readNoteFile()                      // 读便条。
             try readRoleFile()                      // 读角色。
             try readSymbolFile()                    // 读符号。
-            
-            delegate?.loadedFile(file: info.file)
         } catch {
             throw error
         }
@@ -230,6 +227,7 @@ extension Works {
         do {
             let dic = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             info = Info(dictionary: dic as! [String : Any])
+            delegate?.loadedInfo()
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
         }
@@ -279,6 +277,9 @@ extension Works {
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             outlines = dictionaryToStructWith(array: array as! [Any])
+            
+            // 调用完成方法
+            delegate?.loadedCatalog()
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
         }
@@ -327,6 +328,7 @@ extension Works {
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
             notes = dictionaryToStructWith(array: array as! [Any])
+            delegate?.loadedNote()
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
         }
@@ -358,6 +360,7 @@ extension Works {
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
             roles = dictionaryToStructWith(array: array as! [Any])
+            delegate?.loadedRole()
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
         }
@@ -389,6 +392,7 @@ extension Works {
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
             symbols = dictionaryToStructWith(array: array as! [Any])
+            delegate?.loadedSymbol()
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
         }
@@ -440,7 +444,7 @@ extension Works {
     }
     
     func defaultContentFile(chapter: Chapter) throws {
-        if info.chapterEditing.creation == 0 {
+        if info.chapterEditingId == 0 {
             return
         }
         info.saved = false
@@ -488,6 +492,20 @@ extension Works {
         guard SSZipArchive.unzipFile(atPath: info.file, toDestination: CACHE_PATH) else {
             throw WorksError.operateError(OperateCode.folderZip, #function, FILE_ERROR)
         }
+    }
+    
+    func opened(chapter: Chapter){
+        if self.info.chapterOpened.contains(where: {$0.creation == chapter.creation}) {
+            return
+        }
+        self.info.chapterOpened.insert(chapter, at: 0)
+    }
+    
+    func chapterEditing() -> Chapter {
+        if let chapter = self.info.chapterOpened.first(where: {$0.creation == self.info.chapterEditingId}) {
+            return chapter
+        }
+        return Chapter()
     }
 
     /// 菜单点击事件。

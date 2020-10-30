@@ -29,7 +29,7 @@ class JYHInfoView: NSView, NSTextViewDelegate {
     }
     
     override func layout(){
-        if works.info.chapterEditing.creation == 0 {
+        if works.info.chapterEditingId == 0 {
             return
         }
         if works.info.chapterOpened.count == 0 {
@@ -37,9 +37,9 @@ class JYHInfoView: NSView, NSTextViewDelegate {
             return
         }
         // 各章节对应一个编辑器，有则拿来用，没有则新建。
-        var view = views[works.info.chapterEditing.creation]
+        var view = views[works.info.chapterEditingId]
         if view == nil {
-            view = item(chapter: works.info.chapterEditing)
+            view = item(chapter: works.chapterEditing())
         }
         view!.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: self.frame.size)
         placeHolder(view: view!)

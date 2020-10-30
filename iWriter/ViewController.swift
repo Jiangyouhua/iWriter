@@ -79,23 +79,33 @@ class ViewController: NSViewController, WorksDelegate {
     }
     
     /// 实现方法。WorksDelegate
-    func loadedFile(file: String) {
+    func loadedInfo() {
         // 1. 缓存更新；
-        cache.addOpenedFile(file: file)
+        cache.addOpenedFile(file: works.info.file)
+    }
+    
+    func loadedCatalog() {
         
-        // 2. 更新最近打开菜单。
-        app.formatRecentOpenMenu()
-        
-        // 3. 界面更新;
+        // 1. 界面更新;
         catalogBlockView.format()
-        noteBlockView.format()
-        roleBlockView.format()
-        symbolBlockView.format()
-//        infoBlockView.format()
+        
+        // 2. 展开节点。
+        titlesBarView.format()
+        infoBlockView.format()
         contentBlockView.format()
         
-        // 4. 展开节点。
-        titlesBarView.needsLayout = true
+        // 3. 更新最近打开菜单。
+        app.formatRecentOpenMenu()
+    }
+    
+    func loadedNote(){
+        noteBlockView.format()
+    }
+    func loadedRole(){
+        roleBlockView.format()
+    }
+    func loadedSymbol(){
+        symbolBlockView.format()
     }
     
     func selectedLeaf(chapter: Chapter) {

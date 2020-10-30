@@ -11,6 +11,10 @@ import Cocoa
 class JYHSearchView: JYHBlockView {
     
     override func format(){
+        
+    }
+    
+    override func interface() {
         self.titleIconButton.image = NSImage(named: NSImage.Name("Search"))
         self.titleTextButton.title = "Search"
         self.rightAddButton.isHidden = true
