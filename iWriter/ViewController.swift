@@ -70,6 +70,9 @@ class ViewController: NSViewController, WorksDelegate {
         symbolBlockView.delegate = self
         searchBlockView.delegate = self
         dictionaryBlockView.delegate = self
+        
+        contentBlockView.delegate = self
+        
         outlineBlockView.delegate = self
         
         works.delegate = self
@@ -433,5 +436,11 @@ extension ViewController: JYHTitlesBarViewDelegate {
         catalogBlockView.contentOutlineView.reloadData()
         infoBlockView.action(chapter: chapter)
         contentBlockView.action(chapter: chapter)
+    }
+}
+
+extension ViewController : JYHContentViewDelegate {
+    func contentDidChange(chapter: Chapter) {
+        catalogBlockView.contentOutlineView.reloadItem(chapter)
     }
 }

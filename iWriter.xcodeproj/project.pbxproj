@@ -18,7 +18,6 @@
 		781C728E2358890A00763F04 /* RoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781C728C2358890A00763F04 /* RoleWindowController.swift */; };
 		781C728F2358890A00763F04 /* RoleWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 781C728D2358890A00763F04 /* RoleWindowController.xib */; };
 		782344FD2449D1DB006DDF85 /* Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782344FC2449D1DB006DDF85 /* Define.swift */; };
-		7832601A245463E300F13658 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78326019245463E300F13658 /* Annotation.swift */; };
 		7832601C245466F600F13658 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7832601B245466F600F13658 /* Note.swift */; };
 		7840B81C251CDDFD00D065FC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840B81B251CDDFD00D065FC /* MainWindowController.swift */; };
 		784D27AE22D704A7001CDEE1 /* 047画板 12.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278722D7049B001CDEE1 /* 047画板 12.png */; };
@@ -154,7 +153,6 @@
 		781C728C2358890A00763F04 /* RoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleWindowController.swift; sourceTree = "<group>"; };
 		781C728D2358890A00763F04 /* RoleWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoleWindowController.xib; sourceTree = "<group>"; };
 		782344FC2449D1DB006DDF85 /* Define.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Define.swift; sourceTree = "<group>"; };
-		78326019245463E300F13658 /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		7832601B245466F600F13658 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		7840B81B251CDDFD00D065FC /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		784D278722D7049B001CDEE1 /* 047画板 12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 12.png"; sourceTree = "<group>"; };
@@ -398,7 +396,6 @@
 				78FB477E22D4389B00A9F4AF /* FileDelegate.swift */,
 				78FB477422D4383900A9F4AF /* Info.swift */,
 				78FB477622D4384800A9F4AF /* Chapter.swift */,
-				78326019245463E300F13658 /* Annotation.swift */,
 				7832601B245466F600F13658 /* Note.swift */,
 				78FB477822D4385700A9F4AF /* Role.swift */,
 				78FB477A22D4386200A9F4AF /* Symbol.swift */,
@@ -737,7 +734,6 @@
 				78B71ED72462D9E200EDACF4 /* JYHCatalogView.swift in Sources */,
 				78FB477F22D4389B00A9F4AF /* FileDelegate.swift in Sources */,
 				781C728E2358890A00763F04 /* RoleWindowController.swift in Sources */,
-				7832601A245463E300F13658 /* Annotation.swift in Sources */,
 				78D386CF2522261900496EA9 /* JYHTitleTabView.swift in Sources */,
 				780508D322E5C33300A36E18 /* JYHTextField.swift in Sources */,
 				78B71ED52459CB4200EDACF4 /* JYHOutlineView.swift in Sources */,

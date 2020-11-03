@@ -271,9 +271,6 @@ extension Works {
         if data.count == 0 {
             return;
         }
-        if data.count == 0 {
-            return;
-        }
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             outlines = dictionaryToStructWith(array: array as! [Any])

@@ -8,9 +8,16 @@
 
 import Cocoa
 
+protocol JYHContentViewDelegate {
+    func contentDidChange(chapter: Chapter)
+}
+
 class JYHContentView: NSView, NSTextViewDelegate {
     
+    var delegate: JYHContentViewDelegate?
+    
     let works = (NSApp.delegate as! AppDelegate).works
+    var count = 0
     var editing: NSScrollView?
     var active = false
     var views: Dictionary<Int, NSScrollView> = Dictionary<Int, NSScrollView>()
@@ -108,12 +115,12 @@ class JYHContentView: NSView, NSTextViewDelegate {
     }
     
     func textDidChange(_ notification: Notification) {
-        print("@@@@")
         guard let view = (editing?.documentView as? JYHTextView) else {
             return
         }
         view.chapter!.content = view.string
         view.chapter!.count = view.string.count
+        self.delegate?.contentDidChange(chapter: view.chapter!)
         do {
             try works.writeOutlineFile()
             try works.writeContentFile(chapter: view.chapter!)

@@ -72,11 +72,11 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     }
     
     @objc func doubleClicked(_ sender: Any){
-        print("doubleClick")
+        print(#function)
     }
     
     @objc func rowClicked(_ sender: Any){
-        print("rowClicked")
+        print(#function)
     }
 
     override init(frame frameRect: NSRect) {
@@ -99,8 +99,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         contentOutlineView.delegate = self
         contentOutlineView.dataSource = self
         contentOutlineView.target = self
-        contentOutlineView.action = #selector(outlineViewDidClick)
-        contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
+        contentOutlineView.action = #selector(outlineViewDidClick(_:))
         contentOutlineView.doubleAction = #selector(doubleClicked(_:))
         
         // 右键菜单。
@@ -151,7 +150,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     }
     
     func menuWillOpen(_ menu: NSMenu){
-        print("menuWillOpen")
+        print(#function)
     }
     
     func interface(){
@@ -160,58 +159,79 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     
     // 处理各子类的结构。
     func format(){
-        print("format")
+        print(#function)
     }
     
     func leftButtonClicked(isSelect: Bool){
-        print("leftButtonClicked")
+        print(#function)
     }
     
     func rightButtonClicked(isSelect: Bool){
-        print("rightButtonClicked")
+        print(#function)
     }
        
     func moveUpItemClicked(){
-        print("moveUpItemClicked")
+        print(#function)
     }
     
     func moveDownItemClicked(){
-        print("moveDownItemClicked")
+        print(#function)
     }
     
     func renameItemClicked(){
-        print("renameItemClicked")
+        print(#function)
     }
     
     func deleteItemClicked(){
-        print("deleteItemClicked")
+        print(#function)
     }
     
-    @objc func outlineViewDidClick(){
+    @objc func outlineViewDidClick(_ event: NSEvent){
         let row = contentOutlineView.clickedRow
         let column = contentOutlineView.clickedColumn
+        let onTitleImage = onImageViewWithCell(row: row, column: column)
         let unselected = -1
 
         if row == unselected && column == unselected{
             tableViewDidDeselectRow()
             return
         }else if row != unselected && column != unselected{
-            tableViewDidSelectRow(row)
+            tableViewDidSelectRow(row, column, onTitleImage)
             return
         }else if column != unselected && row == unselected{
             tableviewDidSelectHeader(column)
         }
     }
     
+    // 判断是否在图片上点击。、
+    private func onImageViewWithCell(row: Int, column: Int) -> Bool{
+        guard let titleCell: NSTableCellView = contentOutlineView.view(atColumn: column, row: row, makeIfNecessary: true) as? NSTableCellView else {
+            return false
+        }
+        guard let view = titleCell.imageView else {
+            return false
+        }
+        guard let point = view.window?.mouseLocationOutsideOfEventStream else {
+            return false
+        }
+        let p = (self.window?.contentView?.convert(point, to: view.superview))!
+        return view.isMousePoint(p, in: view.frame)
+    }
+    
     func tableViewDidDeselectRow() {
         print(#function)
     }
 
-    func tableViewDidSelectRow(_ row : Int){
+    func tableViewDidSelectRow(_ row : Int, _ column: Int, _ onTitleImage: Bool){
         print(#function)
     }
 
     func tableviewDidSelectHeader(_ column : Int){
         print(#function)
+    }
+    
+    func reloadDataWithRow(_ row: Int) {
+        contentOutlineView.removeItems(at: IndexSet(integer: row), inParent: nil, withAnimation: .effectFade)
+        contentOutlineView.insertItems(at: IndexSet(integer: row), inParent: nil, withAnimation: .effectFade)
     }
 }

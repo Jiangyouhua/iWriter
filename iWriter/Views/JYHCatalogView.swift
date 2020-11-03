@@ -35,12 +35,16 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         self.rightAddButton.image = NSImage(named: NSImage.Name("AddSection"))
         self.titleIconButton.toolTip = "Show or Hide the Catalog Block"
         
+        contextMenu()
+    }
+    
+    func contextMenu(){
         // 菜单
-        let addNote = NSMenuItem(title: "Add Note", action: #selector(addNodeMenuClick(_:)), keyEquivalent: "")
+        let addNode = NSMenuItem(title: "Add Node", action: #selector(addNodeMenuClick(_:)), keyEquivalent: "")
         let addText = NSMenuItem(title: "Add Text", action: #selector(addTextMenuClick(_:)), keyEquivalent: "")
         let importText = NSMenuItem(title: "Import Text", action: #selector(importTextMenuClick(_:)), keyEquivalent: "")
         let exportText = NSMenuItem(title: "Export Text", action: #selector(exportTextMenuClick(_:)), keyEquivalent: "")
-        rightClickMenu.insertItem(addNote, at: 0)
+        rightClickMenu.insertItem(addNode, at: 0)
         rightClickMenu.insertItem(addText, at: 1)
         rightClickMenu.insertItem(importText, at: 2)
         rightClickMenu.insertItem(exportText, at: 3)
@@ -224,7 +228,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
             cell.textField!.stringValue = chapter.title
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
-            cell.textField!.tag = 1
             cell.textField!.font = NSFont.systemFont(ofSize: 11)
             cell.imageView!.image = outlineNodeImage(top: chapter.parent == nil, leaf: chapter.leaf)
             return cell
@@ -237,8 +240,15 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
                 return nil
             }
             // 子集个数或字数。
-            let other = chapter.leaf ? String(chapter.count) : "..."
-            cell.textField!.stringValue = other
+            let other = chapter.leaf ? chapter.count : chapter.children.count
+            var s = String(other)
+            if other > 9999 {
+                s = String(format: "%dK", other/1000)
+            }
+            if other > 9999999 {
+                s = String(format: "%dM", other/1000000)
+            }
+            cell.textField!.stringValue = s
             return cell
         }
         return nil
@@ -258,7 +268,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         // 如果与编辑项相同，则为当前选择项。
         if chapter.creation == works.info.chapterSelection.creation {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-            outlineView.scrollRowToVisible(row)
             return
         }
         
@@ -382,7 +391,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
     }
     
     /// 叶节点的选择发生变化。
-    override func tableViewDidSelectRow(_ row : Int) {
+    override func tableViewDidSelectRow(_ row : Int, _ column: Int, _ onTitleImage: Bool) {
         guard let chapter = contentOutlineView.item(atRow: row) as? Chapter else {
             return
         }

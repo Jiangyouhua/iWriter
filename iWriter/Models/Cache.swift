@@ -145,12 +145,7 @@ class Cache: NSObject {
         }
         
         // 第一分割线直取，第二分割线求差值。
-        switch position {
-        case .leftOfHorizontal, .leftTopOfVertical, .centerTopOfVertical, .rightTopOfVertical, .leftBottomOfVertical, .centerBottomOfVertical, .rightBottomOfVertical:
-            defaults.set(v, forKey: key)
-        case .rightOfHorizontal:
-            defaults.set(windowSize.width - v!, forKey: key)
-        }
+        defaults.set(v, forKey: key)
     }
     
     func defaultPositionWithSplitView(position: SplitLine) -> CGFloat {
