@@ -8,13 +8,9 @@
 
 import Cocoa
 
-class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
+class JYHCatalogView: JYHBlockView {
     
-    var data: [Chapter] = [Chapter]()
-    
-    var node: Chapter?
-    
-    // MARK: - Override
+    // MARK: - View.
     override func format(){
         // 状态。
         data = [works.outlines[0]]
@@ -26,8 +22,8 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         // 初始界面。
         leftAddButtonState = false
         rightAddButtonState = false
-        leftAddButton.isHidden = false
-        rightAddButton.isHidden = false
+        leftAddButton.isHidden = leftAddButtonState
+        rightAddButton.isHidden = rightAddButtonState
 
         self.titleIconButton.image = NSImage(named: NSImage.Name("Catalog"))
         self.titleTextButton.title = "Catalog"
@@ -38,7 +34,32 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         contextMenu()
     }
     
-    func contextMenu(){
+    // MARK: Action - Title Icon.
+    override func leftButtonClicked(isSelect: Bool) {
+        let node = addNode(title:"New Node", leaf: false, isSelect: isSelect)
+        works.info.chapterSelection = node
+        writeAndReloadList()
+    }
+    
+    override func rightButtonClicked(isSelect: Bool) {
+        let node = addNode(title:"New Text", leaf: true, isSelect: isSelect)
+        works.info.chapterSelection = node
+        works.info.chapterEditingId = node.creation
+        works.opened(chapter: node)
+        writeAndReloadList()
+        
+        // 添加并打开对应的文本。
+        do {
+            try works.defaultContentFile(chapter: node)
+            try works.readContentFile(chapter: node)
+        } catch {
+            print(error)
+        }
+    }
+    
+    // MARK: Context Menu.
+    /// 添加私有项。
+    private func contextMenu(){
         // 菜单
         let addNode = NSMenuItem(title: "Add Node", action: #selector(addNodeMenuClick(_:)), keyEquivalent: "")
         let addText = NSMenuItem(title: "Add Text", action: #selector(addTextMenuClick(_:)), keyEquivalent: "")
@@ -51,93 +72,25 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         contentOutlineView.menu = rightClickMenu
     }
     
-    override func leftButtonClicked(isSelect: Bool) {
-        let node = addNode(title:"New Node", leaf: false, isSelect: isSelect)
-        works.info.chapterSelection = node
-        writeAndReloadList()
+    /// 私有项的处理。
+    @objc func addNodeMenuClick(_ sender: Any?) {
+        leftButtonClicked(isSelect: false)
     }
     
-    override func rightButtonClicked(isSelect: Bool) {
-        let node = addNode(title:"New Text", leaf: true, isSelect: isSelect)
-        works.info.chapterSelection = node
-        works.info.chapterEditingId = node.creation
-        writeAndReloadList()
-        
-        // 添加并打开对应的文本。
-        do {
-            try works.defaultContentFile(chapter: node)
-            try works.readContentFile(chapter: node)
-        } catch {
-            print(error)
-        }
+    @objc func addTextMenuClick(_ sender: Any?) {
+        rightButtonClicked(isSelect: false)
     }
     
-    override func doubleClicked(_ sender: Any) {
-        guard let outlineView = sender as? NSOutlineView else {
-                    return
-                }
-                
-        guard let chapter = outlineView.item(atRow: outlineView.selectedRow) as? Chapter else {
-            return
-        }
-        
-        // 展开或关闭子项。
-        if chapter.leaf {
-            return
-        }
-        chapter.expanded = !outlineView.isItemExpanded(chapter)
-        try? works.writeOutlineFile()
-        if chapter.expanded {
-            return outlineView.expandItem(chapter)
-        }
-        return outlineView.collapseItem(chapter)
+    @objc func importTextMenuClick(_ sender: Any?) {
+        // TODO
     }
     
-    override func moveUpItemClicked() {
-        itemUpOrDown(isUp: true)
+    @objc func exportTextMenuClick(_ sender: Any?) {
+        // TODO
     }
     
-    override func moveDownItemClicked() {
-        itemUpOrDown(isUp: false)
-    }
-    
-    override func renameItemClicked() {
-        guard let chapter = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Chapter else {
-            return
-        }
-        chapter.naming = true
-        contentOutlineView.reloadData()
-    }
-    
-    override func deleteItemClicked() {
-        guard let chapter = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Chapter else {
-            return
-        }
-        
-        if chapter.parent == nil {
-            return
-        }
-        
-        let i = chapter.countChildren()
-        let alert = NSAlert()
-        alert.addButton(withTitle: "Delete")
-        alert.addButton(withTitle: "Cancel")
-        alert.messageText = "Do you want to delete the \(i) selected items?"
-        alert.informativeText = "This operation cannot be undone."
-        let code = alert.runModal()
-        
-        //  用户取消了
-        if code == NSApplication.ModalResponse.alertSecondButtonReturn {
-            return
-        }
-        
-        chapter.deleteFiles()
-        _ = chapter.removeFromParent()
-        try? works.writeOutlineFile()
-        contentOutlineView.reloadData()
-    }
-    
-    override func menuWillOpen(_ menu: NSMenu){
+    /// 根据当前项显示菜单项的有效性。
+    func menuWillOpen(_ menu: NSMenu){
         guard let chapter = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Chapter else {
             return
         }
@@ -164,24 +117,51 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         menu.item(at: 9)?.isEnabled = false
     }
     
-    // MARK: - Action
-    @objc func addNodeMenuClick(_ sender: Any?) {
-        leftButtonClicked(isSelect: false)
+    /// 公有项的处理。
+    override func moveUpItemClicked() {
+        itemUpOrDown(isUp: true)
     }
     
-    @objc func addTextMenuClick(_ sender: Any?) {
-        rightButtonClicked(isSelect: false)
+    override func moveDownItemClicked() {
+        itemUpOrDown(isUp: false)
     }
     
-    @objc func importTextMenuClick(_ sender: Any?) {
-        // TODO
+    override func renameItemClicked() {
+        guard let chapter = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Chapter else {
+            return
+        }
+        chapter.naming = true
+        contentOutlineView.reloadItem(chapter)
     }
     
-    @objc func exportTextMenuClick(_ sender: Any?) {
-        // TODO
+    override func deleteItemClicked() {
+        guard let chapter = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Chapter else {
+            return
+        }
+        
+        if chapter.parent == nil {
+            return
+        }
+        
+        let i = chapter.countChildren()
+        let alert = NSAlert()
+        alert.addButton(withTitle: "Delete")
+        alert.addButton(withTitle: "Cancel")
+        alert.messageText = "Do you want to delete the \(i) selected items?"
+        alert.informativeText = "This operation cannot be undone."
+        let code = alert.runModal()
+        
+        //  用户取消了
+        if code == NSApplication.ModalResponse.alertSecondButtonReturn {
+            return
+        }
+        
+        chapter.deleteFiles()
+        _ = chapter.removeFromParent()
+        writeAndReloadList()
     }
     
-    // MARK: - NSOutlineViewDataSource
+    // MARK: - NSOutlineView
     /// 各级的Row数量。
     override func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         guard let chapter = item as? Chapter else {
@@ -232,32 +212,13 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
             cell.imageView!.image = outlineNodeImage(top: chapter.parent == nil, leaf: chapter.leaf)
             return cell
         }
-        
-        // 字数。
-        if columnIdentifier == NSUserInterfaceItemIdentifier(rawValue: "other") {
-            let cellIdentifier = NSUserInterfaceItemIdentifier("otherCellView")
-            guard let cell = outlineView.makeView(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView else {
-                return nil
-            }
-            // 子集个数或字数。
-            let other = chapter.leaf ? chapter.count : chapter.children.count
-            var s = String(other)
-            if other > 9999 {
-                s = String(format: "%dK", other/1000)
-            }
-            if other > 9999999 {
-                s = String(format: "%dM", other/1000000)
-            }
-            cell.textField!.stringValue = s
-            return cell
-        }
         return nil
     }
     
     /// 行添加后的方法了处理当前项。
-    func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
+    override func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
         // 当前项。没有当前项，则选择根目录，有则选择其为当前项。
-        if works.info.chapterSelection.creation == 0 && row == 0 {
+        if works.info.chapterSelection.title.isEmpty && row == 0 {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
             return
         }
@@ -268,7 +229,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         // 如果与编辑项相同，则为当前选择项。
         if chapter.creation == works.info.chapterSelection.creation {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-            return
         }
         
         // 命名项。只有新建项为命名项，失去编辑模则naming = false.
@@ -286,6 +246,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         }
     }
     
+    // MARK: Drag
     /// 开始拖曳。将指定内容写入剪切板，这样可能实现通过拖曳将其内容拖至到文本域等。
     func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
         guard let chapter = item as? Chapter else {
@@ -314,7 +275,7 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
             }
             
             // 内部方法，确定不是拖曳到自己或子类的内部。
-            func lap(_ n: Chapter?) -> Bool{
+            func lap(_ n: Model?) -> Bool{
                 if n?.parent == nil {
                     return false
                 }
@@ -330,7 +291,6 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         
             return NSDragOperation.generic
     }
-    
     
     /// 结束拖曳。
     func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
@@ -398,9 +358,10 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         if !chapter.leaf {
             return
         }
-        chapter.opened = true
+
         works.info.chapterEditingId = chapter.creation
         works.info.chapterSelection = chapter
+        works.opened(chapter: chapter)
         works.delegate?.selectedLeaf(chapter: chapter)
         do {
             try works.writeInfoFile()
@@ -410,17 +371,36 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         }
     }
     
-    // MARK: - 目录章节的增、改、删
+    /// 行被点。
+    override func rowDoubleClicked(_ sender: Any) {
+        guard let outlineView = sender as? NSOutlineView else {
+                    return
+                }
+                
+        guard let chapter = outlineView.item(atRow: outlineView.selectedRow) as? Chapter else {
+            return
+        }
+        
+        // 展开或关闭子项。
+        if chapter.leaf {
+            return
+        }
+        chapter.expanded = !outlineView.isItemExpanded(chapter)
+        try? works.writeOutlineFile()
+        if chapter.expanded {
+            return outlineView.expandItem(chapter)
+        }
+        return outlineView.collapseItem(chapter)
+    }
+    
+    // MARK: - 数据处理
     /// 增。
     func addNode(title:String, leaf: Bool, isSelect: Bool) -> Chapter {
         let row = isSelect ? contentOutlineView.selectedRow : contentOutlineView.clickedRow
-        let chapter: Chapter = contentOutlineView.item(atRow: row) as? Chapter ?? data[0]
-        let node = Chapter.init()
+        let chapter: Chapter = contentOutlineView.item(atRow: row) as? Chapter ?? data[0] as! Chapter
+        let node = Chapter()
         node.title = title
         node.leaf = leaf
-        node.naming = true
-        node.creation = creationTime()
-        node.status = false
         
         // 当前节点为支节点，添加到其子集的未尾。
         if !chapter.leaf {
@@ -441,53 +421,8 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         return node
     }
     
-    /// 改。
-    func controlTextDidEndEditing(_ obj: Notification) {
-        guard let chapter = contentOutlineView.item(atRow: contentOutlineView.selectedRow) as? Chapter  else {
-            return
-        }
-        guard let textField = obj.object as? NSTextField else {
-            return
-        }
-        chapter.title = textField.stringValue
-        chapter.naming = false
-        works.delegate?.namedLeaf(chapter: chapter)
-        
-        writeAndReloadList()
-    }
-    
-    // 写入缓存并更新视图。
-    private func writeAndReloadList(){
-        // 保存数据。
-        do {
-            try works.writeOutlineFile()
-            // TODO New file
-        } catch {
-            print(error)
-        }
-        // 更新视图。
-        contentOutlineView.reloadData()
-    }
-    
-    // 按Chapter.children标志展开下一级。
-    private func expandedChildren(items: [Chapter]){
-        for item in items {
-            if item.expanded {
-                contentOutlineView.expandItem(item)
-            }
-            // 同步标题栏
-            if item.leaf && item.opened {
-                works.opened(chapter: item)
-                works.delegate?.selectedLeaf(chapter: item)
-            }
-            if item.children.isEmpty {
-                continue
-            }
-            expandedChildren(items: item.children)
-        }
-    }
-    
-    private func itemUpOrDown(isUp: Bool){
+    /// 位移。
+    override func itemUpOrDown(isUp: Bool){
         guard let chapter = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Chapter else {
             return
         }
@@ -521,5 +456,70 @@ class JYHCatalogView: JYHBlockView, NSTextFieldDelegate {
         contentOutlineView.moveItem(at: index, inParent: chapter.parent, to: index + 1, inParent: chapter.parent)
         chapter.parent?.children.remove(at: index)
         chapter.parent?.children.insert(chapter, at: index + 1)
+    }
+    
+    func outlineNodeImage(top: Bool, leaf: Bool) -> NSImage {
+        var imageName = "CatalogLeaf"
+        if !leaf {
+            imageName = "CatalogBranch"
+        }
+        if top {
+            imageName = "CatalogBook"
+        }
+        return NSImage(named: NSImage.Name(imageName))!
+    }
+    
+    /// 按Chapter.children标志展开下一级。
+    override func expandedChildren(items: [Model]){
+        for item in items {
+            guard let it = item as? Chapter else {
+                return
+            }
+            if it.expanded {
+                contentOutlineView.expandItem(item)
+            }
+            // 同步标题栏
+            if it.leaf && it.opened {
+                works.opened(chapter: it)
+                works.delegate?.selectedLeaf(chapter: it)
+            }
+            if item.children.isEmpty {
+                continue
+            }
+            expandedChildren(items: item.children)
+        }
+    }
+}
+
+// MARK: 文本的处理。
+extension JYHCatalogView: NSTextFieldDelegate {
+    /// 改。
+    func controlTextDidEndEditing(_ obj: Notification) {
+        guard let chapter = contentOutlineView.item(atRow: contentOutlineView.selectedRow) as? Chapter  else {
+            return
+        }
+        guard let textField = obj.object as? NSTextField else {
+            return
+        }
+        chapter.naming = false
+        if textField.stringValue.isEmpty {
+            textField.stringValue = chapter.title
+            return
+        }
+        chapter.title = textField.stringValue
+        works.delegate?.namedLeaf(chapter: chapter)
+        writeAndReloadList()
+    }
+    
+    /// 写入缓存并更新视图。
+    private func writeAndReloadList(){
+        // 保存数据。
+        do {
+            try works.writeOutlineFile()
+            contentOutlineView.reloadData()
+
+        } catch {
+            print(error)
+        }
     }
 }

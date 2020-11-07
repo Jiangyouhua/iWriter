@@ -134,6 +134,9 @@ class Cache: NSObject {
         if value == nil {
             value = defaultPositionWithSplitView(position: position)
         }
+        if position == .rightOfHorizontal {
+            value = windowSize.width - value!
+        }
         return value!
     }
     
@@ -142,6 +145,11 @@ class Cache: NSObject {
         var v = value
         if value == nil {
             v = defaultPositionWithSplitView(position: position)
+        }
+        
+        // 水平右分割线需要保存到最右侧的值，在窗口缩小放大时有用。
+        if position == .rightOfHorizontal {
+            v = windowSize.width - v!
         }
         
         // 第一分割线直取，第二分割线求差值。

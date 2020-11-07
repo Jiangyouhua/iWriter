@@ -72,7 +72,6 @@ class ViewController: NSViewController, WorksDelegate {
         dictionaryBlockView.delegate = self
         
         contentBlockView.delegate = self
-        
         outlineBlockView.delegate = self
         
         works.delegate = self
@@ -82,11 +81,6 @@ class ViewController: NSViewController, WorksDelegate {
     }
     
     /// 实现方法。WorksDelegate
-    func loadedInfo() {
-        // 1. 缓存更新；
-        cache.addOpenedFile(file: works.info.file)
-    }
-    
     func loadedCatalog() {
         
         // 1. 界面更新;
@@ -153,7 +147,7 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
         
         // 如果右区为隐藏状态，则向右留一个ICON的宽度。
         let rightWidth = cache.getStateWithBlock(block: .right) ? iconWidth : cache.getPositionWithSplitView(position: .rightOfHorizontal)
-        leftRightSplitView.setPosition(windowSize.width - rightWidth, ofDividerAt: 1)
+        leftRightSplitView.setPosition(rightWidth, ofDividerAt: 1)
     }
     
     /// 分隔线位置发生了变化。

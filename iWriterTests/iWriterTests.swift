@@ -101,7 +101,7 @@ class iWriterTests: XCTestCase {
         catalog.count = 3650
         
         // 转Dictionary
-        let dic = catalog.forDictionary()
+        let dic = catalog.toDictionary()
         
         // 转Info
         let temp = Chapter()
@@ -175,12 +175,12 @@ class iWriterTests: XCTestCase {
         var role = Role()
         
         // 判断是否符合预期
-        XCTAssertEqual(role.name, "")
+        XCTAssertEqual(role.content, "")
         XCTAssertEqual(role.info, "")
         XCTAssertEqual(role.creation, 0)
         
         // 赋值
-        role.name = "Role 1"
+        role.content = "Role 1"
         role.info = "Role Info"
         role.creation = 123456
         
@@ -195,7 +195,7 @@ class iWriterTests: XCTestCase {
         }
         
         // 判断是否符合预期
-        XCTAssertEqual(role.name, temp.name)
+        XCTAssertEqual(role.content, temp.content)
         XCTAssertEqual(role.info, temp.info)
         XCTAssertEqual(role.creation, temp.creation)
         
@@ -205,7 +205,7 @@ class iWriterTests: XCTestCase {
         role["creation"] = "2019.04.16"
         
         // 判断是否符合预期
-        XCTAssertEqual(role.name, "")
+        XCTAssertEqual(role.content, "")
         XCTAssertEqual(role.info, "")
         XCTAssertEqual(role.creation, 0)
     }
@@ -216,12 +216,12 @@ class iWriterTests: XCTestCase {
         var symbol = Symbol()
         
         // 判断是否符合预期
-        XCTAssertEqual(symbol.name, "")
+        XCTAssertEqual(symbol.content, "")
         XCTAssertEqual(symbol.info, "")
         XCTAssertEqual(symbol.creation, 0)
         
         // 赋值
-        symbol.name = "Symbol title"
+        symbol.content = "Symbol title"
         symbol.info = "Symbol Info"
         symbol.creation = 123456
         
@@ -236,7 +236,7 @@ class iWriterTests: XCTestCase {
         }
         
         // 判断是否符合预期
-        XCTAssertEqual(symbol.name, temp.name)
+        XCTAssertEqual(symbol.content, temp.content)
         XCTAssertEqual(symbol.info, temp.info)
         XCTAssertEqual(symbol.creation, temp.creation)
         
@@ -246,7 +246,7 @@ class iWriterTests: XCTestCase {
         symbol["creation"] = "2019.04.16"
         
         // 判断是否符合预期
-        XCTAssertEqual(symbol.name, "")
+        XCTAssertEqual(symbol.content, "")
         XCTAssertEqual(symbol.info, "")
         XCTAssertEqual(symbol.creation, 0)
     }

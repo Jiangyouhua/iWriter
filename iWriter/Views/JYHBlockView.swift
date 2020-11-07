@@ -23,62 +23,117 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     @IBOutlet weak var contentScrollView: NSScrollView!
     @IBOutlet weak var contentOutlineView: NSOutlineView!
     @IBOutlet weak var titleColumn: NSTableColumn!
-    @IBOutlet weak var otherColumn: NSTableColumn!
     
-    // Menu
+    /// Context Menu
     @IBOutlet var rightClickMenu: NSMenu!
     
-    // 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
+    /// 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
     let works = (NSApp.delegate as! AppDelegate).works
+    var data: [Model] = []
+    var heights = [Int: CGFloat]()
+    var node: Model?
     var delegate: JYHBlockViewDelegate?
     
-    // 添加按钮的状态， true为隐藏。
+    /// 添加按钮的状态， true为隐藏。
     var leftAddButtonState = true
     var rightAddButtonState = true
     
-    // icon 被点击。
+    // MARK: Action - Title Clicked
+    /// Title Icon clicked
     @IBAction func titleIconButtonClick(_ sender: Any) {
         self.delegate?.blockTitleClicked(self)
     }
     
-    // title 被点击。
+    /// Title Text clicked.
     @IBAction func titleTextButtonClick(_ sender: Any) {
         self.delegate?.blockTitleClicked(self)
     }
     
+    /// left Icon clicked.
     @IBAction func leftAddButtonClick(_ sender: Any) {
         leftButtonClicked(isSelect: true)
     }
     
+    /// right Icon clicked.
     @IBAction func rightAddButtonClick(_ sender: Any) {
         rightButtonClicked(isSelect: true)
     }
     
-    // MARK:  - Menu Action
+    func leftButtonClicked(isSelect: Bool){
+        print(#function)
+    }
+    
+    func rightButtonClicked(isSelect: Bool){
+        print(#function)
+    }
+    
+    // MARK:  Action - Context Clicked
+    /// Move Up Item.
     @IBAction func moveUpMenuClicked(_ sender: Any) {
         moveUpItemClicked()
     }
     
+    /// Move Down Item.
     @IBAction func moveDownMenuClicked(_ sender: Any) {
         moveDownItemClicked()
     }
     
+    /// Remane Item.
     @IBAction func renameMenuClicked(_ sender: Any) {
         renameItemClicked()
     }
     
+    /// Delete Item.
     @IBAction func deleteMenuClicked(_ sender: Any) {
         deleteItemClicked()
     }
-    
-    @objc func doubleClicked(_ sender: Any){
-        print(#function)
+       
+    func moveUpItemClicked() {
+        itemUpOrDown(isUp: true)
     }
     
-    @objc func rowClicked(_ sender: Any){
-        print(#function)
+    func moveDownItemClicked() {
+        itemUpOrDown(isUp: false)
     }
-
+    
+    func renameItemClicked() {
+        guard let model = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Model else {
+            return
+        }
+        model.naming = true
+        contentOutlineView.reloadData()
+    }
+    
+    func deleteItemClicked() {
+        guard let model = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Model else {
+            return
+        }
+        
+        if model.parent == nil {
+            return
+        }
+        
+        let i = model.countChildren()
+        let alert = NSAlert()
+        alert.addButton(withTitle: "Delete")
+        alert.addButton(withTitle: "Cancel")
+        alert.messageText = "Do you want to delete the \(i) selected items?"
+        alert.informativeText = "This operation cannot be undone."
+        let code = alert.runModal()
+        
+        //  用户取消了
+        if code == NSApplication.ModalResponse.alertSecondButtonReturn {
+            return
+        }
+        
+        var a = model.parent == nil ? data : model.children
+        _ = model.removeFromArray(&a)
+        try? works.writeNoteFile()
+        contentOutlineView.reloadData()
+    }
+    
+    // MARK: View
+    /// Init Subclass.
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         loadXib()
@@ -100,7 +155,8 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         contentOutlineView.dataSource = self
         contentOutlineView.target = self
         contentOutlineView.action = #selector(outlineViewDidClick(_:))
-        contentOutlineView.doubleAction = #selector(doubleClicked(_:))
+        contentOutlineView.doubleAction = #selector(rowDoubleClicked(_:))
+        contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
         
         // 右键菜单。
         rightClickMenu.autoenablesItems = false       // 可自己设置菜单项的可用状态。
@@ -113,7 +169,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         super.draw(dirtyRect)
         // 及时更新视图的大小。
         self.view.frame = self.bounds
-        titleColumn.width = self.bounds.width - otherColumn.width
+        titleColumn.width = self.bounds.width - 10
         
         // LeftArea进入隐藏状态。
         if self.frame.size.width <= iconWidth {
@@ -133,61 +189,68 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         rightAddButton.isHidden = rightAddButtonState
     }
     
-    /// NSOutlineViewDataSource
-    // 各级的Row数量。
-    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        return 0
-    }
-    
-    // 各级的Row数据。
-    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any{
-        return (Any).self
-    }
-    
-    // 各级的Row是否为子集显示展开与收拢功能。
-    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool{
-        return false
-    }
-    
-    func menuWillOpen(_ menu: NSMenu){
-        print(#function)
-    }
-    
+    /// 界面处理。
     func interface(){
         print(#function)
     }
     
-    // 处理各子类的结构。
+    /// 显示处理。
     func format(){
         print(#function)
     }
     
-    func leftButtonClicked(isSelect: Bool){
-        print(#function)
+    // MARK: NSOutlineView
+    /// 各级的Row数量。
+    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+        guard let model = item as? Model else {
+            return data.count
+        }
+        return model.children.count
     }
     
-    func rightButtonClicked(isSelect: Bool){
-        print(#function)
-    }
-       
-    func moveUpItemClicked(){
-        print(#function)
-    }
-    
-    func moveDownItemClicked(){
-        print(#function)
+    /// 各级的Row数据。
+    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any{
+        guard let model = item as? Model else {
+            return data[index]
+        }
+        return model.children[index]
     }
     
-    func renameItemClicked(){
-        print(#function)
+    /// 各级的Row是否为子集显示展开与收拢功能。
+    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool{
+        guard let model = item as? Model else {
+            return false
+        }
+        return model.children.count > 0
     }
     
-    func deleteItemClicked(){
-        print(#function)
+    /// 行添加后的方法了处理当前项。
+    func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
+        guard let model = outlineView.item(atRow: row) as? Model else {
+            return
+        }
+        
+        // 命名项。只有新建项为命名项，失去编辑模则naming = false.
+        if model.naming {
+            guard let cell = rowView.view(atColumn: 0) as? NSTableCellView else {
+                return
+            }
+            // 命名项一定是当前项。
+            outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+            outlineView.scrollRowToVisible(row)
+            // 命名项一定为可见，所以必然展开上一级。
+            outlineView.expandItem(model.parent)
+            // 命名项设置为第一响应者，即进入命名状态。
+            cell.textField?.becomeFirstResponder()
+        }
     }
     
+    // MARK: Action - Row Clicked
     @objc func outlineViewDidClick(_ event: NSEvent){
         let row = contentOutlineView.clickedRow
+        if row < 0 {
+            return 
+        }
         let column = contentOutlineView.clickedColumn
         let onTitleImage = onImageViewWithCell(row: row, column: column)
         let unselected = -1
@@ -218,20 +281,105 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         return view.isMousePoint(p, in: view.frame)
     }
     
+    /// 取消行选择。
     func tableViewDidDeselectRow() {
         print(#function)
     }
 
+    /// 选择行。
     func tableViewDidSelectRow(_ row : Int, _ column: Int, _ onTitleImage: Bool){
         print(#function)
     }
 
+    /// 选择了表头。
     func tableviewDidSelectHeader(_ column : Int){
         print(#function)
     }
     
+    /// 更新当前行数据。
     func reloadDataWithRow(_ row: Int) {
         contentOutlineView.removeItems(at: IndexSet(integer: row), inParent: nil, withAnimation: .effectFade)
         contentOutlineView.insertItems(at: IndexSet(integer: row), inParent: nil, withAnimation: .effectFade)
+    }
+
+    /// 双击当前行。
+    @objc func rowDoubleClicked(_ sender: Any){
+        print(#function)
+    }
+    
+    // MARK: 转换器。
+    /// 字数转为字符显示。
+    func conversion(number: Int) -> String {
+        // 子集个数或字数。
+        if number < 10000 {
+            return String(number)
+        }
+        if number < 10000000 {
+            return  String(format: "%dK", number/1000)
+        }
+        return String(format: "%dM", number/1000000)
+    }
+    
+    /// 时间戳转为日期显示。
+    func conversion(time: Int) -> String {
+        let timeInterval = TimeInterval(time)
+        let date = Date.init(timeIntervalSince1970: timeInterval)
+        let dateFormat = DateFormatter()
+        dateFormat.locale = .current
+        dateFormat.dateFormat = "MM.dd"
+        return dateFormat.string(from: date)
+    }
+    
+    func itemUpOrDown(isUp: Bool){
+        let at = contentOutlineView.clickedRow
+        guard let n = contentOutlineView.item(atRow: at) as? Model else {
+            return
+        }
+        
+        // 确定当前节点在兄弟节点中的位置。
+        node = n
+        var to = at + 2
+        
+        if isUp {
+            if at == 0 {
+                return
+            }
+            to = at - 1
+        }
+        changePosition(at: at, to: to, inParent: n.parent)
+    }
+    
+    func changePosition(at: Int, to: Int, inParent: Model?) {
+        // 判断移至内或移至某位置。
+        var x = to
+        // 同子集里下移。
+        if at < x {
+            x -= 1
+        }
+        if  to == at {
+            return
+        }
+        contentOutlineView.moveItem(at: at, inParent: inParent, to: x, inParent: inParent)
+        
+        // 同步更新数据。
+        if inParent == nil {
+            data.remove(at: at)
+            data.insert(node!, at: x)
+        } else {
+            inParent?.children.remove(at: at)
+            inParent?.children.insert(node!, at: x)       // 添加到新的里面；
+        }
+        try? works.writeNoteFile()
+        node = nil
+    }
+    
+    /// 按Note.children标志展开下一级。
+    func expandedChildren(items: [Model]){
+        for item in items {
+            if item.expanded {
+                contentOutlineView.expandItem(item)
+            }
+            expandedChildren(items: item.children)
+        }
     }
 }

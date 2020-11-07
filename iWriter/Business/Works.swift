@@ -37,11 +37,12 @@ enum WorksError: Error {
 
 
 protocol WorksDelegate {
-    func loadedInfo()
+    // Layout.
     func loadedCatalog()
     func loadedNote()
     func loadedRole()
     func loadedSymbol()
+    // Edit Catalog.
     func selectedLeaf(chapter: Chapter)
     func deletedLeaf(chapter: Chapter)
     func namedLeaf(chapter: Chapter)
@@ -177,10 +178,16 @@ extension Works {
 extension Works {
     
     private func applyWorksPath(path: String) {
-        isUserOperate = true
+        // 新Info.
+        info = Info()
         info.file = path
+        info.title = path.fileName()
+        // 用户操作。
+        isUserOperate = true
         cache.addOpenedFile(file: path)
         cache.saveBookmark(path: path)
+        // 更新标题。
+        NSApp.mainWindow?.title = path
     }
     
     // MARK: - Init Cache Folder。
@@ -227,7 +234,6 @@ extension Works {
         do {
             let dic = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             info = Info(dictionary: dic as! [String : Any])
-            delegate?.loadedInfo()
         } catch {
             throw WorksError.operateError(OperateCode.jsonObject, #function, JSON_ERROR)
         }
@@ -236,7 +242,7 @@ extension Works {
     /// 写 Info File。
     func writeInfoFile() throws {
         info.saved = false
-        let dic = info.forDictionary()
+        let dic = info.toDictionary()
         let data:Data
         do {
             data = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
@@ -248,8 +254,6 @@ extension Works {
     
     // 写初始数到Info File。
     private func defaultInfoFile() throws {
-        info.title = info.file.fileName()
-        info.info = ""
         info.author = "iWriter"
         info.version = "1.0"
         info.creation = creationTime()
@@ -298,6 +302,7 @@ extension Works {
     
     /// 写默认数据到Catalog File。
     private func defaultOutlineFile() throws {
+        outlines = [Chapter]()
         // 书名。
         let catalog = Chapter()
         catalog.title =  info.title
@@ -323,7 +328,7 @@ extension Works {
         }
     
         do {
-            let array = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+            let array = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             notes = dictionaryToStructWith(array: array as! [Any])
             delegate?.loadedNote()
         } catch {
@@ -355,7 +360,7 @@ extension Works {
         }
     
         do {
-            let array = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+            let array = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             roles = dictionaryToStructWith(array: array as! [Any])
             delegate?.loadedRole()
         } catch {
@@ -492,6 +497,7 @@ extension Works {
     }
     
     func opened(chapter: Chapter){
+        chapter.opened = true
         if self.info.chapterOpened.contains(where: {$0.creation == chapter.creation}) {
             return
         }

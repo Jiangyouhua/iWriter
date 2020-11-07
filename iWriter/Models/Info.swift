@@ -12,7 +12,7 @@ import Foundation
  ## Info。
     作品信息。
  */
-struct Info: FileDelegate {
+struct Info {
     
     var file: String                     // 文件的保存路径。
     var title: String                    // 作品名称。
@@ -21,7 +21,7 @@ struct Info: FileDelegate {
     var version: String                  // 作者，前期使用iWriter，后期从设置中读取。
     var creation: Int                    // 创建时间，时间戮。
     var saved: Bool                      // 是否被保存。
-    var chapterEditingId: Int              // 正编辑的创建时间。
+    var chapterEditingId: Int            // 正编辑的创建时间。
     var chapterSelection: Chapter        // 被选中的。
     var chapterOpened: [Chapter]         // 打开了的，不作序列化。
     
@@ -31,7 +31,7 @@ struct Info: FileDelegate {
         self.info = ""
         self.author = ""
         self.version = ""
-        self.creation = 0
+        self.creation = creationTime()
         self.saved = false
         self.chapterEditingId = 0
         self.chapterSelection = Chapter()
@@ -54,7 +54,7 @@ struct Info: FileDelegate {
     
     /// 转为字典。
     /// - returns: 字典。
-    func forDictionary()->Dictionary<String, Any> {
+    func toDictionary()->Dictionary<String, Any> {
         var dic:Dictionary<String, Any> = [:]
         
         dic["file"] = self.file
@@ -65,7 +65,7 @@ struct Info: FileDelegate {
         dic["creation"] = self.creation
         dic["saved"] = self.saved
         dic["chapterEditing"] = self.chapterEditingId
-        dic["chapterSelection"] = self.chapterSelection.forDictionary()
+        dic["chapterSelection"] = self.chapterSelection.toDictionary()
         return dic
     }
 }

@@ -55,7 +55,7 @@ func isDarkMode() -> Bool {
 }
 
 // 字典数组转为结构数组。
-func dictionaryToStructWith<T: FileDelegate>(array: [Any]) -> [T] {
+func dictionaryToStructWith<T: ModelDelegate>(array: [Any]) -> [T] {
     var objects = [T]()
     array.forEach{ item in
         guard let object = item as? [String: Any] else {
@@ -67,17 +67,17 @@ func dictionaryToStructWith<T: FileDelegate>(array: [Any]) -> [T] {
 }
 
 // 结构数组转为字典数组。
-func structToDictionaryWith<T: FileDelegate>(array: [T]) -> [Any] {
+func structToDictionaryWith<T: ModelDelegate>(array: [T]) -> [Any] {
     var maps = [Any]()
     array.forEach{ item in
-        let map = item.forDictionary()
+        let map = item.toDictionary()
         maps.append(map)
     }
     return maps
 }
 
 // 字典数组转为结构数组。
-func dictionaryToStructWith<T: FileDelegate>(dic: [Int: Any]) -> [Int: T] {
+func dictionaryToStructWith<T: ModelDelegate>(dic: [Int: Any]) -> [Int: T] {
     var objects: [Int: T] = [:]
     dic.forEach{ (key, value) in
         guard let object = value as? [String: Any] else {
@@ -89,30 +89,44 @@ func dictionaryToStructWith<T: FileDelegate>(dic: [Int: Any]) -> [Int: T] {
 }
 
 // 结构数组转为字典数组。
-func structToDictionaryWith<T: FileDelegate>(dic: [Int: T]) -> [Int: Any] {
+func structToDictionaryWith<T: ModelDelegate>(dic: [Int: T]) -> [Int: Any] {
     var maps:[Int: Any] = [:]
     dic.forEach{ (key, value) in
-        let map = value.forDictionary()
+        let map = value.toDictionary()
         maps[key] = map
     }
     return maps
+}
+
+func modelsFromDictionary<T: Model>(object: Any?, node: T) {
+    guard let array = object as? [Any] else {
+        return
+    }
+    var models = [T]()
+    array.forEach{ item in
+        guard let dic = item as? [String: Any] else {
+            return
+        }
+        let child = T(dictionary: dic)
+        child.parent = node
+        models.append(child)
+    }
+    node.children = models
+}
+
+func modelsToDictionary<T: Model>(array: [T]) -> [Any] {
+    var a: [Any] = [Any]()
+    array.forEach{ node in
+        let d = node.toDictionary()
+        a.append(d)
+    }
+    return a
 }
 
 /// 全局ID，以时间戳为基础。
 func creationTime() -> Int {
     let now = Date()
     return Int(now.timeIntervalSince1970)
-}
-
-func outlineNodeImage(top: Bool, leaf: Bool) -> NSImage {
-    var imageName = "catalogLeaf"
-    if !leaf {
-        imageName = "catalogBranch"
-    }
-    if top {
-        imageName = "catalogBook"
-    }
-    return NSImage(named: NSImage.Name(imageName))!
 }
 
 // 标题栏标签，普通状态时的背景色。深色模式时标题栏浅，反之则

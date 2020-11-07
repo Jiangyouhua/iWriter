@@ -12,37 +12,31 @@ import Foundation
  ## Works Role。
     作品角色，通过标签注释角色信息。
  */
-struct Role: FileDelegate {
+class Role: Model {
     
-    var name: String                     // 角色名称。
-    var info: String                     // 角色信息。
-    var creation: Int                    // 创建时间，时间戮。
-    var status: Bool                     // 是否有效，无效时开启编辑状态。
+    var gender: String                     // 角色出现的次数。
     
-    init() {
-        self.name = ""
-        self.info = ""
-        self.creation = 0
-        self.status = true
+    override init() {
+        self.gender = ""
+        super.init()
     }
     
     /// 使用字典进行初始化。
-    init(dictionary: [String : Any]) {
-        self.name = dictionary["name"] as? String ?? ""
-        self.info = dictionary["info"] as? String ?? ""
-        self.creation = dictionary["creation"] as? Int ?? 0
-        self.status = dictionary["status"] as? Bool ?? false
+    required init(dictionary: [String : Any]) {
+        self.gender = dictionary["gender"] as? String ?? ""
+        // 父类的。
+        super.init(dictionary: dictionary)
+        modelsFromDictionary(object: dictionary["children"], node: self)
     }
     
     /// 转为字典。
     /// - returns: 字典。
-    func forDictionary()->Dictionary<String, Any>{
-        var dic:Dictionary<String, Any> = [:]
+    override func toDictionary()->Dictionary<String, Any>{
+        // 父类的。
+        var dic = super.toDictionary()
+        dic["children"] = modelsToDictionary(array: self.children)
         
-        dic["name"] = self.name
-        dic["info"] = self.info
-        dic["creation"] = self.creation
-        dic["status"] = self.status
+        dic["gender"] = self.gender
         return dic
     }
 }

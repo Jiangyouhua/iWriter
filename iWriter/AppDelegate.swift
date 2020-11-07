@@ -19,26 +19,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         // 打开当前缓存文件。
-        if FileManager.default.fileExists(atPath: CACHE_PATH) {
-            do {
-                // 从缓存读取。
-                try works.openFilesFromCache()
-                NSApp.mainWindow?.title = works.info.file
-                formatRecentOpenMenu()
-            } catch let error as WorksError {
-                // 显示提示窗。
-                let alert = NSAlert()
-                alert.addButton(withTitle: "OK")
-                alert.messageText = "Open File From Cache Error"
-                switch error {
-                case .operateError(let code, let function,  let info) :
-                    print(code, function)
-                    alert.informativeText = info
-                }
-                alert.runModal()
-            } catch {
-                print(error)
+        do {
+            // 从缓存读取。
+            try works.openFilesFromCache()
+            NSApp.mainWindow?.title = works.info.file
+            formatRecentOpenMenu()
+        } catch let error as WorksError {
+            // 显示提示窗。
+            let alert = NSAlert()
+            alert.addButton(withTitle: "OK")
+            alert.messageText = "Open File From Cache Error"
+            switch error {
+            case .operateError(let code, let function,  let info) :
+                print(code, function)
+                alert.informativeText = info
             }
+            alert.runModal()
+        } catch {
+            print(error)
         }
     }
 
@@ -128,7 +126,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch let error as WorksError{
             let alert = NSAlert()
             alert.addButton(withTitle: "OK")
-            alert.messageText = "New File Error"
+            alert.messageText = "Save as File Error"
             switch error {
             case .operateError(let code, let function,  let info) :
                 print(code, function)
@@ -177,10 +175,10 @@ extension AppDelegate {
         dialog.allowedFileTypes        = ["iw"]
         
         if (dialog.runModal() == NSApplication.ModalResponse.OK) {
-            let result = dialog.url // Pathname of the file
-            if (result != nil) {
-                return result!.path
+            guard let result = dialog.url else {
+                return nil
             }
+            return result.path
         }
         return nil
     }
@@ -196,10 +194,10 @@ extension AppDelegate {
         dialog.allowedFileTypes        = ["iw"]
         
         if (dialog.runModal() == NSApplication.ModalResponse.OK) {
-            let result = dialog.url // Pathname of the file
-            if (result != nil) {
-                return result!.path
+            guard let result = dialog.url else {
+                return nil
             }
+            return result.path
         }
         return nil
     }
