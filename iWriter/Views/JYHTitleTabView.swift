@@ -65,7 +65,7 @@ class JYHTitleTabView: NSView {
     func format(){
         // 设置Label。
         backView.backgroundColor = NSColor.selectedControlColor
-        label.stringValue = chapter.title
+        label.stringValue = chapter.content
         label.sizeToFit()
         
         // 设置尺寸适匹内容。

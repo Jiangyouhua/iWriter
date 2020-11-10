@@ -178,7 +178,7 @@ class JYHRoleView: JYHBlockView, NSTextFieldDelegate {
     }
     
     /// 写入缓存并更新视图。
-    private func writeAndReloadList(_ item: Model? = nil){
+    override func writeAndReloadList(_ item: Model? = nil){
         // 保存数据。
         do {
             try works.writeRoleFile()

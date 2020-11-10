@@ -10,9 +10,6 @@ import Cocoa
 
 // MARK: 错误提醒信息。
 let RIGHT_ERROR = "No Operating Rights"               // 没有权限。
-let FILE_ERROR = "File Does Not Exist"                // 文件读写出错。
-let JSON_ERROR = "JSON Conversion Error"              // JSON出错。
-let UNDEFINED = "Undefined"                           // 未定义。
 
 // MARK: 缓存中一开始需要创建的默认文件。
 let CACHE_PATH = NSHomeDirectory() + "/iWriter"       // 缓存目录。
@@ -24,7 +21,7 @@ let SYMBOL_FILE = CACHE_PATH + "/symbol.txt"          // 保存符号数据的�
 
 // MARK: 布局相关。
 var windowSize = NSApp.windows.first!.contentViewController!.view.frame.size
-let iconWidth: CGFloat = 30                             // icon尺寸。
+let iconWidth: CGFloat = 30                            // icon尺寸。
 let minAreaWidth: CGFloat = 200                        // 区块有效宽，小于该宽度则隐藏。
 let minBlockHeight: CGFloat = 120
 let cache = Cache()

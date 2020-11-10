@@ -50,8 +50,7 @@ class JYHCatalogView: JYHBlockView {
         
         // 添加并打开对应的文本。
         do {
-            try works.defaultContentFile(chapter: node)
-            try works.readContentFile(chapter: node)
+            try node.readArticleFile()
         } catch {
             print(error)
         }
@@ -205,7 +204,7 @@ class JYHCatalogView: JYHBlockView {
             }
             
             // 为Table Cell View设置Title与Icon。
-            cell.textField!.stringValue = chapter.title
+            cell.textField!.stringValue = chapter.content
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
             cell.textField!.font = NSFont.systemFont(ofSize: 11)
@@ -218,7 +217,7 @@ class JYHCatalogView: JYHBlockView {
     /// 行添加后的方法了处理当前项。
     override func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
         // 当前项。没有当前项，则选择根目录，有则选择其为当前项。
-        if works.info.chapterSelection.title.isEmpty && row == 0 {
+        if works.info.chapterSelection.content.isEmpty && row == 0 {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
             return
         }
@@ -255,7 +254,7 @@ class JYHCatalogView: JYHBlockView {
         
         node = chapter  // 更新拖曳的对象。
         let  pastBoard = NSPasteboardItem.init()
-        pastBoard.setString(chapter.title, forType: NSPasteboard.PasteboardType.string)
+        pastBoard.setString(chapter.content, forType: NSPasteboard.PasteboardType.string)
         return pastBoard
     }
 
@@ -399,7 +398,7 @@ class JYHCatalogView: JYHBlockView {
         let row = isSelect ? contentOutlineView.selectedRow : contentOutlineView.clickedRow
         let chapter: Chapter = contentOutlineView.item(atRow: row) as? Chapter ?? data[0] as! Chapter
         let node = Chapter()
-        node.title = title
+        node.content = title
         node.leaf = leaf
         
         // 当前节点为支节点，添加到其子集的未尾。
@@ -503,10 +502,10 @@ extension JYHCatalogView: NSTextFieldDelegate {
         }
         chapter.naming = false
         if textField.stringValue.isEmpty {
-            textField.stringValue = chapter.title
+            textField.stringValue = chapter.content
             return
         }
-        chapter.title = textField.stringValue
+        chapter.content = textField.stringValue
         works.delegate?.namedLeaf(chapter: chapter)
         writeAndReloadList()
     }

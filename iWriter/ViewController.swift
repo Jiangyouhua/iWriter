@@ -11,7 +11,7 @@ import Cocoa
  ## 各目录项移动前原位置数据。
  */
 
-class ViewController: NSViewController, WorksDelegate {
+class ViewController: NSViewController, WorksDelegate, JYHSearchViewDelegate {
     
     let app = NSApp.delegate as! AppDelegate
     let works = (NSApp.delegate as! AppDelegate).works
@@ -41,7 +41,7 @@ class ViewController: NSViewController, WorksDelegate {
     @IBOutlet weak var infoBlockView: JYHInfoView!
     
     /// 内容。
-    @IBOutlet weak var contentBlockView: JYHContentView!
+    @IBOutlet weak var articleBlockView: JYHArticleView!
     
 
     /// 大纲。
@@ -71,7 +71,7 @@ class ViewController: NSViewController, WorksDelegate {
         searchBlockView.delegate = self
         dictionaryBlockView.delegate = self
         
-        contentBlockView.delegate = self
+        articleBlockView.delegate = self
         outlineBlockView.delegate = self
         
         works.delegate = self
@@ -89,7 +89,7 @@ class ViewController: NSViewController, WorksDelegate {
         // 2. 展开节点。
         titlesBarView.format()
         infoBlockView.format()
-        contentBlockView.format()
+        articleBlockView.format()
         
         // 3. 更新最近打开菜单。
         app.formatRecentOpenMenu()
@@ -108,13 +108,13 @@ class ViewController: NSViewController, WorksDelegate {
     func selectedLeaf(chapter: Chapter) {
         titlesBarView.opened(chapter: chapter)
         infoBlockView.opened(chapter: chapter)
-        contentBlockView.opened(chapter: chapter)
+        articleBlockView.opened(chapter: chapter)
     }
     
     func namedLeaf(chapter: Chapter) {
         titlesBarView.opened(chapter: chapter)
         infoBlockView.opened(chapter: chapter)
-        contentBlockView.opened(chapter: chapter)
+        articleBlockView.opened(chapter: chapter)
     }
     
     func deletedLeaf(chapter: Chapter) {
@@ -123,7 +123,7 @@ class ViewController: NSViewController, WorksDelegate {
         }
         titlesBarView.deleted(index: index)
         infoBlockView.deleted(chapter: chapter)
-        contentBlockView.deleted(chapter: chapter)
+        articleBlockView.deleted(chapter: chapter)
     }
 }
 
@@ -133,7 +133,29 @@ class ViewController: NSViewController, WorksDelegate {
  1. 各AreaView、BlockView隐藏状态（最小状态）时保留标题栏；
  2. AreaView左右区，在阈值范围内自动隐藏。
  */
-extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineViewDelegate {
+extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHDictionaryViewDelegate, JYHOutlineViewDelegate {
+    
+    func blockTitleClicked(_ target: JYHBlockView) {
+        switch target {
+        case catalogBlockView:
+            toggleCatalogBlockState()
+        case noteBlockView:
+            toggleNoteBlockState()
+        case roleBlockView:
+            toggleRoleBlockState()
+        default:
+            toggleSymbolBlockState()
+        }
+    }
+    
+    func blockTitleClicked(_ target: JYHSearchView) {
+        toggleSearchBlockState()
+    }
+    
+    func blockTitleClicked(_ target: JYHDictionaryView) {
+        toggleDictionaryBlockState()
+    }
+    
     
     override func viewWillAppear() {
         //
@@ -256,23 +278,6 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
         return position
     }
     
-    func blockTitleClicked(_ target: JYHBlockView) {
-        switch target {
-        case catalogBlockView:
-            toggleCatalogBlockState()
-        case noteBlockView:
-            toggleNoteBlockState()
-        case roleBlockView:
-            toggleRoleBlockState()
-        case symbolBlockView:
-            toggleSymbolBlockState()
-        case searchBlockView:
-            toggleSearchBlockState()
-        default:
-            toggleDictionaryBlockState()
-        }
-    }
-    
     func outlineTitleClicked(_ target: JYHOutlineView) {
         if target.frame.height > iconWidth + 3 {
             return centerAreaSplitView.setPosition(windowSize.height - iconWidth * 2, ofDividerAt: 1)
@@ -286,7 +291,7 @@ extension ViewController: NSSplitViewDelegate, JYHBlockViewDelegate, JYHOutlineV
         if infoBlockView.frame.height > iconWidth {
             return centerAreaSplitView.setPosition(0, ofDividerAt: 0)
         }
-        if contentBlockView.frame.height < minBlockHeight {
+        if articleBlockView.frame.height < minBlockHeight {
             centerAreaSplitView.setPosition(minBlockHeight * 2, ofDividerAt: 1)
         }
         centerAreaSplitView.setPosition(minBlockHeight, ofDividerAt: 0)
@@ -423,14 +428,51 @@ extension ViewController: JYHTitlesBarViewDelegate {
     func clickedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
         infoBlockView.action(chapter: chapter)
-        contentBlockView.action(chapter: chapter)
+        articleBlockView.action(chapter: chapter)
     }
     
     func closedTabItem(chapter: Chapter) {
         catalogBlockView.contentOutlineView.reloadData()
         infoBlockView.action(chapter: chapter)
-        contentBlockView.action(chapter: chapter)
+        articleBlockView.action(chapter: chapter)
     }
+    
+    // search
+    func searchWord(_ word: String) {
+        guard let chapter = catalogBlockView.contentOutlineView.item(atRow: catalogBlockView.contentOutlineView.selectedRow) as? Chapter else {
+            return
+        }
+        let data = chapter.search(word)
+        searchBlockView.data = data
+        articleBlockView.updateSearchAttributes(data: data, onlyRemove: false)
+    }
+    
+    func selectAndShow(chapter: Chapter, mark: Mark) {
+        // 更换章节。
+        if works.info.chapterEditingId != chapter.creation {
+            works.info.chapterEditingId = chapter.creation
+            works.info.chapterSelection = chapter
+            works.opened(chapter: chapter)
+            selectedLeaf(chapter: chapter)
+        }
+        
+        DispatchQueue.main.async {
+            // 选择当前。
+            guard let view = self.articleBlockView.editing?.documentView as? JYHTextView else {
+                return
+            }
+            guard let article = view.textStorage else {
+                return
+            }
+            let r = NSRange(mark.articleRange, in: article.string)
+            view.setSelectedRange(r)
+            guard let rect = view.layoutManager?.boundingRect(forGlyphRange: r, in: view.textContainer!) else { return
+            }
+
+            view.scrollToVisible(CGRect(x: rect.origin.x - 100, y: rect.origin.y - 100, width: rect.size.width + 200, height: rect.size.height + 200))
+        }
+    }
+
 }
 
 extension ViewController : JYHContentViewDelegate {

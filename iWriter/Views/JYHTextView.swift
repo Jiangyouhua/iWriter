@@ -19,7 +19,7 @@ class JYHTextView: NSTextView {
         if string.isEmpty {
             let m = [NSAttributedString.Key.foregroundColor: NSColor.gray]
             let s = NSAttributedString(string: placeHolder, attributes: m)
-            s.draw(at: NSMakePoint(4, 4))
+            s.draw(at: NSMakePoint(10, 10))
         }
     }
 }

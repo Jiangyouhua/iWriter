@@ -12,7 +12,7 @@ protocol JYHContentViewDelegate {
     func contentDidChange(chapter: Chapter)
 }
 
-class JYHContentView: NSView, NSTextViewDelegate {
+class JYHArticleView: NSView, NSTextViewDelegate {
     
     var delegate: JYHContentViewDelegate?
     
@@ -30,7 +30,6 @@ class JYHContentView: NSView, NSTextViewDelegate {
     }
     
     func format() {
-        self.autoresizesSubviews = true
         layout()
     }
     
@@ -82,7 +81,7 @@ class JYHContentView: NSView, NSTextViewDelegate {
     func item(chapter: Chapter) -> NSScrollView {
         // 读取内容。
         do {
-            try works.readContentFile(chapter: chapter)
+            try works.readArticleFile(chapter: chapter)
         } catch {
             print(error)
         }
@@ -93,7 +92,7 @@ class JYHContentView: NSView, NSTextViewDelegate {
         
         let textView = scrollView.documentView as! JYHTextView
         textView.allowsUndo = true
-        textView.string = chapter.content
+        textView.textStorage?.append(chapter.article)
         textView.delegate = self
         textView.chapter = chapter
         views[chapter.creation] = scrollView
@@ -123,7 +122,7 @@ class JYHContentView: NSView, NSTextViewDelegate {
         self.delegate?.contentDidChange(chapter: view.chapter!)
         do {
             try works.writeOutlineFile()
-            try works.writeContentFile(chapter: view.chapter!)
+            try works.writeArticleFile(chapter: view.chapter!)
         } catch {
             print(error)
         }
@@ -133,7 +132,7 @@ class JYHContentView: NSView, NSTextViewDelegate {
         guard let v = view.documentView as? JYHTextView else {
             return
         }
-        guard let title = v.chapter?.title else {
+        guard let title = v.chapter?.content else {
             return
         }
         let s = "Content: " + title

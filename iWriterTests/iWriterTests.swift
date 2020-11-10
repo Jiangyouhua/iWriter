@@ -88,7 +88,7 @@ class iWriterTests: XCTestCase {
         // 判断是否符合预期
         XCTAssertEqual(catalog.level, 0)
         XCTAssertEqual(catalog.title, "")
-        XCTAssertEqual(catalog.info, "")
+        XCTAssertEqual(catalog.article, "")
         XCTAssertEqual(catalog.creation, 0)
         XCTAssertEqual(catalog.count, 0)
         
@@ -96,7 +96,7 @@ class iWriterTests: XCTestCase {
         // 赋值
         catalog.level = 1
         catalog.title = "Chapter 1"
-        catalog.info = "Chapter Info"
+        catalog.article = "Chapter Info"
         catalog.creation = 123456
         catalog.count = 3650
         
@@ -113,7 +113,7 @@ class iWriterTests: XCTestCase {
         // 判断是否符合预期
         XCTAssertEqual(catalog.level, temp.level)
         XCTAssertEqual(catalog.title, temp.title)
-        XCTAssertEqual(catalog.info, temp.info)
+        XCTAssertEqual(catalog.article, temp.article)
         XCTAssertEqual(catalog.creation, temp.creation)
         XCTAssertEqual(catalog.count, temp.count)
         
@@ -127,7 +127,7 @@ class iWriterTests: XCTestCase {
         // 判断是否符合预期
         XCTAssertEqual(catalog.level, 0)
         XCTAssertEqual(catalog.title, "")
-        XCTAssertEqual(catalog.info, "")
+        XCTAssertEqual(catalog.article, "")
         XCTAssertEqual(catalog.creation, 0)
         XCTAssertEqual(catalog.count, 0)
     }
@@ -276,7 +276,7 @@ class iWriterTests: XCTestCase {
         // Save File
         let catalog = Chapter()
         catalog.title = "Chapter title"
-        catalog.info = "Chapter info"
+        catalog.article = "Chapter info"
         catalog.creation = works.creationTime()
         works.catalogData.append(catalog)
         works.currentContentData = "Current Chapter Data"

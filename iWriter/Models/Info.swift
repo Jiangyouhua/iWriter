@@ -20,7 +20,6 @@ struct Info {
     var author: String                   // 作者。
     var version: String                  // 作者，前期使用iWriter，后期从设置中读取。
     var creation: Int                    // 创建时间，时间戮。
-    var saved: Bool                      // 是否被保存。
     var chapterEditingId: Int            // 正编辑的创建时间。
     var chapterSelection: Chapter        // 被选中的。
     var chapterOpened: [Chapter]         // 打开了的，不作序列化。
@@ -32,7 +31,6 @@ struct Info {
         self.author = ""
         self.version = ""
         self.creation = creationTime()
-        self.saved = false
         self.chapterEditingId = 0
         self.chapterSelection = Chapter()
         self.chapterOpened = [Chapter]()
@@ -46,7 +44,6 @@ struct Info {
         self.author = dictionary["author"] as? String ?? ""
         self.version = dictionary["version"] as? String ?? ""
         self.creation = dictionary["creation"] as? Int ?? 0
-        self.saved = dictionary["saved"] as? Bool ?? false
         self.chapterEditingId = dictionary["chapterEditing"] as? Int ?? 0
         self.chapterSelection = Chapter(dictionary: dictionary["chapterSelection"] as! [String : Any])
         self.chapterOpened = [Chapter]()
@@ -63,7 +60,6 @@ struct Info {
         dic["author"] = self.author
         dic["version"] = self.version
         dic["creation"] = self.creation
-        dic["saved"] = self.saved
         dic["chapterEditing"] = self.chapterEditingId
         dic["chapterSelection"] = self.chapterSelection.toDictionary()
         return dic

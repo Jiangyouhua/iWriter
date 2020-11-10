@@ -8,31 +8,34 @@
 
 import Cocoa
 
-protocol JYHBlockViewDelegate {
-    func blockTitleClicked(_ target: JYHBlockView)
+protocol JYHDictionaryViewDelegate {
+    func blockTitleClicked(_ target: JYHDictionaryView)
 }
 
-class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMenuDelegate{
+class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMenuDelegate{
     
+
     @IBOutlet var view: NSView!
     @IBOutlet weak var titleIconButton: NSButton!
-    @IBOutlet weak var titleTextButton: NSButton!
-    @IBOutlet weak var leftAddButton: NSButton!
-    @IBOutlet weak var rightAddButton: NSButton!
     @IBOutlet weak var horizontalLineView: JYHView!
+    @IBOutlet weak var dictionaryTextField: NSTextField!
     @IBOutlet weak var contentScrollView: NSScrollView!
+    @IBOutlet weak var previousButton: NSButton!
+    @IBOutlet weak var nextButton: NSButton!
+    
+    
     @IBOutlet weak var contentOutlineView: NSOutlineView!
     @IBOutlet weak var titleColumn: NSTableColumn!
     
-    /// Context Menu
     @IBOutlet var rightClickMenu: NSMenu!
+    /// Context Menu
     
     /// 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
     let works = (NSApp.delegate as! AppDelegate).works
     var data: [Model] = []
     var heights = [Int: CGFloat]()
     var node: Model?
-    var delegate: JYHBlockViewDelegate?
+    var delegate: JYHDictionaryViewDelegate?
     
     /// 添加按钮的状态， true为隐藏。
     var leftAddButtonState = true
@@ -42,29 +45,6 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     /// Title Icon clicked
     @IBAction func titleIconButtonClick(_ sender: Any) {
         self.delegate?.blockTitleClicked(self)
-    }
-    
-    /// Title Text clicked.
-    @IBAction func titleTextButtonClick(_ sender: Any) {
-        self.delegate?.blockTitleClicked(self)
-    }
-    
-    /// left Icon clicked.
-    @IBAction func leftAddButtonClick(_ sender: Any) {
-        leftButtonClicked(isSelect: true)
-    }
-    
-    /// right Icon clicked.
-    @IBAction func rightAddButtonClick(_ sender: Any) {
-        rightButtonClicked(isSelect: true)
-    }
-    
-    func leftButtonClicked(isSelect: Bool){
-        print(#function)
-    }
-    
-    func rightButtonClicked(isSelect: Bool){
-        print(#function)
     }
     
     // MARK:  Action - Context Clicked
@@ -109,6 +89,10 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
             return
         }
         
+        if model.parent == nil {
+            return
+        }
+        
         let i = model.countChildren()
         let alert = NSAlert()
         alert.addButton(withTitle: "Delete")
@@ -122,23 +106,10 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
             return
         }
         
-        if model.parent != nil {
-            _ = model.removeFromParent()
-            writeAndReloadList()
-            
-        } else {
-            _ = model.removeFromArray(&data)
-            removeItemFromData(data)
-        }
-
-    }
-    
-    func writeAndReloadList(_ item: Model? = nil){
-        print(#function)
-    }
-    
-    func removeItemFromData(_ data: [Model]){
-        print(#function)
+        var a = model.parent == nil ? data : model.children
+        _ = model.removeFromArray(&a)
+        try? works.writeNoteFile()
+        contentOutlineView.reloadData()
     }
     
     // MARK: View
@@ -156,7 +127,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     // 加载对应的视图。
     private func loadXib() {
         // 从图获取NSView。
-        Bundle.main.loadNibNamed("JYHBlockView", owner: self, topLevelObjects: nil)
+        Bundle.main.loadNibNamed("JYHDictionaryView", owner: self, topLevelObjects: nil)
         self.addSubview(self.view)
         
         // 表格处理。
@@ -182,20 +153,20 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         
         // LeftArea进入隐藏状态。
         if self.frame.size.width <= iconWidth {
-            titleTextButton.isHidden = true
-            leftAddButton.isHidden = true
-            rightAddButton.isHidden = true
+            dictionaryTextField.isHidden = true
+            previousButton.isHidden = true
+            nextButton.isHidden = true
             contentScrollView.isHidden = true
             horizontalLineView.isHidden = true
             return
         }
         
         // title上元素的显示。
-        titleTextButton.isHidden = false
+        dictionaryTextField.isHidden = false
+        previousButton.isHidden = false
+        nextButton.isHidden = false
         contentScrollView.isHidden = false
         horizontalLineView.isHidden = false
-        leftAddButton.isHidden = leftAddButtonState
-        rightAddButton.isHidden = rightAddButtonState
     }
     
     /// 界面处理。

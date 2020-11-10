@@ -22,7 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             // 从缓存读取。
             try works.openFilesFromCache()
-            NSApp.mainWindow?.title = works.info.file
+            NSApp.mainWindow?.title = works.info.title
             formatRecentOpenMenu()
         } catch let error as WorksError {
             // 显示提示窗。
