@@ -447,7 +447,7 @@ extension ViewController: JYHTitlesBarViewDelegate {
         articleBlockView.updateSearchAttributes(data: data, onlyRemove: false)
     }
     
-    func selectAndShow(chapter: Chapter, mark: Mark) {
+    func currentSearch(chapter: Chapter, mark: Mark) {
         // 更换章节。
         if works.info.chapterEditingId != chapter.creation {
             works.info.chapterEditingId = chapter.creation
@@ -457,19 +457,7 @@ extension ViewController: JYHTitlesBarViewDelegate {
         }
         
         DispatchQueue.main.async {
-            // 选择当前。
-            guard let view = self.articleBlockView.editing?.documentView as? JYHTextView else {
-                return
-            }
-            guard let article = view.textStorage else {
-                return
-            }
-            let r = NSRange(mark.articleRange, in: article.string)
-            view.setSelectedRange(r)
-            guard let rect = view.layoutManager?.boundingRect(forGlyphRange: r, in: view.textContainer!) else { return
-            }
-
-            view.scrollToVisible(CGRect(x: rect.origin.x - 100, y: rect.origin.y - 100, width: rect.size.width + 200, height: rect.size.height + 200))
+            self.articleBlockView.currentSearch(currentMark: mark)
         }
     }
 

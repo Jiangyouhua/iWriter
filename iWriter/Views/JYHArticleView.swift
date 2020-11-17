@@ -22,7 +22,8 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
     var active = false
     var views: Dictionary<Int, NSScrollView> = Dictionary<Int, NSScrollView>()
     var managers: Dictionary<Int, UndoManager> = Dictionary<Int, UndoManager>()
-    var search: Search?
+    var search: Search?  // 当前搜索。
+    var mark: Mark?  // 当前选择。
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -49,16 +50,17 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         }
         
         if search != nil {
-            article.removeAttribute(NSAttributedString.Key.backgroundColor, range: NSRange(location: 0, length: article.string.count))
+            // 移除搜索结果。
+            article.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: article.string.count))
 //            search?.marks.forEach({ mark in
-//                article.removeAttribute(NSAttributedString.Key.backgroundColor, range: NSRange(mark.articleRange, in: article.string))
+//                article.removeAttribute(.backgroundColor, range: NSRange(mark.articleRange, in: article.string))
 //            })
             if onlyRemove {
                 return
             }
         }
         item.marks.forEach({ mark in
-            article.setAttributes([NSAttributedString.Key.backgroundColor: NSColor.red], range: NSRange(mark.articleRange, in: article.string))
+            article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: NSRange(mark.articleRange, in: article.string))
         })
         search = item
     }
@@ -179,10 +181,43 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
     func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
         let paragraphStyle = NSMutableParagraphStyle()
         // 两个都赋值才能让光标与文字垂直居中对齐。
-        paragraphStyle.lineSpacing = 3.0
-        paragraphStyle.lineHeightMultiple = 1.2
+        paragraphStyle.lineSpacing = 10.0
+//        paragraphStyle.lineHeightMultiple = 2.0
 //        paragraphStyle.firstLineHeadIndent = 0
 //        paragraphStyle.paragraphSpacing = 1.0
-        textStorage.addAttributes([NSAttributedString.Key.paragraphStyle : paragraphStyle], range: editedRange)
+        textStorage.addAttributes([.paragraphStyle : paragraphStyle], range: editedRange)
+    }
+    
+    func currentSearch(currentMark: Mark){
+        // 选择当前。
+        guard let view = self.editing?.documentView as? JYHTextView else {
+            return
+        }
+        guard let article = view.textStorage else {
+            return
+        }
+        if mark != nil {
+            // 移除前一个。
+            let r = NSRange(mark!.articleRange, in: article.string)
+            article.setAttributes([.backgroundColor:NSColor.gray, .foregroundColor: NSColor.textColor], range: r)
+        }
+        // 显示当前。
+        let r = NSRange(currentMark.articleRange, in: article.string)
+//        article.setAttributes(<#T##attrs: [NSAttributedString.Key : Any]?##[NSAttributedString.Key : Any]?#>, range: <#T##NSRange#>)
+        useCustomBackground(range: r, article: article, view: view)
+        mark = currentMark
+        
+        // 定位。
+        guard let rect = view.layoutManager?.boundingRect(forGlyphRange: r, in: view.textContainer!) else { return
+        }
+        view.scrollToVisible(CGRect(x: rect.origin.x - 100, y: rect.origin.y - 100, width: rect.size.width + 200, height: rect.size.height + 200))
+    }
+    
+    // 使用自定义的下线改的圆角背景。
+    private func useCustomBackground(range: NSRange, article: NSTextStorage, view: NSTextView) {
+        article.setAttributes([.underlineStyle:NSUnderlineStyle.single.rawValue, .underlineColor: NSColor.yellow, .foregroundColor: NSColor.black], range: range)
+        let layout = JYHLayoutManager()
+        article.addLayoutManager(layout)
+        layout.addTextContainer(view.textContainer!)
     }
 }

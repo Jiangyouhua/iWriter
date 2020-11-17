@@ -61,6 +61,7 @@
 		784D27D422D704A7001CDEE1 /* 047画板 22.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27AD22D704A6001CDEE1 /* 047画板 22.png */; };
 		784F4DC52556CAB7004E6190 /* JYHDictionaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 784F4DC42556CAB7004E6190 /* JYHDictionaryView.xib */; };
 		784F4DCE2556CB00004E6190 /* JYHDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784F4DCD2556CB00004E6190 /* JYHDictionaryView.swift */; };
+		785E923E2562AB5300433903 /* JYHLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E923D2562AB5300433903 /* JYHLayoutManager.swift */; };
 		7873E4B0244F0D7900FC186B /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7873E4AF244F0D7900FC186B /* Cache.swift */; };
 		7880F26B25554D8C00E62425 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880F26A25554D8C00E62425 /* Model.swift */; };
 		788319172340E05F006FFD61 /* 037画板 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 788319162340E05F006FFD61 /* 037画板 1.png */; };
@@ -200,6 +201,7 @@
 		784D27AD22D704A6001CDEE1 /* 047画板 22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 22.png"; sourceTree = "<group>"; };
 		784F4DC42556CAB7004E6190 /* JYHDictionaryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JYHDictionaryView.xib; sourceTree = "<group>"; };
 		784F4DCD2556CB00004E6190 /* JYHDictionaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHDictionaryView.swift; sourceTree = "<group>"; };
+		785E923D2562AB5300433903 /* JYHLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHLayoutManager.swift; sourceTree = "<group>"; };
 		7873E4AF244F0D7900FC186B /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		7880F26A25554D8C00E62425 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		788319162340E05F006FFD61 /* 037画板 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1.png"; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 			children = (
 				78A96C7B22E4D43A00280327 /* JYHView.swift */,
 				780508D222E5C33300A36E18 /* JYHTextField.swift */,
+				785E923D2562AB5300433903 /* JYHLayoutManager.swift */,
 				78D386CD2522261900496EA9 /* JYHTitleTabView.swift */,
 				78D386CC2522261900496EA9 /* JYHTitleTabView.xib */,
 				78D386D82522265200496EA9 /* JYHTitlesBarView.swift */,
@@ -729,6 +732,7 @@
 				7884F6DC247158BD005FC6BF /* JYHIdeaView.swift in Sources */,
 				78B71ED92462D9F900EDACF4 /* JYHNoteView.swift in Sources */,
 				781B88212531C695006AB5DC /* JYHInfoView.swift in Sources */,
+				785E923E2562AB5300433903 /* JYHLayoutManager.swift in Sources */,
 				78B71EDF2462DA3400EDACF4 /* JYHSearchView.swift in Sources */,
 				78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */,
 				7812000522E4544C00C32B9E /* Extension.swift in Sources */,

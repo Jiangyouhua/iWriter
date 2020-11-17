@@ -316,29 +316,6 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         print(#function)
     }
     
-    // MARK: 转换器。
-    /// 字数转为字符显示。
-    func conversion(number: Int) -> String {
-        // 子集个数或字数。
-        if number < 10000 {
-            return String(number)
-        }
-        if number < 10000000 {
-            return  String(format: "%dK", number/1000)
-        }
-        return String(format: "%dM", number/1000000)
-    }
-    
-    /// 时间戳转为日期显示。
-    func conversion(time: Int) -> String {
-        let timeInterval = TimeInterval(time)
-        let date = Date.init(timeIntervalSince1970: timeInterval)
-        let dateFormat = DateFormatter()
-        dateFormat.locale = .current
-        dateFormat.dateFormat = "MM.dd"
-        return dateFormat.string(from: date)
-    }
-    
     func itemUpOrDown(isUp: Bool){
         let at = contentOutlineView.clickedRow
         guard let n = contentOutlineView.item(atRow: at) as? Model else {

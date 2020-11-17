@@ -11,7 +11,7 @@ import Cocoa
 protocol JYHSearchViewDelegate {
     func blockTitleClicked(_ target: JYHSearchView)
     func searchWord(_ word: String)
-    func selectAndShow(chapter: Chapter, mark: Mark)
+    func currentSearch(chapter: Chapter, mark: Mark)
 }
 
 class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMenuDelegate{
@@ -221,7 +221,7 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     
     private func attributeWith(mark: Mark) -> NSMutableAttributedString {
         let s = NSMutableAttributedString(string: mark.paragraph)
-        s.addAttributes([NSAttributedString.Key.backgroundColor: NSColor.systemOrange], range: NSRange(mark.paragraphRange, in: mark.paragraph))
+        s.addAttributes([NSAttributedString.Key.backgroundColor: NSColor.linkColor], range: NSRange(mark.paragraphRange, in: mark.paragraph))
         return s
     }
     
@@ -276,7 +276,7 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         guard let search = contentOutlineView.parent(forItem: item) as? Search else {
             return
         }
-        self.delegate?.selectAndShow(chapter: search.chapter, mark: mark)
+        self.delegate?.currentSearch(chapter: search.chapter, mark: mark)
     }
 
     /// 选择了表头。
@@ -293,29 +293,6 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     /// 双击当前行。
     @objc func rowDoubleClicked(_ sender: Any){
         print(#function)
-    }
-    
-    // MARK: 转换器。
-    /// 字数转为字符显示。
-    func conversion(number: Int) -> String {
-        // 子集个数或字数。
-        if number < 10000 {
-            return String(number)
-        }
-        if number < 10000000 {
-            return  String(format: "%dK", number/1000)
-        }
-        return String(format: "%dM", number/1000000)
-    }
-    
-    /// 时间戳转为日期显示。
-    func conversion(time: Int) -> String {
-        let timeInterval = TimeInterval(time)
-        let date = Date.init(timeIntervalSince1970: timeInterval)
-        let dateFormat = DateFormatter()
-        dateFormat.locale = .current
-        dateFormat.dateFormat = "MM.dd"
-        return dateFormat.string(from: date)
     }
     
     /// 按Note.children标志展开下一级。

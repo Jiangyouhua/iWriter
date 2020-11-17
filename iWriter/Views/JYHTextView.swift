@@ -13,6 +13,7 @@ class JYHTextView: NSTextView {
     var placeHolder: String = "Please enter ..."
     
     var chapter: Chapter?
+//    internal override var layoutManager: JYHLayoutManager?
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
