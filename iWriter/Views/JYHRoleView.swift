@@ -121,7 +121,6 @@ class JYHRoleView: JYHBlockView, NSTextFieldDelegate {
             cell.textField!.stringValue = role.content
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
-            cell.textField!.font = NSFont.systemFont(ofSize: 11)
 //            cell.imageView!.image = NSImage(named: NSImage.Name(role.gender))!
             return cell
         }

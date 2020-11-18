@@ -447,6 +447,13 @@ extension ViewController: JYHTitlesBarViewDelegate {
         articleBlockView.updateSearchAttributes(data: data, onlyRemove: false)
     }
     
+    func replaceWord(from: String, to: String, item: Any) {
+        if searchBlockView.contentOutlineView.numberOfRows == 0 {
+            return
+        }
+        articleBlockView.replaceWordWithSelected(from: from, to: to, item: item)
+    }
+    
     func currentSearch(chapter: Chapter, mark: Mark) {
         // 更换章节。
         if works.info.chapterEditingId != chapter.creation {

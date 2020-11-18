@@ -24,6 +24,7 @@ var windowSize = NSApp.windows.first!.contentViewController!.view.frame.size
 let iconWidth: CGFloat = 30                            // icon尺寸。
 let minAreaWidth: CGFloat = 200                        // 区块有效宽，小于该宽度则隐藏。
 let minBlockHeight: CGFloat = 120
+let articleFontSize: CGFloat = 12
 let cache = Cache()
 
 // MARK: 页面布局的定义。

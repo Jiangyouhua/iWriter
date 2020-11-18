@@ -114,7 +114,6 @@ class JYHNoteView: JYHBlockView, NSTextFieldDelegate {
             cell.textField!.stringValue = note.content
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
-            cell.textField!.font = NSFont.systemFont(ofSize: 11)
             cell.imageView!.image = outlineNodeImage(top: note.parent == nil, checked: note.checked)
             return cell
         }

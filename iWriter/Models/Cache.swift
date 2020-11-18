@@ -181,4 +181,19 @@ class Cache: NSObject {
         let key = "stateFromCache\(block)"
         defaults.set(value, forKey: key)
     }
+    
+    /// 设置文章字体大小。
+    func setArticleFontMultiple(_ value: CGFloat){
+        let key = "articleFontSize"
+        defaults.set(value, forKey: key)
+    }
+    
+    /// 获取文章字体大小。
+    func getArticleFontMultiple() -> CGFloat {
+        let key = "articleFontMultiple"
+        guard let value = defaults.value(forKey: key) as? CGFloat else {
+            return  1.0
+        }
+        return value
+    }
 }

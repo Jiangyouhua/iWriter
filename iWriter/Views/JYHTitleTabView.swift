@@ -69,9 +69,9 @@ class JYHTitleTabView: NSView {
         label.sizeToFit()
         
         // 设置尺寸适匹内容。
-        var width = 40 + label.frame.width
-        if width > 200 {
-            width = 200
+        var width = 50 + label.frame.width
+        if width > 250 {
+            width = 250
         }
         var frame = self.view.frame
         frame.size.width = width

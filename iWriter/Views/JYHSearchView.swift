@@ -11,6 +11,7 @@ import Cocoa
 protocol JYHSearchViewDelegate {
     func blockTitleClicked(_ target: JYHSearchView)
     func searchWord(_ word: String)
+    func replaceWord(from: String, to: String, item: Any)
     func currentSearch(chapter: Chapter, mark: Mark)
 }
 
@@ -40,6 +41,8 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         didSet{
             contentOutlineView.reloadData()
             contentOutlineView.expandItem(nil, expandChildren: true)
+            previousButton.isEnabled = data.count > 0
+            nextButton.isEnabled = data.count > 0
         }
     }
     var heights = [Int: CGFloat]()
@@ -64,11 +67,19 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     }
        
     @IBAction func replaceTextFieldSend(_ sender: Any) {
+        return
     }
+    
     @IBAction func previousButtonClicked(_ sender: Any) {
+        let row = previousRow(index: contentOutlineView.selectedRow)
+        contentOutlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+        contentOutlineView.scrollRowToVisible(row)
     }
     
     @IBAction func nextButtonClicked(_ sender: Any) {
+        let row = nextRow(index: contentOutlineView.selectedRow)
+        contentOutlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+        contentOutlineView.scrollRowToVisible(row)
     }
     
     @IBAction func toggleButtonClicked(_ sender: Any) {
@@ -78,6 +89,33 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     }
     
     @IBAction func replaceButtonClicked(_ sender: Any) {
+        guard let item = contentOutlineView.item(atRow: contentOutlineView.selectedRow) else {
+            return
+        }
+        self.delegate?.replaceWord(from: searchTextField.stringValue, to: replaceTextField.stringValue, item: item)
+        self.delegate?.searchWord(searchTextField.stringValue)
+    }
+    
+    func previousRow(index: Int) -> Int{
+        var row = index - 1
+        if row < 1 {
+            row = contentOutlineView.numberOfRows - 1
+        }
+        if (contentOutlineView.item(atRow: row) as? Search) != nil {
+            return previousRow(index: row)
+        }
+        return row
+    }
+    
+    func nextRow(index: Int) -> Int{
+        var row = index + 1
+        if row > contentOutlineView.numberOfRows - 1 {
+            row = 0
+        }
+        if (contentOutlineView.item(atRow: row) as? Search) != nil {
+            return nextRow(index: row)
+        }
+        return row
     }
     
     // MARK: View
@@ -117,7 +155,6 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         
         // LeftArea进入隐藏状态。
         if self.frame.size.width <= iconWidth {
-            replaceViewConstraint.constant = 0
             replaceView.isHidden = true
             searchTextField.isHidden = true
             previousButton.isHidden = true
@@ -129,7 +166,6 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         }
         
         // title上元素的显示。
-        replaceViewConstraint.constant = 26
         replaceView.isHidden = false
         searchTextField.isHidden = false
         previousButton.isHidden = false
@@ -209,6 +245,10 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
             return cell
         }
         return nil
+    }
+    
+    func outlineViewSelectionDidChange(_ notification: Notification){
+        tableViewDidSelectRow(contentOutlineView.selectedRow, contentOutlineView.selectedColumn, false)
     }
     
     private func titleWith(chapter: Model) -> String {

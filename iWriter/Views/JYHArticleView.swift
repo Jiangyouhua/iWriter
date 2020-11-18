@@ -36,35 +36,6 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         layout()
     }
     
-    func updateSearchAttributes(data: [Search], onlyRemove: Bool) {
-        guard let view = editing?.documentView as? JYHTextView else {
-            return
-        }
-        guard let article = view.textStorage else {
-            return
-        }
-        guard let item = data.filter({
-            return $0.chapter.creation == view.chapter?.creation
-        }).first else {
-            return
-        }
-        
-        if search != nil {
-            // 移除搜索结果。
-            article.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: article.string.count))
-//            search?.marks.forEach({ mark in
-//                article.removeAttribute(.backgroundColor, range: NSRange(mark.articleRange, in: article.string))
-//            })
-            if onlyRemove {
-                return
-            }
-        }
-        item.marks.forEach({ mark in
-            article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: NSRange(mark.articleRange, in: article.string))
-        })
-        search = item
-    }
-    
     override func layout(){
         if works.info.chapterOpened.count == 0 {
             self.subviews.forEach{$0.removeFromSuperview()}
@@ -125,7 +96,7 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         let textView = scrollView.documentView as! JYHTextView
         textView.allowsUndo = true
         textView.textContainerInset = NSSize(width: 10, height: 10)
-        textView.textStorage?.append(chapter.article)
+        textView.textStorage?.setAttributedString(chapter.article)
         textView.delegate = self
         textView.textStorage!.delegate = self
         textView.chapter = chapter
@@ -151,6 +122,10 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         guard let view = (editing?.documentView as? JYHTextView) else {
             return
         }
+        textDidChangeFrom(view: view)
+    }
+    
+    func textDidChangeFrom(view: JYHTextView) {
         view.chapter!.article = view.textStorage!
         view.chapter!.count = view.string.count
         works.saved = false
@@ -181,12 +156,79 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
     func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
         let paragraphStyle = NSMutableParagraphStyle()
         // 两个都赋值才能让光标与文字垂直居中对齐。
-        paragraphStyle.lineSpacing = 10.0
-//        paragraphStyle.lineHeightMultiple = 2.0
+//        paragraphStyle.lineSpacing = 3.0
+//        paragraphStyle.lineHeightMultiple = 1.2
 //        paragraphStyle.firstLineHeadIndent = 0
 //        paragraphStyle.paragraphSpacing = 1.0
         textStorage.addAttributes([.paragraphStyle : paragraphStyle], range: editedRange)
     }
+    
+    func updateSearchAttributes(data: [Search], onlyRemove: Bool) {
+        guard let view = editing?.documentView as? JYHTextView else {
+            return
+        }
+        guard let article = view.textStorage else {
+            return
+        }
+        guard let item = data.filter({
+            return $0.chapter.creation == view.chapter?.creation
+        }).first else {
+            return
+        }
+        
+        if search != nil {
+            // 移除搜索结果。
+            article.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: article.string.count))
+//            search?.marks.forEach({ mark in
+//                article.removeAttribute(.backgroundColor, range: NSRange(mark.articleRange, in: article.string))
+//            })
+            if onlyRemove {
+                return
+            }
+        }
+        item.marks.forEach({ mark in
+            article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: NSRange(mark.articleRange, in: article.string))
+        })
+        search = item
+    }
+    
+    func replaceWordWithSelected(from: String, to: String, item: Any){
+        guard let view = editing?.documentView as? JYHTextView else {
+            return
+        }
+        guard let article = view.textStorage else {
+            return
+        }
+        guard let manager = self.undoManager(for: view) else {
+            return
+        }
+        
+        // 实现Undo\Redo功能。
+        manager.registerUndo(withTarget: self) { target in
+            target.replaceWordWithSelected(from: to, to: from, item: item)
+        }
+        switch item {
+        case is Search:
+            let search = item as! Search
+            var i = 0
+                search.marks.forEach({ mark in
+                    var r = NSRange(mark.articleRange, in: article.string)
+                    r.location += i
+                    r.length = from.count
+                    article.replaceCharacters(in: r, with: to)
+                    i += (to.count - search.word.count)
+                })
+        case is Mark:
+            let mark = item as! Mark
+            var r = NSRange(mark.articleRange, in: article.string)
+            r.length = from.count
+            article.replaceCharacters(in: r, with: to)
+        default:
+            return
+        }
+        self.textDidChangeFrom(view: view)
+    }
+    
     
     func currentSearch(currentMark: Mark){
         // 选择当前。
@@ -199,12 +241,12 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         if mark != nil {
             // 移除前一个。
             let r = NSRange(mark!.articleRange, in: article.string)
-            article.setAttributes([.backgroundColor:NSColor.gray, .foregroundColor: NSColor.textColor], range: r)
+            article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: r)
         }
         // 显示当前。
         let r = NSRange(currentMark.articleRange, in: article.string)
-//        article.setAttributes(<#T##attrs: [NSAttributedString.Key : Any]?##[NSAttributedString.Key : Any]?#>, range: <#T##NSRange#>)
-        useCustomBackground(range: r, article: article, view: view)
+        article.setAttributes([.backgroundColor:  NSColor.yellow, .foregroundColor: NSColor.black], range: r)
+//        useCustomBackground(range: r, article: article, view: view)
         mark = currentMark
         
         // 定位。

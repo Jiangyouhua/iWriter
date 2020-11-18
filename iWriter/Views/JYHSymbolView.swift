@@ -121,7 +121,6 @@ class JYHSymbolView: JYHBlockView , NSTextFieldDelegate {
             cell.textField!.stringValue = symbol.content
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
-            cell.textField!.font = NSFont.systemFont(ofSize: 11)
 //            cell.imageView!.image = NSImage(named: NSImage.Name(symbol.gender))!
             return cell
         }

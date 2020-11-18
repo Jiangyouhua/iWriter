@@ -207,7 +207,6 @@ class JYHCatalogView: JYHBlockView {
             cell.textField!.stringValue = chapter.content
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
-            cell.textField!.font = NSFont.systemFont(ofSize: 11)
             cell.imageView!.image = outlineNodeImage(top: chapter.parent == nil, leaf: chapter.leaf)
             return cell
         }

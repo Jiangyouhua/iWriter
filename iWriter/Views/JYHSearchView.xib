@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,19 +31,19 @@
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="3hf-Oj-rNd" customClass="JYHView" customModule="iWriter" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="81" width="202" height="1"/>
+                    <rect key="frame" x="0.0" y="107" width="202" height="1"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="t02-Ff-J0r"/>
                     </constraints>
                 </customView>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="23" horizontalPageScroll="10" verticalLineScroll="23" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RkE-TJ-gx9">
-                    <rect key="frame" x="0.0" y="0.0" width="202" height="81"/>
+                    <rect key="frame" x="0.0" y="0.0" width="202" height="107"/>
                     <clipView key="contentView" drawsBackground="NO" id="8Y4-K0-A7T">
-                        <rect key="frame" x="0.0" y="0.0" width="202" height="81"/>
+                        <rect key="frame" x="0.0" y="0.0" width="202" height="107"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowHeight="21" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="EdA-nY-apr" id="dbv-QJ-QCa">
-                                <rect key="frame" x="0.0" y="0.0" width="202" height="81"/>
+                                <rect key="frame" x="0.0" y="0.0" width="202" height="107"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
@@ -71,10 +71,10 @@
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="Z9t-Yp-aSo"/>
                                                     </imageView>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GhJ-ll-pWi">
-                                                        <rect key="frame" x="25" y="0.0" width="121" height="17"/>
+                                                        <rect key="frame" x="25" y="0.0" width="121" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="charWrapping" sendsActionOnEndEditing="YES" title="title" id="Y5m-Qy-lov">
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -121,7 +121,7 @@
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="Ili-Ry-TEp"/>
                         <constraint firstAttribute="width" constant="23" id="kCl-iC-bei"/>
                     </constraints>
-                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarGoBackTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tmn-Qn-W2C">
+                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarGoBackTemplate" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tmn-Qn-W2C">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -135,7 +135,7 @@
                         <constraint firstAttribute="width" constant="23" id="UrM-4e-5rf"/>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="tFW-65-DnY"/>
                     </constraints>
-                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarGoForwardTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ql3-gh-GV6">
+                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarGoForwardTemplate" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ql3-gh-GV6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -144,10 +144,10 @@
                     </connections>
                 </button>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="F3n-eE-dWy">
-                    <rect key="frame" x="0.0" y="82" width="202" height="26"/>
+                    <rect key="frame" x="0.0" y="108" width="202" height="0.0"/>
                     <subviews>
                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kmP-pg-lvy">
-                            <rect key="frame" x="30" y="5" width="87" height="21"/>
+                            <rect key="frame" x="30" y="-21" width="87" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="H2o-rL-UtV"/>
                             </constraints>
@@ -161,7 +161,7 @@
                             </connections>
                         </textField>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="syl-Ro-4bW">
-                            <rect key="frame" x="116" y="-2" width="82" height="32"/>
+                            <rect key="frame" x="116" y="-28" width="82" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="70" id="yn6-jP-tAZ"/>
                             </constraints>
@@ -181,7 +181,7 @@
                         <constraint firstItem="kmP-pg-lvy" firstAttribute="top" secondItem="F3n-eE-dWy" secondAttribute="top" id="TNY-35-ykP"/>
                         <constraint firstAttribute="trailing" secondItem="syl-Ro-4bW" secondAttribute="trailing" constant="10" id="cOh-0O-yxC"/>
                         <constraint firstItem="kmP-pg-lvy" firstAttribute="leading" secondItem="F3n-eE-dWy" secondAttribute="leading" constant="30" id="luM-pX-BkV"/>
-                        <constraint firstAttribute="height" constant="26" id="y3B-Oa-HqT"/>
+                        <constraint firstAttribute="height" id="y3B-Oa-HqT"/>
                     </constraints>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Ab-c2-PhW">
@@ -189,7 +189,7 @@
                     <constraints>
                         <constraint firstAttribute="width" constant="23" id="XKA-yL-SCE"/>
                     </constraints>
-                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarGoDownTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i0T-J3-xOd">
+                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarGoUpTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i0T-J3-xOd">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -245,8 +245,8 @@
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSTouchBarGoBackTemplate" width="10" height="30"/>
-        <image name="NSTouchBarGoDownTemplate" width="16" height="30"/>
         <image name="NSTouchBarGoForwardTemplate" width="10" height="30"/>
+        <image name="NSTouchBarGoUpTemplate" width="16" height="30"/>
         <image name="Search" width="16" height="16"/>
     </resources>
 </document>
