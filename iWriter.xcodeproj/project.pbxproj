@@ -20,52 +20,12 @@
 		782344FD2449D1DB006DDF85 /* Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782344FC2449D1DB006DDF85 /* Define.swift */; };
 		7832601C245466F600F13658 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7832601B245466F600F13658 /* Note.swift */; };
 		7840B81C251CDDFD00D065FC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840B81B251CDDFD00D065FC /* MainWindowController.swift */; };
-		784D27AE22D704A7001CDEE1 /* 047画板 12.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278722D7049B001CDEE1 /* 047画板 12.png */; };
-		784D27AF22D704A7001CDEE1 /* 047画板 21@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278822D7049B001CDEE1 /* 047画板 21@0.5x.png */; };
-		784D27B022D704A7001CDEE1 /* 047画板 11.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278922D7049B001CDEE1 /* 047画板 11.png */; };
-		784D27B122D704A7001CDEE1 /* 047画板 17@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278A22D7049B001CDEE1 /* 047画板 17@0.5x.png */; };
-		784D27B222D704A7001CDEE1 /* 047画板 13@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278B22D7049C001CDEE1 /* 047画板 13@1.5x.png */; };
-		784D27B322D704A7001CDEE1 /* 047画板 14.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278C22D7049C001CDEE1 /* 047画板 14.png */; };
-		784D27B422D704A7001CDEE1 /* 047画板 13@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278D22D7049C001CDEE1 /* 047画板 13@0.5x.png */; };
-		784D27B522D704A7001CDEE1 /* 047画板 20@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278E22D7049C001CDEE1 /* 047画板 20@1.5x.png */; };
-		784D27B622D704A7001CDEE1 /* 047画板 18.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D278F22D7049C001CDEE1 /* 047画板 18.png */; };
-		784D27B722D704A7001CDEE1 /* 047画板 13.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279022D7049D001CDEE1 /* 047画板 13.png */; };
-		784D27B822D704A7001CDEE1 /* 047画板 17@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279122D7049D001CDEE1 /* 047画板 17@1.5x.png */; };
-		784D27B922D704A7001CDEE1 /* 047画板 19.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279222D7049D001CDEE1 /* 047画板 19.png */; };
-		784D27BA22D704A7001CDEE1 /* 047画板 23@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279322D7049D001CDEE1 /* 047画板 23@1.5x.png */; };
-		784D27BB22D704A7001CDEE1 /* 047画板 15@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279422D7049D001CDEE1 /* 047画板 15@1.5x.png */; };
-		784D27BC22D704A7001CDEE1 /* 047画板 20.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279522D7049E001CDEE1 /* 047画板 20.png */; };
-		784D27BD22D704A7001CDEE1 /* 047画板 14@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279622D7049E001CDEE1 /* 047画板 14@1.5x.png */; };
-		784D27BE22D704A7001CDEE1 /* 047画板 18@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279722D7049F001CDEE1 /* 047画板 18@0.5x.png */; };
-		784D27BF22D704A7001CDEE1 /* 047画板 17.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279822D7049F001CDEE1 /* 047画板 17.png */; };
-		784D27C022D704A7001CDEE1 /* 047画板 11@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279922D7049F001CDEE1 /* 047画板 11@0.5x.png */; };
-		784D27C122D704A7001CDEE1 /* 047画板 18@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279A22D704A0001CDEE1 /* 047画板 18@1.5x.png */; };
-		784D27C222D704A7001CDEE1 /* 047画板 22@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279B22D704A0001CDEE1 /* 047画板 22@0.5x.png */; };
-		784D27C322D704A7001CDEE1 /* 047画板 21@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279C22D704A0001CDEE1 /* 047画板 21@1.5x.png */; };
-		784D27C422D704A7001CDEE1 /* 047画板 11@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279D22D704A0001CDEE1 /* 047画板 11@1.5x.png */; };
-		784D27C522D704A7001CDEE1 /* 047画板 14@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279E22D704A1001CDEE1 /* 047画板 14@0.5x.png */; };
-		784D27C622D704A7001CDEE1 /* 047画板 16@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D279F22D704A1001CDEE1 /* 047画板 16@0.5x.png */; };
-		784D27C722D704A7001CDEE1 /* 047画板 12@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A022D704A2001CDEE1 /* 047画板 12@1.5x.png */; };
-		784D27C822D704A7001CDEE1 /* 047画板 16@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A122D704A3001CDEE1 /* 047画板 16@1.5x.png */; };
-		784D27C922D704A7001CDEE1 /* 047画板 12@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A222D704A3001CDEE1 /* 047画板 12@0.5x.png */; };
-		784D27CA22D704A7001CDEE1 /* 047画板 19@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A322D704A3001CDEE1 /* 047画板 19@1.5x.png */; };
-		784D27CB22D704A7001CDEE1 /* 047画板 21.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A422D704A4001CDEE1 /* 047画板 21.png */; };
-		784D27CC22D704A7001CDEE1 /* 047画板 16.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A522D704A4001CDEE1 /* 047画板 16.png */; };
-		784D27CD22D704A7001CDEE1 /* 047画板 20@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A622D704A5001CDEE1 /* 047画板 20@0.5x.png */; };
-		784D27CE22D704A7001CDEE1 /* 047画板 22@1.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A722D704A5001CDEE1 /* 047画板 22@1.5x.png */; };
-		784D27CF22D704A7001CDEE1 /* 047画板 23.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A822D704A5001CDEE1 /* 047画板 23.png */; };
-		784D27D022D704A7001CDEE1 /* 047画板 15.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27A922D704A5001CDEE1 /* 047画板 15.png */; };
-		784D27D122D704A7001CDEE1 /* 047画板 19@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27AA22D704A6001CDEE1 /* 047画板 19@0.5x.png */; };
-		784D27D222D704A7001CDEE1 /* 047画板 23@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27AB22D704A6001CDEE1 /* 047画板 23@0.5x.png */; };
-		784D27D322D704A7001CDEE1 /* 047画板 15@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27AC22D704A6001CDEE1 /* 047画板 15@0.5x.png */; };
-		784D27D422D704A7001CDEE1 /* 047画板 22.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D27AD22D704A6001CDEE1 /* 047画板 22.png */; };
+		784ABC6F257A5A9B008A4747 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784ABC6E257A5A9B008A4747 /* Database.swift */; };
 		784F4DC52556CAB7004E6190 /* JYHDictionaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 784F4DC42556CAB7004E6190 /* JYHDictionaryView.xib */; };
 		784F4DCE2556CB00004E6190 /* JYHDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784F4DCD2556CB00004E6190 /* JYHDictionaryView.swift */; };
 		785E923E2562AB5300433903 /* JYHLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E923D2562AB5300433903 /* JYHLayoutManager.swift */; };
 		7873E4B0244F0D7900FC186B /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7873E4AF244F0D7900FC186B /* Cache.swift */; };
 		7880F26B25554D8C00E62425 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880F26A25554D8C00E62425 /* Model.swift */; };
-		788319172340E05F006FFD61 /* 037画板 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 788319162340E05F006FFD61 /* 037画板 1.png */; };
-		78845520241C787700F2C971 /* DragItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884551F241C787700F2C971 /* DragItem.swift */; };
 		7884F6DC247158BD005FC6BF /* JYHIdeaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884F6DB247158BD005FC6BF /* JYHIdeaView.swift */; };
 		7884F6E524740031005FC6BF /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 7884F6E424740031005FC6BF /* index.html */; };
 		7899CC742558EDD8003892D2 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7899CC732558EDD8003892D2 /* Search.swift */; };
@@ -79,12 +39,7 @@
 		78B71EDB2462DA0C00EDACF4 /* JYHRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B71EDA2462DA0C00EDACF4 /* JYHRoleView.swift */; };
 		78B71EDD2462DA1D00EDACF4 /* JYHSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B71EDC2462DA1D00EDACF4 /* JYHSymbolView.swift */; };
 		78B71EDF2462DA3400EDACF4 /* JYHSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B71EDE2462DA3400EDACF4 /* JYHSearchView.swift */; };
-		78C1017522D5FEA10073416E /* 037画板 1@16x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1015722D5FE9C0073416E /* 037画板 1@16x.png */; };
-		78C1018122D5FEA10073416E /* 037画板 1@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1016322D5FE9E0073416E /* 037画板 1@4x.png */; };
-		78C1018A22D5FEA10073416E /* 037画板 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1016C22D5FE9F0073416E /* 037画板 1@2x.png */; };
-		78C1018D22D5FEA10073416E /* 037画板 1@0.5x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1016F22D5FE9F0073416E /* 037画板 1@0.5x.png */; };
-		78C1018E22D5FEA10073416E /* 037画板 1@32x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017022D5FE9F0073416E /* 037画板 1@32x.png */; };
-		78C1018F22D5FEA10073416E /* 037画板 1@8x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C1017122D5FEA00073416E /* 037画板 1@8x.png */; };
+		78C1FDDC257FAB6600625506 /* foo.db in Resources */ = {isa = PBXBuildFile; fileRef = 78C1FDD8257FAB5200625506 /* foo.db */; };
 		78D386CE2522261900496EA9 /* JYHTitleTabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D386CC2522261900496EA9 /* JYHTitleTabView.xib */; };
 		78D386CF2522261900496EA9 /* JYHTitleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386CD2522261900496EA9 /* JYHTitleTabView.swift */; };
 		78D386D92522265200496EA9 /* JYHTitlesBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386D82522265200496EA9 /* JYHTitlesBarView.swift */; };
@@ -160,52 +115,12 @@
 		782344FC2449D1DB006DDF85 /* Define.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Define.swift; sourceTree = "<group>"; };
 		7832601B245466F600F13658 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		7840B81B251CDDFD00D065FC /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
-		784D278722D7049B001CDEE1 /* 047画板 12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 12.png"; sourceTree = "<group>"; };
-		784D278822D7049B001CDEE1 /* 047画板 21@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 21@0.5x.png"; sourceTree = "<group>"; };
-		784D278922D7049B001CDEE1 /* 047画板 11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 11.png"; sourceTree = "<group>"; };
-		784D278A22D7049B001CDEE1 /* 047画板 17@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 17@0.5x.png"; sourceTree = "<group>"; };
-		784D278B22D7049C001CDEE1 /* 047画板 13@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 13@1.5x.png"; sourceTree = "<group>"; };
-		784D278C22D7049C001CDEE1 /* 047画板 14.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 14.png"; sourceTree = "<group>"; };
-		784D278D22D7049C001CDEE1 /* 047画板 13@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 13@0.5x.png"; sourceTree = "<group>"; };
-		784D278E22D7049C001CDEE1 /* 047画板 20@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 20@1.5x.png"; sourceTree = "<group>"; };
-		784D278F22D7049C001CDEE1 /* 047画板 18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 18.png"; sourceTree = "<group>"; };
-		784D279022D7049D001CDEE1 /* 047画板 13.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 13.png"; sourceTree = "<group>"; };
-		784D279122D7049D001CDEE1 /* 047画板 17@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 17@1.5x.png"; sourceTree = "<group>"; };
-		784D279222D7049D001CDEE1 /* 047画板 19.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 19.png"; sourceTree = "<group>"; };
-		784D279322D7049D001CDEE1 /* 047画板 23@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 23@1.5x.png"; sourceTree = "<group>"; };
-		784D279422D7049D001CDEE1 /* 047画板 15@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 15@1.5x.png"; sourceTree = "<group>"; };
-		784D279522D7049E001CDEE1 /* 047画板 20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 20.png"; sourceTree = "<group>"; };
-		784D279622D7049E001CDEE1 /* 047画板 14@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 14@1.5x.png"; sourceTree = "<group>"; };
-		784D279722D7049F001CDEE1 /* 047画板 18@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 18@0.5x.png"; sourceTree = "<group>"; };
-		784D279822D7049F001CDEE1 /* 047画板 17.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 17.png"; sourceTree = "<group>"; };
-		784D279922D7049F001CDEE1 /* 047画板 11@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 11@0.5x.png"; sourceTree = "<group>"; };
-		784D279A22D704A0001CDEE1 /* 047画板 18@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 18@1.5x.png"; sourceTree = "<group>"; };
-		784D279B22D704A0001CDEE1 /* 047画板 22@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 22@0.5x.png"; sourceTree = "<group>"; };
-		784D279C22D704A0001CDEE1 /* 047画板 21@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 21@1.5x.png"; sourceTree = "<group>"; };
-		784D279D22D704A0001CDEE1 /* 047画板 11@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 11@1.5x.png"; sourceTree = "<group>"; };
-		784D279E22D704A1001CDEE1 /* 047画板 14@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 14@0.5x.png"; sourceTree = "<group>"; };
-		784D279F22D704A1001CDEE1 /* 047画板 16@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 16@0.5x.png"; sourceTree = "<group>"; };
-		784D27A022D704A2001CDEE1 /* 047画板 12@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 12@1.5x.png"; sourceTree = "<group>"; };
-		784D27A122D704A3001CDEE1 /* 047画板 16@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 16@1.5x.png"; sourceTree = "<group>"; };
-		784D27A222D704A3001CDEE1 /* 047画板 12@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 12@0.5x.png"; sourceTree = "<group>"; };
-		784D27A322D704A3001CDEE1 /* 047画板 19@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 19@1.5x.png"; sourceTree = "<group>"; };
-		784D27A422D704A4001CDEE1 /* 047画板 21.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 21.png"; sourceTree = "<group>"; };
-		784D27A522D704A4001CDEE1 /* 047画板 16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 16.png"; sourceTree = "<group>"; };
-		784D27A622D704A5001CDEE1 /* 047画板 20@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 20@0.5x.png"; sourceTree = "<group>"; };
-		784D27A722D704A5001CDEE1 /* 047画板 22@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 22@1.5x.png"; sourceTree = "<group>"; };
-		784D27A822D704A5001CDEE1 /* 047画板 23.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 23.png"; sourceTree = "<group>"; };
-		784D27A922D704A5001CDEE1 /* 047画板 15.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 15.png"; sourceTree = "<group>"; };
-		784D27AA22D704A6001CDEE1 /* 047画板 19@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 19@0.5x.png"; sourceTree = "<group>"; };
-		784D27AB22D704A6001CDEE1 /* 047画板 23@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 23@0.5x.png"; sourceTree = "<group>"; };
-		784D27AC22D704A6001CDEE1 /* 047画板 15@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 15@0.5x.png"; sourceTree = "<group>"; };
-		784D27AD22D704A6001CDEE1 /* 047画板 22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "047画板 22.png"; sourceTree = "<group>"; };
+		784ABC6E257A5A9B008A4747 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		784F4DC42556CAB7004E6190 /* JYHDictionaryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JYHDictionaryView.xib; sourceTree = "<group>"; };
 		784F4DCD2556CB00004E6190 /* JYHDictionaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHDictionaryView.swift; sourceTree = "<group>"; };
 		785E923D2562AB5300433903 /* JYHLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHLayoutManager.swift; sourceTree = "<group>"; };
 		7873E4AF244F0D7900FC186B /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		7880F26A25554D8C00E62425 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		788319162340E05F006FFD61 /* 037画板 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1.png"; sourceTree = "<group>"; };
-		7884551F241C787700F2C971 /* DragItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragItem.swift; sourceTree = "<group>"; };
 		7884F6DB247158BD005FC6BF /* JYHIdeaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHIdeaView.swift; sourceTree = "<group>"; };
 		7884F6E424740031005FC6BF /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		7899CC732558EDD8003892D2 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
@@ -219,12 +134,7 @@
 		78B71EDA2462DA0C00EDACF4 /* JYHRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHRoleView.swift; sourceTree = "<group>"; };
 		78B71EDC2462DA1D00EDACF4 /* JYHSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHSymbolView.swift; sourceTree = "<group>"; };
 		78B71EDE2462DA3400EDACF4 /* JYHSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHSearchView.swift; sourceTree = "<group>"; };
-		78C1015722D5FE9C0073416E /* 037画板 1@16x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@16x.png"; sourceTree = "<group>"; };
-		78C1016322D5FE9E0073416E /* 037画板 1@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@4x.png"; sourceTree = "<group>"; };
-		78C1016C22D5FE9F0073416E /* 037画板 1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@2x.png"; sourceTree = "<group>"; };
-		78C1016F22D5FE9F0073416E /* 037画板 1@0.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@0.5x.png"; sourceTree = "<group>"; };
-		78C1017022D5FE9F0073416E /* 037画板 1@32x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@32x.png"; sourceTree = "<group>"; };
-		78C1017122D5FEA00073416E /* 037画板 1@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "037画板 1@8x.png"; sourceTree = "<group>"; };
+		78C1FDD8257FAB5200625506 /* foo.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = foo.db; sourceTree = "<group>"; };
 		78D386CC2522261900496EA9 /* JYHTitleTabView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JYHTitleTabView.xib; sourceTree = "<group>"; };
 		78D386CD2522261900496EA9 /* JYHTitleTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTitleTabView.swift; sourceTree = "<group>"; };
 		78D386D82522265200496EA9 /* JYHTitlesBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTitlesBarView.swift; sourceTree = "<group>"; };
@@ -407,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				78FB477E22D4389B00A9F4AF /* ModelDelegate.swift */,
+				784ABC6E257A5A9B008A4747 /* Database.swift */,
 				78FB477422D4383900A9F4AF /* Info.swift */,
 				7880F26A25554D8C00E62425 /* Model.swift */,
 				78FB477622D4384800A9F4AF /* Chapter.swift */,
@@ -414,7 +325,6 @@
 				78FB477822D4385700A9F4AF /* Role.swift */,
 				78FB477A22D4386200A9F4AF /* Symbol.swift */,
 				7899CC732558EDD8003892D2 /* Search.swift */,
-				7884551F241C787700F2C971 /* DragItem.swift */,
 				782344FC2449D1DB006DDF85 /* Define.swift */,
 				7873E4AF244F0D7900FC186B /* Cache.swift */,
 			);
@@ -432,52 +342,7 @@
 		78FB477122D437D700A9F4AF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				784D278922D7049B001CDEE1 /* 047画板 11.png */,
-				784D279922D7049F001CDEE1 /* 047画板 11@0.5x.png */,
-				784D279D22D704A0001CDEE1 /* 047画板 11@1.5x.png */,
-				784D278722D7049B001CDEE1 /* 047画板 12.png */,
-				784D27A222D704A3001CDEE1 /* 047画板 12@0.5x.png */,
-				784D27A022D704A2001CDEE1 /* 047画板 12@1.5x.png */,
-				784D279022D7049D001CDEE1 /* 047画板 13.png */,
-				784D278D22D7049C001CDEE1 /* 047画板 13@0.5x.png */,
-				784D278B22D7049C001CDEE1 /* 047画板 13@1.5x.png */,
-				784D278C22D7049C001CDEE1 /* 047画板 14.png */,
-				784D279E22D704A1001CDEE1 /* 047画板 14@0.5x.png */,
-				784D279622D7049E001CDEE1 /* 047画板 14@1.5x.png */,
-				784D27A922D704A5001CDEE1 /* 047画板 15.png */,
-				784D27AC22D704A6001CDEE1 /* 047画板 15@0.5x.png */,
-				784D279422D7049D001CDEE1 /* 047画板 15@1.5x.png */,
-				784D27A522D704A4001CDEE1 /* 047画板 16.png */,
-				784D279F22D704A1001CDEE1 /* 047画板 16@0.5x.png */,
-				784D27A122D704A3001CDEE1 /* 047画板 16@1.5x.png */,
-				784D279822D7049F001CDEE1 /* 047画板 17.png */,
-				784D278A22D7049B001CDEE1 /* 047画板 17@0.5x.png */,
-				784D279122D7049D001CDEE1 /* 047画板 17@1.5x.png */,
-				784D278F22D7049C001CDEE1 /* 047画板 18.png */,
-				784D279722D7049F001CDEE1 /* 047画板 18@0.5x.png */,
-				784D279A22D704A0001CDEE1 /* 047画板 18@1.5x.png */,
-				784D279222D7049D001CDEE1 /* 047画板 19.png */,
-				784D27AA22D704A6001CDEE1 /* 047画板 19@0.5x.png */,
-				784D27A322D704A3001CDEE1 /* 047画板 19@1.5x.png */,
-				784D279522D7049E001CDEE1 /* 047画板 20.png */,
-				784D27A622D704A5001CDEE1 /* 047画板 20@0.5x.png */,
-				784D278E22D7049C001CDEE1 /* 047画板 20@1.5x.png */,
-				784D27A422D704A4001CDEE1 /* 047画板 21.png */,
-				784D278822D7049B001CDEE1 /* 047画板 21@0.5x.png */,
-				784D279C22D704A0001CDEE1 /* 047画板 21@1.5x.png */,
-				784D27AD22D704A6001CDEE1 /* 047画板 22.png */,
-				784D279B22D704A0001CDEE1 /* 047画板 22@0.5x.png */,
-				784D27A722D704A5001CDEE1 /* 047画板 22@1.5x.png */,
-				784D27A822D704A5001CDEE1 /* 047画板 23.png */,
-				784D27AB22D704A6001CDEE1 /* 047画板 23@0.5x.png */,
-				788319162340E05F006FFD61 /* 037画板 1.png */,
-				784D279322D7049D001CDEE1 /* 047画板 23@1.5x.png */,
-				78C1016F22D5FE9F0073416E /* 037画板 1@0.5x.png */,
-				78C1016C22D5FE9F0073416E /* 037画板 1@2x.png */,
-				78C1016322D5FE9E0073416E /* 037画板 1@4x.png */,
-				78C1017122D5FEA00073416E /* 037画板 1@8x.png */,
-				78C1015722D5FE9C0073416E /* 037画板 1@16x.png */,
-				78C1017022D5FE9F0073416E /* 037画板 1@32x.png */,
+				78C1FDD8257FAB5200625506 /* foo.db */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -644,61 +509,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				784D27C922D704A7001CDEE1 /* 047画板 12@0.5x.png in Resources */,
-				784D27CF22D704A7001CDEE1 /* 047画板 23.png in Resources */,
+				78C1FDDC257FAB6600625506 /* foo.db in Resources */,
 				781C728F2358890A00763F04 /* RoleWindowController.xib in Resources */,
-				784D27B922D704A7001CDEE1 /* 047画板 19.png in Resources */,
-				784D27B122D704A7001CDEE1 /* 047画板 17@0.5x.png in Resources */,
-				784D27CE22D704A7001CDEE1 /* 047画板 22@1.5x.png in Resources */,
-				78C1018D22D5FEA10073416E /* 037画板 1@0.5x.png in Resources */,
 				78FB474722D4365900A9F4AF /* Assets.xcassets in Resources */,
-				78C1018122D5FEA10073416E /* 037画板 1@4x.png in Resources */,
-				784D27CB22D704A7001CDEE1 /* 047画板 21.png in Resources */,
-				784D27B322D704A7001CDEE1 /* 047画板 14.png in Resources */,
 				784F4DC52556CAB7004E6190 /* JYHDictionaryView.xib in Resources */,
-				784D27B822D704A7001CDEE1 /* 047画板 17@1.5x.png in Resources */,
-				78C1018F22D5FEA10073416E /* 037画板 1@8x.png in Resources */,
-				784D27BB22D704A7001CDEE1 /* 047画板 15@1.5x.png in Resources */,
-				784D27D322D704A7001CDEE1 /* 047画板 15@0.5x.png in Resources */,
 				78B71ED32459CA2B00EDACF4 /* JYHOutlineView.xib in Resources */,
-				784D27C322D704A7001CDEE1 /* 047画板 21@1.5x.png in Resources */,
-				784D27BC22D704A7001CDEE1 /* 047画板 20.png in Resources */,
-				784D27BD22D704A7001CDEE1 /* 047画板 14@1.5x.png in Resources */,
-				784D27AF22D704A7001CDEE1 /* 047画板 21@0.5x.png in Resources */,
-				784D27C222D704A7001CDEE1 /* 047画板 22@0.5x.png in Resources */,
-				784D27C722D704A7001CDEE1 /* 047画板 12@1.5x.png in Resources */,
-				784D27B722D704A7001CDEE1 /* 047画板 13.png in Resources */,
-				784D27C622D704A7001CDEE1 /* 047画板 16@0.5x.png in Resources */,
-				784D27D022D704A7001CDEE1 /* 047画板 15.png in Resources */,
-				784D27D122D704A7001CDEE1 /* 047画板 19@0.5x.png in Resources */,
-				78C1018A22D5FEA10073416E /* 037画板 1@2x.png in Resources */,
 				78D386CE2522261900496EA9 /* JYHTitleTabView.xib in Resources */,
-				784D27B522D704A7001CDEE1 /* 047画板 20@1.5x.png in Resources */,
 				78B71ECF2459BDCA00EDACF4 /* JYHBlockView.xib in Resources */,
-				784D27B622D704A7001CDEE1 /* 047画板 18.png in Resources */,
-				784D27C122D704A7001CDEE1 /* 047画板 18@1.5x.png in Resources */,
-				784D27CA22D704A7001CDEE1 /* 047画板 19@1.5x.png in Resources */,
-				784D27CD22D704A7001CDEE1 /* 047画板 20@0.5x.png in Resources */,
-				784D27BF22D704A7001CDEE1 /* 047画板 17.png in Resources */,
 				78F5229A2557867700F42E1C /* JYHSearchView.xib in Resources */,
-				784D27C522D704A7001CDEE1 /* 047画板 14@0.5x.png in Resources */,
-				78C1017522D5FEA10073416E /* 037画板 1@16x.png in Resources */,
-				784D27CC22D704A7001CDEE1 /* 047画板 16.png in Resources */,
-				784D27C822D704A7001CDEE1 /* 047画板 16@1.5x.png in Resources */,
 				7884F6E524740031005FC6BF /* index.html in Resources */,
-				784D27D422D704A7001CDEE1 /* 047画板 22.png in Resources */,
-				784D27C422D704A7001CDEE1 /* 047画板 11@1.5x.png in Resources */,
-				784D27B422D704A7001CDEE1 /* 047画板 13@0.5x.png in Resources */,
-				784D27D222D704A7001CDEE1 /* 047画板 23@0.5x.png in Resources */,
-				784D27BE22D704A7001CDEE1 /* 047画板 18@0.5x.png in Resources */,
 				78FB474A22D4365900A9F4AF /* Main.storyboard in Resources */,
-				788319172340E05F006FFD61 /* 037画板 1.png in Resources */,
-				78C1018E22D5FEA10073416E /* 037画板 1@32x.png in Resources */,
-				784D27BA22D704A7001CDEE1 /* 047画板 23@1.5x.png in Resources */,
-				784D27B222D704A7001CDEE1 /* 047画板 13@1.5x.png in Resources */,
-				784D27B022D704A7001CDEE1 /* 047画板 11.png in Resources */,
-				784D27C022D704A7001CDEE1 /* 047画板 11@0.5x.png in Resources */,
-				784D27AE22D704A7001CDEE1 /* 047画板 12.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,7 +546,6 @@
 				7899CC742558EDD8003892D2 /* Search.swift in Sources */,
 				7873E4B0244F0D7900FC186B /* Cache.swift in Sources */,
 				78FB477522D4383900A9F4AF /* Info.swift in Sources */,
-				78845520241C787700F2C971 /* DragItem.swift in Sources */,
 				78FB474522D4365800A9F4AF /* ViewController.swift in Sources */,
 				78FB478122D442B200A9F4AF /* Works.swift in Sources */,
 				7884F6DC247158BD005FC6BF /* JYHIdeaView.swift in Sources */,
@@ -737,6 +556,7 @@
 				78FB474322D4365800A9F4AF /* AppDelegate.swift in Sources */,
 				7812000522E4544C00C32B9E /* Extension.swift in Sources */,
 				782344FD2449D1DB006DDF85 /* Define.swift in Sources */,
+				784ABC6F257A5A9B008A4747 /* Database.swift in Sources */,
 				78B71EDB2462DA0C00EDACF4 /* JYHRoleView.swift in Sources */,
 				7832601C245466F600F13658 /* Note.swift in Sources */,
 				78B71ED12459C1A500EDACF4 /* JYHBlockView.swift in Sources */,

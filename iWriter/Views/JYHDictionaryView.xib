@@ -120,6 +120,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="previousButtonClicked:" target="-2" id="hax-3Q-1Rk"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yOv-LG-soP">
                     <rect key="frame" x="141" y="106" width="35" height="32"/>
@@ -130,6 +133,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="nextButtonClicked:" target="-2" id="F6X-cm-yVD"/>
+                    </connections>
                 </button>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vj2-Ka-dee">
                     <rect key="frame" x="30" y="113" width="89" height="21"/>
@@ -141,6 +147,9 @@
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <action selector="dictionaryTextFieldSend:" target="-2" id="ndb-QE-PKo"/>
+                    </connections>
                 </textField>
             </subviews>
             <constraints>

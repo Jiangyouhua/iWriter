@@ -10,6 +10,7 @@ import Cocoa
 
 protocol JYHDictionaryViewDelegate {
     func blockTitleClicked(_ target: JYHDictionaryView)
+    func dictionaryWord(_ word: String)
 }
 
 class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMenuDelegate{
@@ -31,87 +32,34 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     /// Context Menu
     
     /// 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
-    let works = (NSApp.delegate as! AppDelegate).works
-    var data: [Model] = []
+    var data: [Paraphrase] = []{
+        didSet{
+            contentOutlineView.reloadData()
+            contentOutlineView.expandItem(nil, expandChildren: true)
+            previousButton.isEnabled = data.count > 0
+            nextButton.isEnabled = data.count > 0
+        }
+    }
     var heights = [Int: CGFloat]()
-    var node: Model?
     var delegate: JYHDictionaryViewDelegate?
-    
-    /// 添加按钮的状态， true为隐藏。
-    var leftAddButtonState = true
-    var rightAddButtonState = true
     
     // MARK: Action - Title Clicked
     /// Title Icon clicked
     @IBAction func titleIconButtonClick(_ sender: Any) {
         self.delegate?.blockTitleClicked(self)
     }
-    
-    // MARK:  Action - Context Clicked
-    /// Move Up Item.
-    @IBAction func moveUpMenuClicked(_ sender: Any) {
-        moveUpItemClicked()
-    }
-    
-    /// Move Down Item.
-    @IBAction func moveDownMenuClicked(_ sender: Any) {
-        moveDownItemClicked()
-    }
-    
-    /// Remane Item.
-    @IBAction func renameMenuClicked(_ sender: Any) {
-        renameItemClicked()
-    }
-    
-    /// Delete Item.
-    @IBAction func deleteMenuClicked(_ sender: Any) {
-        deleteItemClicked()
-    }
-       
-    func moveUpItemClicked() {
-        itemUpOrDown(isUp: true)
-    }
-    
-    func moveDownItemClicked() {
-        itemUpOrDown(isUp: false)
-    }
-    
-    func renameItemClicked() {
-        guard let model = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Model else {
+    @IBAction func dictionaryTextFieldSend(_ sender: Any) {
+        guard let word = (sender as? NSTextField)?.stringValue else {
             return
         }
-        model.naming = true
-        contentOutlineView.reloadData()
+        self.delegate?.dictionaryWord(word)
     }
     
-    func deleteItemClicked() {
-        guard let model = contentOutlineView.item(atRow: contentOutlineView.clickedRow) as? Model else {
-            return
-        }
-        
-        if model.parent == nil {
-            return
-        }
-        
-        let i = model.countChildren()
-        let alert = NSAlert()
-        alert.addButton(withTitle: "Delete")
-        alert.addButton(withTitle: "Cancel")
-        alert.messageText = "Do you want to delete the \(i) selected items?"
-        alert.informativeText = "This operation cannot be undone."
-        let code = alert.runModal()
-        
-        //  用户取消了
-        if code == NSApplication.ModalResponse.alertSecondButtonReturn {
-            return
-        }
-        
-        var a = model.parent == nil ? data : model.children
-        _ = model.removeFromArray(&a)
-        try? works.writeNoteFile()
-        contentOutlineView.reloadData()
+    @IBAction func previousButtonClicked(_ sender: Any) {
     }
     
+    @IBAction func nextButtonClicked(_ sender: Any) {
+    }
     // MARK: View
     /// Init Subclass.
     override init(frame frameRect: NSRect) {
@@ -137,10 +85,6 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
         contentOutlineView.action = #selector(outlineViewDidClick(_:))
         contentOutlineView.doubleAction = #selector(rowDoubleClicked(_:))
         contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
-        
-        // 右键菜单。
-        rightClickMenu.autoenablesItems = false       // 可自己设置菜单项的可用状态。
-        rightClickMenu.delegate = self
         
         interface()
     }
@@ -182,7 +126,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     // MARK: NSOutlineView
     /// 各级的Row数量。
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        guard let model = item as? Model else {
+        guard let model = item as? Paraphrase else {
             return data.count
         }
         return model.children.count
@@ -190,7 +134,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     
     /// 各级的Row数据。
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any{
-        guard let model = item as? Model else {
+        guard let model = item as? Paraphrase else {
             return data[index]
         }
         return model.children[index]
@@ -198,31 +142,32 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     
     /// 各级的Row是否为子集显示展开与收拢功能。
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool{
-        guard let model = item as? Model else {
+        guard let model = item as? Paraphrase else {
             return false
         }
         return model.children.count > 0
     }
     
-    /// 行添加后的方法了处理当前项。
-    func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
-        guard let model = outlineView.item(atRow: row) as? Model else {
-            return
+    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView?{
+        guard let columnIdentifier = tableColumn?.identifier else {
+            return nil
         }
-        
-        // 命名项。只有新建项为命名项，失去编辑模则naming = false.
-        if model.naming {
-            guard let cell = rowView.view(atColumn: 0) as? NSTableCellView else {
-                return
+        guard let model = item as? Paraphrase else {
+            return nil
+        }
+
+        // 标题。
+        if columnIdentifier == NSUserInterfaceItemIdentifier(rawValue: "title") {
+            let cellIdentifier = NSUserInterfaceItemIdentifier(rawValue: "titleCellView")
+            guard let cell = outlineView.makeView(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView else {
+                return nil
             }
-            // 命名项一定是当前项。
-            outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-            outlineView.scrollRowToVisible(row)
-            // 命名项一定为可见，所以必然展开上一级。
-            outlineView.expandItem(model.parent)
-            // 命名项设置为第一响应者，即进入命名状态。
-            cell.textField?.becomeFirstResponder()
+
+            cell.textField!.stringValue = model.title
+            cell.imageView!.image = NSImage(named: "Article")
+            return cell
         }
+        return nil
     }
     
     // MARK: Action - Row Clicked
@@ -285,58 +230,5 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     /// 双击当前行。
     @objc func rowDoubleClicked(_ sender: Any){
         print(#function)
-    }
-    
-    func itemUpOrDown(isUp: Bool){
-        let at = contentOutlineView.clickedRow
-        guard let n = contentOutlineView.item(atRow: at) as? Model else {
-            return
-        }
-        
-        // 确定当前节点在兄弟节点中的位置。
-        node = n
-        var to = at + 2
-        
-        if isUp {
-            if at == 0 {
-                return
-            }
-            to = at - 1
-        }
-        changePosition(at: at, to: to, inParent: n.parent)
-    }
-    
-    func changePosition(at: Int, to: Int, inParent: Model?) {
-        // 判断移至内或移至某位置。
-        var x = to
-        // 同子集里下移。
-        if at < x {
-            x -= 1
-        }
-        if  to == at {
-            return
-        }
-        contentOutlineView.moveItem(at: at, inParent: inParent, to: x, inParent: inParent)
-        
-        // 同步更新数据。
-        if inParent == nil {
-            data.remove(at: at)
-            data.insert(node!, at: x)
-        } else {
-            inParent?.children.remove(at: at)
-            inParent?.children.insert(node!, at: x)       // 添加到新的里面；
-        }
-        try? works.writeNoteFile()
-        node = nil
-    }
-    
-    /// 按Note.children标志展开下一级。
-    func expandedChildren(items: [Model]){
-        for item in items {
-            if item.expanded {
-                contentOutlineView.expandItem(item)
-            }
-            expandedChildren(items: item.children)
-        }
     }
 }

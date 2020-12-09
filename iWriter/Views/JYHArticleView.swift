@@ -178,16 +178,15 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         
         if search != nil {
             // 移除搜索结果。
-            article.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: article.string.count))
-//            search?.marks.forEach({ mark in
-//                article.removeAttribute(.backgroundColor, range: NSRange(mark.articleRange, in: article.string))
-//            })
+            search?.marks.forEach({ mark in
+                article.removeAttribute(.backgroundColor, range: NSRange(mark.articleRange, in: article.string))
+            })
             if onlyRemove {
                 return
             }
         }
         item.marks.forEach({ mark in
-            article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: NSRange(mark.articleRange, in: article.string))
+            article.setAttributes([.backgroundColor: NSColor.gray], range: NSRange(mark.articleRange, in: article.string))
         })
         search = item
     }
@@ -241,12 +240,12 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         if mark != nil {
             // 移除前一个。
             let r = NSRange(mark!.articleRange, in: article.string)
+            article.removeAttribute(.underlineStyle, range: r)
             article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: r)
         }
         // 显示当前。
         let r = NSRange(currentMark.articleRange, in: article.string)
-        article.setAttributes([.backgroundColor:  NSColor.yellow, .foregroundColor: NSColor.black], range: r)
-//        useCustomBackground(range: r, article: article, view: view)
+        useCustomBackground(range: r, article: article, view: view)
         mark = currentMark
         
         // 定位。

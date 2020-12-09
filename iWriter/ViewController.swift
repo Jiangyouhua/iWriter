@@ -437,6 +437,14 @@ extension ViewController: JYHTitlesBarViewDelegate {
         articleBlockView.action(chapter: chapter)
     }
     
+    // dictionary
+    func dictionaryWord(_ word: String) {
+        guard let data = Database().find(text: word) else {
+            return
+        }
+        dictionaryBlockView.data = data
+    }
+    
     // search
     func searchWord(_ word: String) {
         guard let chapter = catalogBlockView.contentOutlineView.item(atRow: catalogBlockView.contentOutlineView.selectedRow) as? Chapter else {

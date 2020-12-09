@@ -140,8 +140,6 @@ class JYHInfoView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
     func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 5.0
-        paragraphStyle.firstLineHeadIndent = 22
-        paragraphStyle.paragraphSpacing = 22
         textStorage.addAttributes([NSAttributedString.Key.paragraphStyle : paragraphStyle], range: editedRange)
     }
 }

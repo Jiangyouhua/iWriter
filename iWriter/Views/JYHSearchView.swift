@@ -36,7 +36,6 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     /// Context Menu
     
     /// 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
-    let works = (NSApp.delegate as! AppDelegate).works
     var data: [Search] = []{
         didSet{
             contentOutlineView.reloadData()
@@ -46,12 +45,7 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         }
     }
     var heights = [Int: CGFloat]()
-    var node: Model?
     var delegate: JYHSearchViewDelegate?
-    
-    /// 添加按钮的状态， true为隐藏。
-    var leftAddButtonState = true
-    var rightAddButtonState = true
     
     // MARK: Action - Title Clicked
     /// Title Icon clicked
@@ -333,15 +327,5 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     /// 双击当前行。
     @objc func rowDoubleClicked(_ sender: Any){
         print(#function)
-    }
-    
-    /// 按Note.children标志展开下一级。
-    func expandedChildren(items: [Model]){
-        for item in items {
-            if item.expanded {
-                contentOutlineView.expandItem(item)
-            }
-            expandedChildren(items: item.children)
-        }
     }
 }

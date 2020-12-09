@@ -23,4 +23,14 @@ class JYHTextView: NSTextView {
             s.draw(at: NSMakePoint(10, 10))
         }
     }
+    
+    override func becomeFirstResponder() -> Bool {
+        guard let article = self.textStorage else {
+            return super.becomeFirstResponder()
+        }
+        let r = NSRange(location: 0, length: article.string.count)
+        article.removeAttribute(.underlineStyle, range: r)
+        article.setAttributes([.foregroundColor: NSColor.textColor], range: r)
+        return super.becomeFirstResponder()
+    }
 }
