@@ -125,12 +125,10 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         if model.parent != nil {
             _ = model.removeFromParent()
             writeAndReloadList()
-            
-        } else {
-            _ = model.removeFromArray(&data)
-            removeItemFromData(data)
+            return
         }
-
+        _ = model.removeFromArray(&data)
+        removeItemFromData(data)
     }
     
     func writeAndReloadList(_ item: Model? = nil){
@@ -254,7 +252,68 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         }
     }
     
+    // MARK: Drag
+    /// 开始拖曳。将指定内容写入剪切板，这样可能实现通过拖曳将其内容拖至到文本域等。
+    func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
+        guard let model = item as? Model else {
+            return nil
+        }
+        
+        node = model  // 更新拖曳的对象。
+        let  pastBoard = NSPasteboardItem.init()
+        pastBoard.setString(model.value, forType: NSPasteboard.PasteboardType.string)
+        return pastBoard
+    }
+
+    /// 拖曳中。
+    func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) ->
+        NSDragOperation {
+        let dragNullOperation: NSDragOperation = []
+        
+        // 非同父节点的兄弟节点间，不能拖曳。
+        if (item == nil && node?.parent == nil) || (item as? Model)?.id == node?.parent?.id {
+            return NSDragOperation.generic
+        }
+        return dragNullOperation
+    }
+    
+    /// 结束拖曳。
+    func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
+        
+        // 非同父节点的兄弟节点间，不能拖曳。
+        if (item == nil && node?.parent == nil) || (item as? Model)?.id == node?.parent?.id {
+            let parent = node?.parent
+
+            // 从自身的父节点中移除自己。
+            let i = item == nil ? node!.removeFromArray(&data) : node!.removeFromParent()
+            if i < 0 {
+                return false
+            }
+            var x = index
+            // 同子集里下移。
+            if i < index {
+                x -= 1
+            }
+            
+            outlineView.moveItem(at: i, inParent: parent, to: x, inParent: parent)
+            
+            // 同步更新数据。
+            if parent == nil {
+                data.insert(node!, at: x)
+            } else {
+                parent!.children.insert(node!, at: x)       // 添加到新的里面；
+            }
+            try? works.writeOutlineFile()
+            
+            // 节点清空。
+            node = nil
+            return true
+        }
+        return false
+    }
+    
     // MARK: Action - Row Clicked
+    /// Row点击事件。
     @objc func outlineViewDidClick(_ event: NSEvent){
         let row = contentOutlineView.clickedRow
         if row < 0 {
@@ -275,7 +334,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         }
     }
     
-    // 判断是否在图片上点击。、
+    /// 判断是否在图片上点击。、
     private func onImageViewWithCell(row: Int, column: Int) -> Bool{
         guard let titleCell: NSTableCellView = contentOutlineView.view(atColumn: column, row: row, makeIfNecessary: true) as? NSTableCellView else {
             return false
@@ -335,7 +394,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         changePosition(at: at, to: to, inParent: n.parent)
     }
     
-    func changePosition(at: Int, to: Int, inParent: Model?) {
+    func changePosition(at: Int, to: Int, inParent: Node?) {
         // 判断移至内或移至某位置。
         var x = to
         // 同子集里下移。
@@ -365,7 +424,10 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
             if item.expanded {
                 contentOutlineView.expandItem(item)
             }
-            expandedChildren(items: item.children)
+            guard let array = item.children as? [Model] else {
+                return
+            }
+            expandedChildren(items: array)
         }
     }
 }

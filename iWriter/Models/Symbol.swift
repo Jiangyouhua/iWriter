@@ -15,9 +15,9 @@ import Foundation
 class Symbol: Model {
     var gender: String                     // 角色性别。
     
-    override init() {
-        self.gender = ""
-        super.init()
+    init(id: Int = 0, value: String = "", naming: Bool = true, status: Bool = true, expanded: Bool = false, gender: String = "") {
+        self.gender = gender
+        super.init(id: id, value: value, naming: naming, status: status, expanded: expanded)
     }
     
     /// 使用字典进行初始化。

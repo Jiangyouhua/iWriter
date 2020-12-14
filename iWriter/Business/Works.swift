@@ -275,6 +275,8 @@ extension Works {
             throw WorksError.operateError(OperateCode.fileRead, #function, RIGHT_ERROR)
         }
         if data.count == 0 {
+            outlines = [Chapter]()
+            delegate?.loadedCatalog()
             return;
         }
         do {
@@ -307,9 +309,9 @@ extension Works {
         outlines = [Chapter]()
         // 书名。
         let catalog = Chapter()
-        catalog.content =  info.title
+        catalog.value =  info.title
         catalog.info = "Please enter the summary of each chapter"
-        catalog.creation = info.creation
+        catalog.id = info.creation
         catalog.leaf = false
         outlines.append(catalog)
         do {
@@ -326,6 +328,8 @@ extension Works {
             throw WorksError.operateError(OperateCode.fileRead, #function, RIGHT_ERROR)
         }
         if data.count == 0 {
+            notes = [Note]()
+            delegate?.loadedNote()
             return
         }
     
@@ -358,6 +362,8 @@ extension Works {
             throw WorksError.operateError(OperateCode.fileRead, #function, RIGHT_ERROR)
         }
         if data.count == 0 {
+            roles = [Role]()
+            delegate?.loadedRole()
             return
         }
     
@@ -390,6 +396,8 @@ extension Works {
             throw WorksError.operateError(OperateCode.fileRead, #function, RIGHT_ERROR)
         }
         if data.count == 0 {
+            symbols = [Symbol]()
+            delegate?.loadedSymbol()
             return
         }
         do {
@@ -452,14 +460,14 @@ extension Works {
     
     func opened(chapter: Chapter){
         chapter.opened = true
-        if self.info.chapterOpened.contains(where: {$0.creation == chapter.creation}) {
+        if self.info.chapterOpened.contains(where: {$0.id == chapter.id}) {
             return
         }
         self.info.chapterOpened.insert(chapter, at: 0)
     }
     
     func chapterEditing() -> Chapter {
-        if let chapter = self.info.chapterOpened.first(where: {$0.creation == self.info.chapterEditingId}) {
+        if let chapter = self.info.chapterOpened.first(where: {$0.id == self.info.chapterEditingId}) {
             return chapter
         }
         return Chapter()

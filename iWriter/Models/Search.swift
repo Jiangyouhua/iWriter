@@ -29,11 +29,11 @@ class Search {
     }
     
     private func marksFromArticle() {
-        if chapter.article.string.isEmpty {
+        if chapter.value.isEmpty {
             return
         }
         // 分段。
-        let paragraphs = chapter.article.string.components(separatedBy: CharacterSet(charactersIn: "\n"))
+        let paragraphs = chapter.value.components(separatedBy: CharacterSet(charactersIn: "\n"))
         // 逐个处理。
         var offset = 0
         paragraphs.forEach { pg in
@@ -54,8 +54,8 @@ class Search {
         {
             let lowerPosition = paragraph.distance(from: paragraph.startIndex, to: range.lowerBound)
             let upPosition = paragraph.distance(from: paragraph.startIndex, to: range.upperBound)
-            let start = chapter.article.string.index(chapter.article.string.startIndex, offsetBy: lowerPosition + offset)
-            let end = chapter.article.string.index(chapter.article.string.startIndex, offsetBy: upPosition + offset)
+            let start = chapter.value.index(chapter.value.startIndex, offsetBy: lowerPosition + offset)
+            let end = chapter.value.index(chapter.value.startIndex, offsetBy: upPosition + offset)
 
             let mark = Mark(
                 paragraph: paragraph,

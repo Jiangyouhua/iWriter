@@ -245,8 +245,8 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         tableViewDidSelectRow(contentOutlineView.selectedRow, contentOutlineView.selectedColumn, false)
     }
     
-    private func titleWith(chapter: Model) -> String {
-        let title = chapter.content
+    private func titleWith(chapter: Node) -> String {
+        let title = chapter.value
         if chapter.parent == nil {
             return title
         }

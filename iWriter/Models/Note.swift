@@ -12,9 +12,9 @@ import Foundation
 class Note: Model {
     var checked: Bool             // 是否检查。
     
-    override init() {
-        self.checked = false
-        super.init()
+    init(id: Int = 0, value: String = "", naming: Bool = true, status: Bool = true, expanded: Bool = false, checked: Bool = false) {
+        self.checked = checked
+        super.init(id: id, value: value, naming: naming, status: status, expanded: expanded)
     }
     
     required init(dictionary: [String : Any]) {

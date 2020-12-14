@@ -40,6 +40,7 @@
 		78B71EDD2462DA1D00EDACF4 /* JYHSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B71EDC2462DA1D00EDACF4 /* JYHSymbolView.swift */; };
 		78B71EDF2462DA3400EDACF4 /* JYHSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B71EDE2462DA3400EDACF4 /* JYHSearchView.swift */; };
 		78C1FDDC257FAB6600625506 /* foo.db in Resources */ = {isa = PBXBuildFile; fileRef = 78C1FDD8257FAB5200625506 /* foo.db */; };
+		78C1FDE42580BD0200625506 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C1FDE32580BD0200625506 /* Node.swift */; };
 		78D386CE2522261900496EA9 /* JYHTitleTabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D386CC2522261900496EA9 /* JYHTitleTabView.xib */; };
 		78D386CF2522261900496EA9 /* JYHTitleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386CD2522261900496EA9 /* JYHTitleTabView.swift */; };
 		78D386D92522265200496EA9 /* JYHTitlesBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D386D82522265200496EA9 /* JYHTitlesBarView.swift */; };
@@ -54,7 +55,6 @@
 		78FB477722D4384800A9F4AF /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB477622D4384800A9F4AF /* Chapter.swift */; };
 		78FB477922D4385700A9F4AF /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB477822D4385700A9F4AF /* Role.swift */; };
 		78FB477B22D4386200A9F4AF /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB477A22D4386200A9F4AF /* Symbol.swift */; };
-		78FB477F22D4389B00A9F4AF /* ModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB477E22D4389B00A9F4AF /* ModelDelegate.swift */; };
 		78FB478122D442B200A9F4AF /* Works.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FB478022D442B200A9F4AF /* Works.swift */; };
 /* End PBXBuildFile section */
 
@@ -135,6 +135,7 @@
 		78B71EDC2462DA1D00EDACF4 /* JYHSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHSymbolView.swift; sourceTree = "<group>"; };
 		78B71EDE2462DA3400EDACF4 /* JYHSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JYHSearchView.swift; sourceTree = "<group>"; };
 		78C1FDD8257FAB5200625506 /* foo.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = foo.db; sourceTree = "<group>"; };
+		78C1FDE32580BD0200625506 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		78D386CC2522261900496EA9 /* JYHTitleTabView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JYHTitleTabView.xib; sourceTree = "<group>"; };
 		78D386CD2522261900496EA9 /* JYHTitleTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTitleTabView.swift; sourceTree = "<group>"; };
 		78D386D82522265200496EA9 /* JYHTitlesBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JYHTitlesBarView.swift; sourceTree = "<group>"; };
@@ -156,7 +157,6 @@
 		78FB477622D4384800A9F4AF /* Chapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
 		78FB477822D4385700A9F4AF /* Role.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
 		78FB477A22D4386200A9F4AF /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
-		78FB477E22D4389B00A9F4AF /* ModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDelegate.swift; sourceTree = "<group>"; };
 		78FB478022D442B200A9F4AF /* Works.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Works.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -316,9 +316,9 @@
 		78FB476F22D4377300A9F4AF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				78FB477E22D4389B00A9F4AF /* ModelDelegate.swift */,
 				784ABC6E257A5A9B008A4747 /* Database.swift */,
 				78FB477422D4383900A9F4AF /* Info.swift */,
+				78C1FDE32580BD0200625506 /* Node.swift */,
 				7880F26A25554D8C00E62425 /* Model.swift */,
 				78FB477622D4384800A9F4AF /* Chapter.swift */,
 				7832601B245466F600F13658 /* Note.swift */,
@@ -543,6 +543,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78C1FDE42580BD0200625506 /* Node.swift in Sources */,
 				7899CC742558EDD8003892D2 /* Search.swift in Sources */,
 				7873E4B0244F0D7900FC186B /* Cache.swift in Sources */,
 				78FB477522D4383900A9F4AF /* Info.swift in Sources */,
@@ -572,7 +573,6 @@
 				781B883D2535F3CA006AB5DC /* JYHTextView.swift in Sources */,
 				78FB477B22D4386200A9F4AF /* Symbol.swift in Sources */,
 				78B71ED72462D9E200EDACF4 /* JYHCatalogView.swift in Sources */,
-				78FB477F22D4389B00A9F4AF /* ModelDelegate.swift in Sources */,
 				781C728E2358890A00763F04 /* RoleWindowController.swift in Sources */,
 				78D386CF2522261900496EA9 /* JYHTitleTabView.swift in Sources */,
 				780508D322E5C33300A36E18 /* JYHTextField.swift in Sources */,

@@ -53,7 +53,7 @@ func isDarkMode() -> Bool {
 }
 
 // 字典数组转为结构数组。
-func dictionaryToStructWith<T: ModelDelegate>(array: [Any]) -> [T] {
+func dictionaryToStructWith<T: Node>(array: [Any]) -> [T] {
     var objects = [T]()
     array.forEach{ item in
         guard let object = item as? [String: Any] else {
@@ -65,7 +65,7 @@ func dictionaryToStructWith<T: ModelDelegate>(array: [Any]) -> [T] {
 }
 
 // 结构数组转为字典数组。
-func structToDictionaryWith<T: ModelDelegate>(array: [T]) -> [Any] {
+func structToDictionaryWith<T: Node>(array: [T]) -> [Any] {
     var maps = [Any]()
     array.forEach{ item in
         let map = item.toDictionary()
@@ -75,7 +75,7 @@ func structToDictionaryWith<T: ModelDelegate>(array: [T]) -> [Any] {
 }
 
 // 字典数组转为结构数组。
-func dictionaryToStructWith<T: ModelDelegate>(dic: [Int: Any]) -> [Int: T] {
+func dictionaryToStructWith<T: Node>(dic: [Int: Any]) -> [Int: T] {
     var objects: [Int: T] = [:]
     dic.forEach{ (key, value) in
         guard let object = value as? [String: Any] else {
@@ -87,7 +87,7 @@ func dictionaryToStructWith<T: ModelDelegate>(dic: [Int: Any]) -> [Int: T] {
 }
 
 // 结构数组转为字典数组。
-func structToDictionaryWith<T: ModelDelegate>(dic: [Int: T]) -> [Int: Any] {
+func structToDictionaryWith<T: Node>(dic: [Int: T]) -> [Int: Any] {
     var maps:[Int: Any] = [:]
     dic.forEach{ (key, value) in
         let map = value.toDictionary()
@@ -96,7 +96,7 @@ func structToDictionaryWith<T: ModelDelegate>(dic: [Int: T]) -> [Int: Any] {
     return maps
 }
 
-func modelsFromDictionary<T: Model>(object: Any?, node: T) {
+func modelsFromDictionary<T: Node>(object: Any?, node: T) {
     guard let array = object as? [Any] else {
         return
     }
@@ -112,7 +112,7 @@ func modelsFromDictionary<T: Model>(object: Any?, node: T) {
     node.children = models
 }
 
-func modelsToDictionary<T: Model>(array: [T]) -> [Any] {
+func modelsToDictionary<T: Node>(array: [T]) -> [Any] {
     var a: [Any] = [Any]()
     array.forEach{ node in
         let d = node.toDictionary()

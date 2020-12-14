@@ -118,7 +118,7 @@ class ViewController: NSViewController, WorksDelegate, JYHSearchViewDelegate {
     }
     
     func deletedLeaf(chapter: Chapter) {
-        guard let index = works.info.chapterOpened.firstIndex(where: {return $0.creation == chapter.creation}) else {
+        guard let index = works.info.chapterOpened.firstIndex(where: {return $0.id == chapter.id}) else {
             return
         }
         titlesBarView.deleted(index: index)
@@ -464,8 +464,8 @@ extension ViewController: JYHTitlesBarViewDelegate {
     
     func currentSearch(chapter: Chapter, mark: Mark) {
         // 更换章节。
-        if works.info.chapterEditingId != chapter.creation {
-            works.info.chapterEditingId = chapter.creation
+        if works.info.chapterEditingId != chapter.id {
+            works.info.chapterEditingId = chapter.id
             works.info.chapterSelection = chapter
             works.opened(chapter: chapter)
             selectedLeaf(chapter: chapter)

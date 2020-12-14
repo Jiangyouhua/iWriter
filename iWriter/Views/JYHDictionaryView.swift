@@ -32,7 +32,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     /// Context Menu
     
     /// 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
-    var data: [Paraphrase] = []{
+    var data: [Node] = []{
         didSet{
             contentOutlineView.reloadData()
             contentOutlineView.expandItem(nil, expandChildren: true)
@@ -126,7 +126,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     // MARK: NSOutlineView
     /// 各级的Row数量。
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        guard let model = item as? Paraphrase else {
+        guard let model = item as? Node else {
             return data.count
         }
         return model.children.count
@@ -134,7 +134,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     
     /// 各级的Row数据。
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any{
-        guard let model = item as? Paraphrase else {
+        guard let model = item as? Node else {
             return data[index]
         }
         return model.children[index]
@@ -142,7 +142,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     
     /// 各级的Row是否为子集显示展开与收拢功能。
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool{
-        guard let model = item as? Paraphrase else {
+        guard let model = item as? Node else {
             return false
         }
         return model.children.count > 0
@@ -152,7 +152,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
         guard let columnIdentifier = tableColumn?.identifier else {
             return nil
         }
-        guard let model = item as? Paraphrase else {
+        guard let model = item as? Node else {
             return nil
         }
 
@@ -163,7 +163,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
                 return nil
             }
 
-            cell.textField!.stringValue = model.title
+            cell.textField!.stringValue = model.value
             cell.imageView!.image = NSImage(named: "Article")
             return cell
         }

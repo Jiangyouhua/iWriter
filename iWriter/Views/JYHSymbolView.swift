@@ -35,8 +35,7 @@ class JYHSymbolView: JYHBlockView , NSTextFieldDelegate {
     
     // MARK: Action - Title Icon.
     override func leftButtonClicked(isSelect: Bool) {
-        let node = Symbol()
-        node.content = "New Symbol"
+        let node = Symbol(id: creationTime(), value: "New Symbol")
         data.append(node)
         works.symbols = data as! [Symbol]
         writeAndReloadList()
@@ -47,18 +46,17 @@ class JYHSymbolView: JYHBlockView , NSTextFieldDelegate {
         guard let symbol = contentOutlineView.item(atRow: index) as? Symbol else {
             return
         }
-        let node = Symbol()
-        node.content = "New Symbol Tag"
+        let node = Symbol(id: creationTime(), value: "New Symbol")
         // 非顶级。
         if symbol.parent != nil {
-            node.parent = symbol.parent
-            symbol.parent?.children.insert(node, at: index)
-            symbol.parent?.expanded = true
-            writeAndReloadList(symbol.parent)
+            symbol.parent?.add(child: node)
+            if let item = symbol.parent as? Model {
+                item.expanded = true
+                writeAndReloadList(item)
+            }
             return
         }
-        node.parent = symbol
-        symbol.children.append(node)
+        symbol.add(child: node)
         symbol.expanded = true
         writeAndReloadList(symbol)
     }
@@ -118,7 +116,7 @@ class JYHSymbolView: JYHBlockView , NSTextFieldDelegate {
             }
             
             // 为Table Cell View设置Title与Icon。
-            cell.textField!.stringValue = symbol.content
+            cell.textField!.stringValue = symbol.value
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
 //            cell.imageView!.image = NSImage(named: NSImage.Name(symbol.gender))!
@@ -168,10 +166,10 @@ class JYHSymbolView: JYHBlockView , NSTextFieldDelegate {
         }
         symbol.naming = false
         if textField.stringValue.isEmpty {
-            textField.stringValue = symbol.content
+            textField.stringValue = symbol.value
             return
         }
-        symbol.content = textField.stringValue
+        symbol.value = textField.stringValue
         
         writeAndReloadList()
     }

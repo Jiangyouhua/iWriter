@@ -96,11 +96,11 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         let textView = scrollView.documentView as! JYHTextView
         textView.allowsUndo = true
         textView.textContainerInset = NSSize(width: 10, height: 10)
-        textView.textStorage?.setAttributedString(chapter.article)
+        textView.textStorage?.setAttributedString(NSAttributedString(string: chapter.value))
         textView.delegate = self
         textView.textStorage!.delegate = self
         textView.chapter = chapter
-        views[chapter.creation] = scrollView
+        views[chapter.id] = scrollView
         return scrollView
     }
     
@@ -109,12 +109,12 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         guard let v = view as? JYHTextView else {
             return nil
         }
-        var manager = managers[v.chapter!.creation]
+        var manager = managers[v.chapter!.id]
         if manager != nil {
             return manager
         }
         manager = UndoManager()
-        managers[v.chapter!.creation] = manager
+        managers[v.chapter!.id] = manager
         return manager
     }
     
@@ -126,7 +126,7 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
     }
     
     func textDidChangeFrom(view: JYHTextView) {
-        view.chapter!.article = view.textStorage!
+        view.chapter!.article = view.string
         view.chapter!.count = view.string.count
         works.saved = false
         self.delegate?.contentDidChange(chapter: view.chapter!)
@@ -142,7 +142,7 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         guard let v = view.documentView as? JYHTextView else {
             return
         }
-        guard let title = v.chapter?.content else {
+        guard let title = v.chapter?.value else {
             return
         }
         let s = "Content: " + title
@@ -171,7 +171,7 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
             return
         }
         guard let item = data.filter({
-            return $0.chapter.creation == view.chapter?.creation
+            return $0.chapter.id == view.chapter?.id
         }).first else {
             return
         }

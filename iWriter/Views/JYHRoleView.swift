@@ -35,8 +35,7 @@ class JYHRoleView: JYHBlockView, NSTextFieldDelegate {
     
     // MARK: Action - Title Icon.
     override func leftButtonClicked(isSelect: Bool) {
-        let node = Role()
-        node.content = "New Role"
+        let node = Role(id: creationTime(), value: "New Role")
         data.append(node)
         works.roles = data as! [Role]
         writeAndReloadList()
@@ -47,18 +46,17 @@ class JYHRoleView: JYHBlockView, NSTextFieldDelegate {
         guard let role = contentOutlineView.item(atRow: index) as? Role else {
             return
         }
-        let node = Role()
-        node.content = "New Role Tag"
+        let node = Role(id: creationTime(), value: "New Role Tag")
         // 非顶级。
         if role.parent != nil {
-            node.parent = role.parent
-            role.parent?.children.insert(node, at: index)
-            role.parent?.expanded = true
-            writeAndReloadList(role.parent)
+            role.parent?.add(child: node)
+            if let item = role.parent as? Model {
+                item.expanded = true
+                writeAndReloadList(item )
+            }
             return
         }
-        node.parent = role
-        role.children.append(node)
+        role.add(child: node)
         role.expanded = true
         writeAndReloadList(role)
     }
@@ -118,7 +116,7 @@ class JYHRoleView: JYHBlockView, NSTextFieldDelegate {
             }
             
             // 为Table Cell View设置Title与Icon。
-            cell.textField!.stringValue = role.content
+            cell.textField!.stringValue = role.value
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
 //            cell.imageView!.image = NSImage(named: NSImage.Name(role.gender))!
@@ -168,16 +166,16 @@ class JYHRoleView: JYHBlockView, NSTextFieldDelegate {
         }
         role.naming = false
         if textField.stringValue.isEmpty {
-            textField.stringValue = role.content
+            textField.stringValue = role.value
             return
         }
-        role.content = textField.stringValue
+        role.value = textField.stringValue
         
         writeAndReloadList()
     }
     
     /// 写入缓存并更新视图。
-    override func writeAndReloadList(_ item: Model? = nil){
+    override func writeAndReloadList(_ item: Node? = nil){
         // 保存数据。
         do {
             try works.writeRoleFile()

@@ -17,33 +17,34 @@ import Foundation
 class Chapter: Model {
     
     var info: String                         // 章节信息，概述。
-    var article: NSMutableAttributedString   // 关联的文章。
+    var article: String                      // 文章内容。
     var loaded: Bool                         // 文章是否被加载。
+    var opened: Bool                         // 被打开的。
     var count: Int                           // 章节字数。
     var leaf: Bool                           // 是否为叶节点。
     var snapshot: [String]                   // 每个快照加一串关键词, 将索引加在另存文件名后。
     var x: Int                               // 在画布中x轴的位置。
     var y: Int                               // 在画布中y轴的位置。
-    var opened: Bool                         // 被打开的。
     
-    override init() {
-        self.info = ""
-        self.article = NSMutableAttributedString(string: "")
-        self.loaded = false
-        self.count = 0
-        self.leaf = false
-        self.snapshot = [String]()
-        self.x = 0
-        self.y = 0
-        self.opened = true
-        super.init()
+    init(id: Int = 0, value: String = "", naming: Bool = true, status: Bool = true, expanded: Bool = false, info: String = "", article: String = "", loaded: Bool = false, opened: Bool = true, count: Int = 0, leaf: Bool = false, snapshot: [String] = [], x: Int = 0, y: Int = 0) {
+        self.info = info
+        self.article = article
+        self.loaded = loaded
+        self.opened = opened
+        self.count = count
+        self.leaf = leaf
+        self.snapshot = snapshot
+        self.x = x
+        self.y = y
+        
+        super.init(id: id, value: value, naming: naming, status: status, expanded: expanded)
     }
     
     /// 使用字典进行初始化。
     required init(dictionary: [String : Any]) {
         // 本类的。
         self.info = dictionary["info"] as? String ?? ""
-        self.article = NSMutableAttributedString(string: "")
+        self.article = ""
         self.loaded = false
         self.count = dictionary["count"] as? Int ?? 0
         self.leaf = dictionary["leaf"] as? Bool ?? false
@@ -74,7 +75,7 @@ class Chapter: Model {
     
     /// 章节内容的缓存路径。
     func articleFile() -> String {
-        return CACHE_PATH + "/c\(self.creation).rtf"
+        return CACHE_PATH + "/c\(self.id).txt"
     }
     
     /// 删除当前节点关联的内容.
@@ -97,15 +98,18 @@ class Chapter: Model {
     /// 读当前章节。
     func readArticleFile() throws {
         // 没有正在编辑的文档。
-        if self.creation == 0 {
+        if self.id == 0 {
             return
         }
 
         // 章节以创建时间为标识保存。
         let file = self.articleFile()
         do {
-            self.article = try NSMutableAttributedString(url: URL(fileURLWithPath: file), options: [.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil)
+            // rtf格式。
+//            self.article = try NSMutableAttributedString(url: URL(fileURLWithPath: file), options: [.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil)
+            // txt格式。
             self.loaded = true
+            self.article = try String(contentsOf: URL(fileURLWithPath: file))
         } catch {
             throw WorksError.operateError(OperateCode.fileRead, #function, error.localizedDescription)
         }
@@ -113,14 +117,17 @@ class Chapter: Model {
 
     /// 写当前章节。
     func writeArticleFile() throws {
-        if self.content.isEmpty {
+        if self.value.isEmpty {
             return
         }
         // 章节以创建时间为标识保存。
         let file = self.articleFile()
         do {
-            let rtfData = try self.article.data(from: .init(location: 0, length: self.article.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
-           try rtfData.write(to: URL(fileURLWithPath: file), options: .atomic)
+            // rtf格式。
+//            let rtfData = try self.article.data(from: .init(location: 0, length: self.article.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+//           try rtfData.write(to: URL(fileURLWithPath: file), options: .atomic)
+            // txt格式。
+            try self.article.write(toFile: file, atomically: false, encoding: .utf8)
         } catch {
             throw WorksError.operateError(OperateCode.fileWrite, #function, error.localizedDescription)
         }

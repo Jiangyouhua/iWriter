@@ -44,7 +44,7 @@ class JYHCatalogView: JYHBlockView {
     override func rightButtonClicked(isSelect: Bool) {
         let node = addNode(title:"New Text", leaf: true, isSelect: isSelect)
         works.info.chapterSelection = node
-        works.info.chapterEditingId = node.creation
+        works.info.chapterEditingId = node.id
         works.opened(chapter: node)
         writeAndReloadList()
         
@@ -204,7 +204,7 @@ class JYHCatalogView: JYHBlockView {
             }
             
             // 为Table Cell View设置Title与Icon。
-            cell.textField!.stringValue = chapter.content
+            cell.textField!.stringValue = chapter.value
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
             cell.imageView!.image = outlineNodeImage(top: chapter.parent == nil, leaf: chapter.leaf)
@@ -216,7 +216,7 @@ class JYHCatalogView: JYHBlockView {
     /// 行添加后的方法了处理当前项。
     override func outlineView(_ outlineView: NSOutlineView, didAdd rowView: NSTableRowView, forRow row: Int) {
         // 当前项。没有当前项，则选择根目录，有则选择其为当前项。
-        if works.info.chapterSelection.content.isEmpty && row == 0 {
+        if works.info.chapterSelection.value.isEmpty && row == 0 {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
             return
         }
@@ -225,7 +225,7 @@ class JYHCatalogView: JYHBlockView {
         }
         
         // 如果与编辑项相同，则为当前选择项。
-        if chapter.creation == works.info.chapterSelection.creation {
+        if chapter.id == works.info.chapterSelection.id {
             outlineView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
         }
         
@@ -246,19 +246,19 @@ class JYHCatalogView: JYHBlockView {
     
     // MARK: Drag
     /// 开始拖曳。将指定内容写入剪切板，这样可能实现通过拖曳将其内容拖至到文本域等。
-    func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
+    override func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
         guard let chapter = item as? Chapter else {
             return nil
         }
         
         node = chapter  // 更新拖曳的对象。
         let  pastBoard = NSPasteboardItem.init()
-        pastBoard.setString(chapter.content, forType: NSPasteboard.PasteboardType.string)
+        pastBoard.setString(chapter.value, forType: NSPasteboard.PasteboardType.string)
         return pastBoard
     }
 
     /// 拖曳中。
-    func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) ->
+    override func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) ->
         NSDragOperation {
             let dragNullOperation: NSDragOperation = []
         
@@ -273,11 +273,11 @@ class JYHCatalogView: JYHBlockView {
             }
             
             // 内部方法，确定不是拖曳到自己或子类的内部。
-            func lap(_ n: Model?) -> Bool{
+            func lap(_ n: Node?) -> Bool{
                 if n?.parent == nil {
                     return false
                 }
-                if n?.creation == node?.creation {
+                if n?.id == node?.id {
                     return true
                 }
                 return lap(n?.parent)
@@ -291,7 +291,7 @@ class JYHCatalogView: JYHBlockView {
     }
     
     /// 结束拖曳。
-    func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
+    override func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
         // 接收的对象为空。
         guard let chapter = item as? Chapter else {
             return false
@@ -315,7 +315,7 @@ class JYHCatalogView: JYHBlockView {
             x = chapter.children.count
         }
         // 同子集里下移。
-        if node?.parent?.creation == chapter.creation && i < x {
+        if node?.parent?.id == chapter.id && i < x {
             x -= 1
         }
         outlineView.moveItem(at: i, inParent: node?.parent, to: x, inParent: chapter)
@@ -357,7 +357,7 @@ class JYHCatalogView: JYHBlockView {
             return
         }
 
-        works.info.chapterEditingId = chapter.creation
+        works.info.chapterEditingId = chapter.id
         works.info.chapterSelection = chapter
         works.opened(chapter: chapter)
         works.delegate?.selectedLeaf(chapter: chapter)
@@ -396,26 +396,22 @@ class JYHCatalogView: JYHBlockView {
     func addNode(title:String, leaf: Bool, isSelect: Bool) -> Chapter {
         let row = isSelect ? contentOutlineView.selectedRow : contentOutlineView.clickedRow
         let chapter: Chapter = contentOutlineView.item(atRow: row) as? Chapter ?? data[0] as! Chapter
-        let node = Chapter()
-        node.content = title
-        node.leaf = leaf
+        let node = Chapter(id: creationTime(), value: title, leaf: leaf)
         
         // 当前节点为支节点，添加到其子集的未尾。
         if !chapter.leaf {
-            node.parent = chapter
             node.expanded = true
+            chapter.add(child: node)
             contentOutlineView.expandItem(chapter)
-            chapter.children.append(node)
             return node
         }
         
         // 当前节点为叶节点，添加到其后，为同级。
-        node.parent = chapter.parent
         let index = chapter.indexParent()
         if index < 0 {
             return node
         }
-        chapter.parent?.children.insert(node, at: index + 1)
+        chapter.parent?.insert(child: node, at: index + 1)
         return node
     }
     
@@ -484,7 +480,10 @@ class JYHCatalogView: JYHBlockView {
             if item.children.isEmpty {
                 continue
             }
-            expandedChildren(items: item.children)
+            guard let array = item.children as? [Model] else {
+                return
+            }
+            expandedChildren(items: array)
         }
     }
 }
@@ -501,10 +500,10 @@ extension JYHCatalogView: NSTextFieldDelegate {
         }
         chapter.naming = false
         if textField.stringValue.isEmpty {
-            textField.stringValue = chapter.content
+            textField.stringValue = chapter.value
             return
         }
-        chapter.content = textField.stringValue
+        chapter.value = textField.stringValue
         works.delegate?.namedLeaf(chapter: chapter)
         writeAndReloadList()
     }
@@ -515,7 +514,6 @@ extension JYHCatalogView: NSTextFieldDelegate {
         do {
             try works.writeOutlineFile()
             contentOutlineView.reloadData()
-
         } catch {
             print(error)
         }

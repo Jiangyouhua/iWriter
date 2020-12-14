@@ -91,7 +91,7 @@ class JYHInfoView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         textView.delegate = self
         textView.textStorage?.delegate = self
         textView.chapter = chapter
-        views[chapter.creation] = scrollView
+        views[chapter.id] = scrollView
         return scrollView
     }
     
@@ -100,12 +100,12 @@ class JYHInfoView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         guard let v = view as? JYHTextView else {
             return nil
         }
-        var manager = managers[v.chapter!.creation]
+        var manager = managers[v.chapter!.id]
         if manager != nil {
             return manager
         }
         manager = UndoManager()
-        managers[v.chapter!.creation] = manager
+        managers[v.chapter!.id] = manager
         return manager
     }
     
@@ -126,7 +126,7 @@ class JYHInfoView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
         guard let v = view.documentView as? JYHTextView else {
             return
         }
-        guard let title = v.chapter?.content else {
+        guard let title = v.chapter?.value else {
             return
         }
         let s = "Synopsis: " + title

@@ -9,13 +9,8 @@
 import Foundation
 import SQLite3
 
-struct Paraphrase {
-    var title: String
-    var children = [Paraphrase]()
-}
-
 class Database {
-    var items = [Paraphrase]()
+    var items = [Node]()
     var db: OpaquePointer?
     
     init(){
@@ -29,11 +24,11 @@ class Database {
         }
     }
     
-    func find(text: String) -> [Paraphrase]? {
+    func find(text: String) -> [Node]? {
         if text.isEmpty || db == nil {
             return nil
         }
-        items = [Paraphrase]()
+        items = [Node]()
         if text.count < 2 {
             guard let result = query("SELECT * FROM character WHERE word = '\(text)'") else {
                 return nil
@@ -69,10 +64,11 @@ class Database {
         return stmt
     }
     
-    func formatCharacter(result: OpaquePointer) ->Paraphrase {
-        var paraphrase = Paraphrase(title: "字", children: [Paraphrase]())
+    func formatCharacter(result: OpaquePointer) ->Node {
+        let paraphrase = Node()
+        paraphrase.value = "字"
         while (sqlite3_step(result) == SQLITE_ROW) {
-//            let id = sqlite3_column_int(result, 0)
+            let id = sqlite3_column_int(result, 0)
 //            let word = String(cString: sqlite3_column_text(result, 1))
 //            let alias = String(cString: sqlite3_column_text(result, 2))
 //            let strokes = String(cString: sqlite3_column_text(result, 3))
@@ -80,47 +76,47 @@ class Database {
 //            let radicals = String(cString: sqlite3_column_text(result, 5))
             let explanation = String(cString: sqlite3_column_text(result, 6))
             let more = String(cString: sqlite3_column_text(result, 7))
-            let item = Paraphrase(title: String(format: "%@\n%@", explanation, more))
+            let item = Node(id: Int(id), value: String(format: "%@\n%@", explanation, more))
             paraphrase.children.append(item)
         }
         return paraphrase
     }
     
-    func formatWord(result: OpaquePointer) ->Paraphrase {
-        var paraphrase = Paraphrase(title: "词", children: [Paraphrase]())
+    func formatWord(result: OpaquePointer) ->Node {
+        let paraphrase = Node(value: "词")
         while (sqlite3_step(result) == SQLITE_ROW) {
-//            let id = sqlite3_column_int(result, 0)
+            let id = sqlite3_column_int(result, 0)
             let word = String(cString: sqlite3_column_text(result, 1))
             let explanation = String(cString: sqlite3_column_text(result, 2))
-            let item = Paraphrase(title: String(format: "%@：%@", word, explanation))
+            let item = Node(id: Int(id), value: String(format: "%@：%@", word, explanation))
             paraphrase.children.append(item)
         }
         return paraphrase
     }
     
-    func formatIdiom(result: OpaquePointer) -> Paraphrase {
-        var paraphrase = Paraphrase(title: "成语", children: [Paraphrase]())
+    func formatIdiom(result: OpaquePointer) -> Node {
+        let paraphrase = Node(value: "成语")
         while (sqlite3_step(result) == SQLITE_ROW) {
-//            let id = sqlite3_column_int(result, 0)
+            let id = sqlite3_column_int(result, 0)
             let word = String(cString: sqlite3_column_text(result, 1))
 //            let pinyin = String(cString: sqlite3_column_text(result, 2))
             let example = String(cString: sqlite3_column_text(result, 3))
             let explanation = String(cString: sqlite3_column_text(result, 4))
             let derivation = String(cString: sqlite3_column_text(result, 5))
             let abbreviation = String(cString: sqlite3_column_text(result, 6))
-            let item = Paraphrase(title: String(format: "%@：%@\n%@\n%@\n%@", word, example, explanation, derivation, abbreviation))
+            let item = Node(id: Int(id), value: String(format: "%@：%@\n%@\n%@\n%@", word, example, explanation, derivation, abbreviation))
             paraphrase.children.append(item)
         }
         return paraphrase
     }
     
-    func formatAllegorical(result: OpaquePointer) -> Paraphrase {
-        var paraphrase = Paraphrase(title: "歇后语", children: [Paraphrase]())
+    func formatAllegorical(result: OpaquePointer) -> Node {
+        let paraphrase = Node(value: "歇后语")
         while (sqlite3_step(result) == SQLITE_ROW) {
-//            let id = sqlite3_column_int(result, 0)
+            let id = sqlite3_column_int(result, 0)
             let riddle = String(cString: sqlite3_column_text(result, 1))
             let answer = String(cString: sqlite3_column_text(result, 2))
-            let item = Paraphrase(title: String(format: "%@——%@", riddle, answer))
+            let item = Node(id: Int(id), value: String(format: "%@——%@", riddle, answer))
             paraphrase.children.append(item)
         }
         return paraphrase

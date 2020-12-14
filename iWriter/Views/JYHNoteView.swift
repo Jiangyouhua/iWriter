@@ -35,22 +35,32 @@ class JYHNoteView: JYHBlockView, NSTextFieldDelegate {
     }
     
     // MARK: Action - Title Icon.
+    /// 添加事项。
     override func leftButtonClicked(isSelect: Bool) {
-        let node = Note()
-        node.content = "New Note"
+        let node = Note(id: creationTime(), value: "New Note")
         data.append(node)
         works.notes = data as! [Note]
         writeAndReloadList()
     }
     
+    /// 添加回复。
     override func rightButtonClicked(isSelect: Bool) {
-        guard let note = contentOutlineView.item(atRow: contentOutlineView.selectedRow) as? Note else {
+        let index = contentOutlineView.selectedRow
+        guard let note = contentOutlineView.item(atRow: index) as? Note else {
             return
         }
-        let node = Note()
-        node.content = "New Reply"
-        node.parent = note
-        note.children.append(node)
+        let node = Note(id: creationTime(), value: "New Replay")
+        
+        // 非顶级。
+        if note.parent != nil {
+            note.parent?.add(child: node)
+            if let item = note.parent as? Model {
+                item.expanded = true
+                writeAndReloadList(item )
+            }
+            return
+        }
+        note.add(child: node)
         note.expanded = true
         writeAndReloadList(note)
     }
@@ -111,7 +121,7 @@ class JYHNoteView: JYHBlockView, NSTextFieldDelegate {
             }
             
             // 为Table Cell View设置Title与Icon。
-            cell.textField!.stringValue = note.content
+            cell.textField!.stringValue = note.value
             cell.textField!.isEditable = true
             cell.textField!.delegate = self
             cell.imageView!.image = outlineNodeImage(top: note.parent == nil, checked: note.checked)
@@ -138,7 +148,6 @@ class JYHNoteView: JYHBlockView, NSTextFieldDelegate {
         guard let outlineView = sender as? NSOutlineView else {
                     return
                 }
-                
         guard let note = outlineView.item(atRow: outlineView.selectedRow) as? Note else {
             return
         }
@@ -198,10 +207,10 @@ class JYHNoteView: JYHBlockView, NSTextFieldDelegate {
         }
         note.naming = false
         if textField.stringValue.isEmpty {
-            textField.stringValue = note.content
+            textField.stringValue = note.value
             return
         }
-        note.content = textField.stringValue
+        note.value = textField.stringValue
         
         writeAndReloadList()
     }
