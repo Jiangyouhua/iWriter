@@ -117,7 +117,7 @@ class JYHSymbolView: JYHBlockView , NSTextFieldDelegate {
             
             // 为Table Cell View设置Title与Icon。
             cell.textField!.stringValue = symbol.value
-            cell.textField!.isEditable = true
+//            cell.textField!.isEditable = true
             cell.textField!.delegate = self
 //            cell.imageView!.image = NSImage(named: NSImage.Name(symbol.gender))!
             return cell

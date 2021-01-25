@@ -122,7 +122,7 @@ class JYHNoteView: JYHBlockView, NSTextFieldDelegate {
             
             // 为Table Cell View设置Title与Icon。
             cell.textField!.stringValue = note.value
-            cell.textField!.isEditable = true
+//            cell.textField!.isEditable = true
             cell.textField!.delegate = self
             cell.imageView!.image = outlineNodeImage(top: note.parent == nil, checked: note.checked)
             return cell

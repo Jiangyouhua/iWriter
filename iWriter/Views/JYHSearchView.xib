@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -42,7 +42,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="202" height="107"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowHeight="21" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="EdA-nY-apr" id="dbv-QJ-QCa">
+                            <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowHeight="21" usesAutomaticRowHeights="YES" viewBased="YES" indentationPerLevel="16" outlineTableColumn="EdA-nY-apr" id="dbv-QJ-QCa">
                                 <rect key="frame" x="0.0" y="0.0" width="202" height="107"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -61,18 +61,20 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView identifier="titleCellView" id="51w-Gk-zXQ">
-                                                <rect key="frame" x="1" y="1" width="146" height="21"/>
+                                            <tableCellView identifier="titleCellView" misplaced="YES" id="51w-Gk-zXQ">
+                                                <rect key="frame" x="11" y="1" width="155" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7uL-wP-FoP">
-                                                        <rect key="frame" x="3" y="0.0" width="17" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7uL-wP-FoP">
+                                                        <rect key="frame" x="0.0" y="-2" width="15" height="21"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="15" id="9S8-Ye-UrT"/>
+                                                            <constraint firstAttribute="height" constant="15" id="j7X-6M-jYR"/>
+                                                        </constraints>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="Z9t-Yp-aSo"/>
                                                     </imageView>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GhJ-ll-pWi">
-                                                        <rect key="frame" x="25" y="0.0" width="121" height="19"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GhJ-ll-pWi">
+                                                        <rect key="frame" x="18" y="0.0" width="139" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="charWrapping" sendsActionOnEndEditing="YES" title="title" id="Y5m-Qy-lov">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -80,6 +82,14 @@
                                                         </textFieldCell>
                                                     </textField>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="GhJ-ll-pWi" firstAttribute="top" secondItem="51w-Gk-zXQ" secondAttribute="top" id="76W-Ry-hXl"/>
+                                                    <constraint firstItem="7uL-wP-FoP" firstAttribute="top" secondItem="51w-Gk-zXQ" secondAttribute="top" id="DQX-IF-QIV"/>
+                                                    <constraint firstItem="7uL-wP-FoP" firstAttribute="leading" secondItem="51w-Gk-zXQ" secondAttribute="leading" id="FK3-2Q-0Q1"/>
+                                                    <constraint firstAttribute="bottom" secondItem="GhJ-ll-pWi" secondAttribute="bottom" id="H0h-IZ-2ZN"/>
+                                                    <constraint firstItem="GhJ-ll-pWi" firstAttribute="leading" secondItem="7uL-wP-FoP" secondAttribute="trailing" constant="5" id="JMy-td-VPi"/>
+                                                    <constraint firstAttribute="trailing" secondItem="GhJ-ll-pWi" secondAttribute="trailing" id="s1U-A4-3PI"/>
+                                                </constraints>
                                                 <connections>
                                                     <outlet property="imageView" destination="7uL-wP-FoP" id="Ho2-47-7Kb"/>
                                                     <outlet property="textField" destination="GhJ-ll-pWi" id="PlN-eP-g6S"/>
@@ -116,7 +126,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IaY-NT-66b">
-                    <rect key="frame" x="117" y="106" width="35" height="32"/>
+                    <rect key="frame" x="116" y="107" width="37" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="Ili-Ry-TEp"/>
                         <constraint firstAttribute="width" constant="23" id="kCl-iC-bei"/>
@@ -130,7 +140,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bwe-xZ-KbM">
-                    <rect key="frame" x="140" y="106" width="35" height="32"/>
+                    <rect key="frame" x="139" y="107" width="37" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="23" id="UrM-4e-5rf"/>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="tFW-65-DnY"/>
@@ -161,7 +171,7 @@
                             </connections>
                         </textField>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="syl-Ro-4bW">
-                            <rect key="frame" x="116" y="-28" width="82" height="32"/>
+                            <rect key="frame" x="115" y="-27" width="84" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="70" id="yn6-jP-tAZ"/>
                             </constraints>
@@ -185,7 +195,7 @@
                     </constraints>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Ab-c2-PhW">
-                    <rect key="frame" x="163" y="106" width="35" height="32"/>
+                    <rect key="frame" x="162" y="107" width="37" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="23" id="XKA-yL-SCE"/>
                     </constraints>
@@ -243,10 +253,10 @@
         </customView>
     </objects>
     <resources>
-        <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSTouchBarGoBackTemplate" width="10" height="30"/>
-        <image name="NSTouchBarGoForwardTemplate" width="10" height="30"/>
-        <image name="NSTouchBarGoUpTemplate" width="16" height="30"/>
+        <image name="NSActionTemplate" width="15" height="15"/>
+        <image name="NSTouchBarGoBackTemplate" width="10" height="14"/>
+        <image name="NSTouchBarGoForwardTemplate" width="10" height="14"/>
+        <image name="NSTouchBarGoUpTemplate" width="15" height="9"/>
         <image name="Search" width="16" height="16"/>
     </resources>
 </document>

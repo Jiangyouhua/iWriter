@@ -205,7 +205,7 @@ class JYHCatalogView: JYHBlockView {
             
             // 为Table Cell View设置Title与Icon。
             cell.textField!.stringValue = chapter.value
-            cell.textField!.isEditable = true
+            cell.textField!.isEditable = chapter.naming
             cell.textField!.delegate = self
             cell.imageView!.image = outlineNodeImage(top: chapter.parent == nil, leaf: chapter.leaf)
             return cell
@@ -241,6 +241,9 @@ class JYHCatalogView: JYHBlockView {
             outlineView.expandItem(chapter.parent)
             // 命名项设置为第一响应者，即进入命名状态。
             cell.textField?.becomeFirstResponder()
+            var frame = cell.frame
+            frame.size.height = 100
+            cell.frame = frame
         }
     }
     

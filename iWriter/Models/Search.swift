@@ -8,16 +8,18 @@
 
 import Cocoa
 
+// 标志特定内容。
 struct Mark {
-    var paragraph: String
-    var paragraphRange: Range<String.Index>
-    var articleRange: Range<String.Index>
+    var paragraph: String                       // 段落文本。
+    var paragraphRange: Range<String.Index>     // 在段落中的位置。
+    var articleRange: Range<String.Index>       // 在全文中的位置。
 }
 
+// 实现全文索。
 class Search {
-    var word: String
-    var chapter: Chapter                        // 对应的章节。
-    var marks: [Mark]
+    var word: String                            // 搜索的词。
+    var chapter: Chapter                        // 搜索的范围。
+    var marks: [Mark]                           // 搜索到的结果。
     
     init(word: String, chapter: Chapter) {
         self.word = word
@@ -29,11 +31,11 @@ class Search {
     }
     
     private func marksFromArticle() {
-        if chapter.value.isEmpty {
+        if chapter.article.isEmpty {
             return
         }
         // 分段。
-        let paragraphs = chapter.value.components(separatedBy: CharacterSet(charactersIn: "\n"))
+        let paragraphs = chapter.article.components(separatedBy: CharacterSet(charactersIn: "\n"))
         // 逐个处理。
         var offset = 0
         paragraphs.forEach { pg in
@@ -54,8 +56,8 @@ class Search {
         {
             let lowerPosition = paragraph.distance(from: paragraph.startIndex, to: range.lowerBound)
             let upPosition = paragraph.distance(from: paragraph.startIndex, to: range.upperBound)
-            let start = chapter.value.index(chapter.value.startIndex, offsetBy: lowerPosition + offset)
-            let end = chapter.value.index(chapter.value.startIndex, offsetBy: upPosition + offset)
+            let start = chapter.article.index(chapter.article.startIndex, offsetBy: lowerPosition + offset)
+            let end = chapter.article.index(chapter.article.startIndex, offsetBy: upPosition + offset)
 
             let mark = Mark(
                 paragraph: paragraph,

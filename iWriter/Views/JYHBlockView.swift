@@ -30,7 +30,6 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     /// 跟区域大小相关的分割线，点击标题栏时需要改变其位置。
     let works = (NSApp.delegate as! AppDelegate).works
     var data: [Model] = []
-    var heights = [Int: CGFloat]()
     var node: Model?
     var delegate: JYHBlockViewDelegate?
     
@@ -161,7 +160,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         contentOutlineView.delegate = self
         contentOutlineView.dataSource = self
         contentOutlineView.target = self
-        contentOutlineView.action = #selector(outlineViewDidClick(_:))
+        contentOutlineView.action = #selector(rowSingleClicked(_:))
         contentOutlineView.doubleAction = #selector(rowDoubleClicked(_:))
         contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
         
@@ -176,7 +175,6 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
         super.draw(dirtyRect)
         // 及时更新视图的大小。
         self.view.frame = self.bounds
-        titleColumn.width = self.bounds.width - 10
         
         // LeftArea进入隐藏状态。
         if self.frame.size.width <= iconWidth {
@@ -314,13 +312,14 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     
     // MARK: Action - Row Clicked
     /// Row点击事件。
-    @objc func outlineViewDidClick(_ event: NSEvent){
+    @objc func rowSingleClicked(_ event: NSEvent){
+        print(#function)
         let row = contentOutlineView.clickedRow
         if row < 0 {
             return 
         }
         let column = contentOutlineView.clickedColumn
-        let onTitleImage = onImageViewWithCell(row: row, column: column)
+        let onTitleImage = clickOnImage(row: row, column: column)
         let unselected = -1
 
         if row == unselected && column == unselected{
@@ -335,7 +334,7 @@ class JYHBlockView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSMe
     }
     
     /// 判断是否在图片上点击。、
-    private func onImageViewWithCell(row: Int, column: Int) -> Bool{
+    private func clickOnImage(row: Int, column: Int) -> Bool{
         guard let titleCell: NSTableCellView = contentOutlineView.view(atColumn: column, row: row, makeIfNecessary: true) as? NSTableCellView else {
             return false
         }

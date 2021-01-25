@@ -40,7 +40,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
             nextButton.isEnabled = data.count > 0
         }
     }
-    var heights = [Int: CGFloat]()
+
     var delegate: JYHDictionaryViewDelegate?
     
     // MARK: Action - Title Clicked
@@ -82,7 +82,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
         contentOutlineView.delegate = self
         contentOutlineView.dataSource = self
         contentOutlineView.target = self
-        contentOutlineView.action = #selector(outlineViewDidClick(_:))
+        contentOutlineView.action = #selector(rowSingleClicked(_:))
         contentOutlineView.doubleAction = #selector(rowDoubleClicked(_:))
         contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
         
@@ -93,7 +93,6 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
         super.draw(dirtyRect)
         // 及时更新视图的大小。
         self.view.frame = self.bounds
-        titleColumn.width = self.bounds.width - 10
         
         // LeftArea进入隐藏状态。
         if self.frame.size.width <= iconWidth {
@@ -171,7 +170,7 @@ class JYHDictionaryView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource,
     }
     
     // MARK: Action - Row Clicked
-    @objc func outlineViewDidClick(_ event: NSEvent){
+    @objc func rowSingleClicked(_ event: NSEvent){
         let row = contentOutlineView.clickedRow
         if row < 0 {
             return 

@@ -440,6 +440,7 @@ extension ViewController: JYHTitlesBarViewDelegate {
     // dictionary
     func dictionaryWord(_ word: String) {
         guard let data = Database().find(text: word) else {
+            dictionaryBlockView.data = []
             return
         }
         dictionaryBlockView.data = data

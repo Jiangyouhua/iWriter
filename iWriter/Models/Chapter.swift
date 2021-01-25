@@ -117,7 +117,7 @@ class Chapter: Model {
 
     /// 写当前章节。
     func writeArticleFile() throws {
-        if self.value.isEmpty {
+        if self.article.isEmpty {
             return
         }
         // 章节以创建时间为标识保存。

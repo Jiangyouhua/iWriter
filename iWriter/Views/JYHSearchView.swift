@@ -44,7 +44,7 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
             nextButton.isEnabled = data.count > 0
         }
     }
-    var heights = [Int: CGFloat]()
+
     var delegate: JYHSearchViewDelegate?
     
     // MARK: Action - Title Clicked
@@ -134,7 +134,7 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         contentOutlineView.delegate = self
         contentOutlineView.dataSource = self
         contentOutlineView.target = self
-        contentOutlineView.action = #selector(outlineViewDidClick(_:))
+        contentOutlineView.action = #selector(rowSingleClicked(_:))
         contentOutlineView.doubleAction = #selector(rowDoubleClicked(_:))
         contentOutlineView.registerForDraggedTypes([NSPasteboard.PasteboardType.string])
         
@@ -145,7 +145,6 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
         super.draw(dirtyRect)
         // 及时更新视图的大小。
         self.view.frame = self.bounds
-        titleColumn.width = self.bounds.width - 10
         
         // LeftArea进入隐藏状态。
         if self.frame.size.width <= iconWidth {
@@ -261,7 +260,7 @@ class JYHSearchView: NSView, NSOutlineViewDelegate, NSOutlineViewDataSource, NSM
     
     
     // MARK: Action - Row Clicked
-    @objc func outlineViewDidClick(_ event: NSEvent){
+    @objc func rowSingleClicked(_ event: NSEvent){
         let row = contentOutlineView.clickedRow
         if row < 0 {
             return

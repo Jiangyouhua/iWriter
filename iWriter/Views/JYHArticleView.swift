@@ -238,7 +238,7 @@ class JYHArticleView: NSView, NSTextViewDelegate, NSTextStorageDelegate {
             return
         }
         if mark != nil {
-            // 移除前一个。
+            // 移除前一个，标志现在的。
             let r = NSRange(mark!.articleRange, in: article.string)
             article.removeAttribute(.underlineStyle, range: r)
             article.setAttributes([.backgroundColor: NSColor.gray, .foregroundColor: NSColor.textColor], range: r)
